@@ -1,0 +1,106 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Core surfaces */
+    --background: 0 0% 100%; /* #FFFFFF */
+    --foreground: 217.5 100% 14.1%; /* #001B48 */
+
+    --card: 0 0% 100%; /* white cards */
+    --card-foreground: 217.5 100% 14.1%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 217.5 100% 14.1%;
+
+    /* Brand primary */
+    --primary: 206.8 63.3% 35.3%; /* #216093 */
+    --primary-foreground: 0 0% 100%; /* white text on brand */
+
+    /* Secondary & UI states */
+    --secondary: 180 9.1% 97.8%; /* #F9FAFA light surface */
+    --secondary-foreground: 217.5 100% 14.1%;
+
+    --muted: 210 40% 96%; /* subtle bg */
+    --muted-foreground: 215.4 16.3% 46.9%;
+
+    --accent: 185.4 27.8% 47.3%; /* #57949A teal accents */
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 352.4 81.7% 47.3%; /* #DB162F */
+    --destructive-foreground: 0 0% 100%;
+
+    /* Inputs & outlines */
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 206.8 63.3% 35.3%; /* brand ring */
+
+    /* Geometry */
+    --radius: 0.75rem;
+
+    /* Extra semantic colors */
+    --success: 128.3 52.3% 37.8%; /* #2E933C */
+    --warning: 47.4 87.8% 52%; /* #F0C319 */
+    --info: 210.8 53.4% 28.6%; /* #224870 */
+  }
+
+  .dark {
+    /* Dark surfaces */
+    --background: 217.5 100% 14.1%; /* #001B48 */
+    --foreground: 0 0% 100%; /* white */
+
+    --card: 217.5 100% 14.1%;
+    --card-foreground: 0 0% 100%;
+
+    --popover: 217.5 100% 14.1%;
+    --popover-foreground: 0 0% 100%;
+
+    /* Brand primary remains the same for consistency */
+    --primary: 206.8 63.3% 35.3%; /* #216093 */
+    --primary-foreground: 0 0% 100%;
+
+    /* Secondary & UI states */
+    --secondary: 210.8 53.4% 28.6%; /* #224870 for dark surfaces */
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+
+    --accent: 185.4 27.8% 47.3%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 85.7% 97.3%;
+
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 206.8 63.3% 35.3%;
+
+    --success: 128.3 52.3% 37.8%;
+    --warning: 47.4 87.8% 52%;
+    --info: 210.8 53.4% 28.6%;
+  }
+
+  /* Base application of tokens */
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+
+  /* HelixIntel typography */
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-black;
+  } /* Inter 900 */
+  p,
+  li,
+  span,
+  body {
+    font-weight: 400;
+  } /* Inter 400 */
+}

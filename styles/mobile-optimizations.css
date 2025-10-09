@@ -1,0 +1,232 @@
+/**
+ * Mobile Optimizations for Touch Targets
+ * Ensures all interactive elements meet minimum 44x44px touch target requirements
+ */
+
+/* Ensure all buttons have minimum touch target size */
+@media (max-width: 768px) {
+  /* Buttons - ensure minimum 44px height */
+  button,
+  .btn,
+  [role='button'] {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* Small buttons need extra padding on mobile */
+  button[class*='size-sm'],
+  .btn-sm {
+    padding: 0.75rem 1rem;
+    min-height: 44px;
+  }
+
+  /* Icon buttons */
+  button:has(svg:only-child),
+  [role='button']:has(svg:only-child) {
+    padding: 0.75rem;
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  /* Links in navigation */
+  nav a,
+  .sidebar a {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 1rem;
+  }
+
+  /* Form inputs */
+  input,
+  select,
+  textarea {
+    min-height: 44px;
+    font-size: 16px; /* Prevents zoom on iOS */
+  }
+
+  /* Checkboxes and radio buttons */
+  input[type='checkbox'],
+  input[type='radio'] {
+    width: 24px;
+    height: 24px;
+    /* Add invisible padding area for easier tapping */
+    margin: 10px;
+  }
+
+  /* Toggle switches */
+  [role='switch'],
+  .toggle-group-item {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* Tab triggers */
+  [role='tab'] {
+    min-height: 44px;
+    padding: 0.75rem 1rem;
+  }
+
+  /* Card click areas */
+  .cursor-pointer {
+    min-height: 44px;
+  }
+
+  /* Dropdown items */
+  [role='menuitem'],
+  .dropdown-item {
+    min-height: 44px;
+    padding: 0.75rem 1rem;
+  }
+
+  /* Modal close buttons */
+  [aria-label*='Close'],
+  [aria-label*='close'] {
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  /* Pagination buttons */
+  .pagination button {
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  /* Badge click areas when interactive */
+  .badge.cursor-pointer {
+    padding: 0.5rem 0.75rem;
+    min-height: 32px; /* Slightly smaller but still tappable */
+  }
+
+  /* Schedule card action buttons */
+  .schedule-card button {
+    min-height: 44px;
+    padding: 0.75rem 1rem;
+  }
+
+  /* Template card buttons */
+  .template-card button {
+    min-height: 44px;
+  }
+
+  /* Asset card interaction areas */
+  .asset-card {
+    padding: 1rem;
+  }
+
+  /* FAB button */
+  .fixed.bottom-6.right-6 button {
+    width: 56px;
+    height: 56px;
+  }
+
+  /* Increase spacing between interactive elements */
+  .space-y-2 > * {
+    margin-top: 0.75rem;
+  }
+
+  .gap-2 {
+    gap: 0.75rem;
+  }
+
+  /* Dialog action buttons */
+  [role='dialog'] footer button {
+    min-height: 44px;
+    padding: 0.75rem 1.5rem;
+  }
+
+  /* Ensure clickable cards have adequate padding */
+  .card.cursor-pointer,
+  .card.hover\:shadow-lg {
+    padding: 1rem;
+    min-height: 60px;
+  }
+
+  /* List view items */
+  .list-item,
+  [class*='list'] .card {
+    min-height: 60px;
+    padding: 1rem;
+  }
+}
+
+/* Additional mobile-specific improvements */
+@media (hover: none) and (pointer: coarse) {
+  /* Remove hover effects on touch devices */
+  .hover\:bg-gray-50:hover {
+    background-color: transparent;
+  }
+
+  /* Add active state for better feedback */
+  button:active,
+  [role='button']:active,
+  .card.cursor-pointer:active {
+    opacity: 0.8;
+    transform: scale(0.98);
+  }
+
+  /* Ensure adequate spacing in lists */
+  ul > li,
+  .list > * {
+    padding: 0.75rem 0;
+  }
+
+  /* Improve tap feedback */
+  a:active,
+  button:active {
+    background-color: rgba(0, 0, 0, 0.05);
+  }
+}
+
+/* iOS-specific fixes */
+@supports (-webkit-touch-callout: none) {
+  /* Prevent text selection on tap */
+  button,
+  [role='button'],
+  .card.cursor-pointer {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+  }
+
+  /* Fix iOS button styling */
+  button,
+  input[type='submit'],
+  input[type='button'] {
+    -webkit-appearance: none;
+    appearance: none;
+  }
+
+  /* Prevent zoom on input focus */
+  input,
+  select,
+  textarea {
+    font-size: 16px !important;
+  }
+}
+
+/* Android-specific fixes */
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+  /* Improve tap highlight */
+  button,
+  a,
+  [role='button'] {
+    -webkit-tap-highlight-color: rgba(33, 96, 147, 0.1);
+  }
+}
+
+/* Landscape mode adjustments */
+@media (max-height: 500px) and (orientation: landscape) {
+  /* Reduce vertical padding in landscape */
+  button,
+  [role='button'] {
+    min-height: 40px;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+  }
+
+  /* Adjust modal heights */
+  [role='dialog'] {
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+}
