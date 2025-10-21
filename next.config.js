@@ -1,4 +1,35 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {};
+import bundleAnalyzer from '@next/bundle-analyzer'
 
-export default nextConfig;
+const withBundleAnalyzer = bundleAnalyzer({
+  enabled: process.env.ANALYZE === 'true',
+})
+
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  // PERFORMANCE OPTIMIZATION: Task 7a
+  compiler: {
+    // Remove console.log in production
+    removeConsole:
+      process.env.NODE_ENV === 'production'
+        ? {
+            exclude: ['error', 'warn'],
+          }
+        : false,
+  },
+
+  // Optimize package imports to reduce bundle size
+  experimental: {
+    optimizePackageImports: ['recharts', 'lucide-react', 'date-fns'],
+  },
+
+  // Production optimizations
+  reactStrictMode: true,
+
+  // Compress output
+  compress: true,
+
+  // Output standalone for better deployment
+  output: process.env.BUILD_STANDALONE ? 'standalone' : undefined,
+}
+
+export default withBundleAnalyzer(nextConfig)

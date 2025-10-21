@@ -10,7 +10,7 @@ interface CacheEntry<T> {
 }
 
 class MemoryCache {
-  private cache: Map<string, CacheEntry<any>> = new Map()
+  private cache: Map<string, CacheEntry<unknown>> = new Map()
   private cleanupInterval: NodeJS.Timeout | null = null
 
   constructor() {
@@ -28,7 +28,7 @@ class MemoryCache {
     this.cache.set(key, {
       data: value,
       timestamp: Date.now(),
-      ttl
+      ttl,
     })
   }
 
@@ -91,7 +91,7 @@ class MemoryCache {
       }
     }
 
-    keysToDelete.forEach(key => this.cache.delete(key))
+    keysToDelete.forEach((key) => this.cache.delete(key))
   }
 
   /**
@@ -100,7 +100,7 @@ class MemoryCache {
   getStats(): { size: number; keys: string[] } {
     return {
       size: this.cache.size,
-      keys: Array.from(this.cache.keys())
+      keys: Array.from(this.cache.keys()),
     }
   }
 
@@ -112,9 +112,12 @@ class MemoryCache {
       clearInterval(this.cleanupInterval)
     }
 
-    this.cleanupInterval = setInterval(() => {
-      this.cleanup()
-    }, 5 * 60 * 1000) // Run every 5 minutes
+    this.cleanupInterval = setInterval(
+      () => {
+        this.cleanup()
+      },
+      5 * 60 * 1000
+    ) // Run every 5 minutes
   }
 
   /**
@@ -130,7 +133,7 @@ class MemoryCache {
       }
     }
 
-    keysToDelete.forEach(key => this.cache.delete(key))
+    keysToDelete.forEach((key) => this.cache.delete(key))
 
     if (keysToDelete.length > 0) {
       console.log(`[Cache] Cleaned up ${keysToDelete.length} expired entries`)
@@ -157,11 +160,11 @@ export const templateCache = {
   /**
    * Get templates from cache or fetch them
    */
-  async getTemplates(
+  async getTemplates<T = unknown>(
     key: string,
-    fetcher: () => Promise<any>,
+    fetcher: () => Promise<T>,
     ttl: number = 10 * 60 * 1000 // 10 minutes default
-  ): Promise<any> {
+  ): Promise<T> {
     const cached = cache.get(key)
     if (cached) {
       console.log(`[Cache] Hit for key: ${key}`)
@@ -200,7 +203,7 @@ export const templateCache = {
   /**
    * Clear all caches
    */
-  clear: () => cache.clear()
+  clear: () => cache.clear(),
 }
 
 // Schedule cache functions
@@ -208,11 +211,11 @@ export const scheduleCache = {
   /**
    * Get schedules from cache or fetch them
    */
-  async getSchedules(
+  async getSchedules<T = unknown>(
     key: string,
-    fetcher: () => Promise<any>,
+    fetcher: () => Promise<T>,
     ttl: number = 5 * 60 * 1000 // 5 minutes default
-  ): Promise<any> {
+  ): Promise<T> {
     const cached = cache.get(key)
     if (cached) {
       console.log(`[Cache] Hit for key: ${key}`)
@@ -245,7 +248,133 @@ export const scheduleCache = {
   /**
    * Clear all caches
    */
-  clear: () => cache.clear()
+  clear: () => cache.clear(),
+}
+
+// Dashboard cache functions (PERFORMANCE OPTIMIZATION - Task 7a)
+export const dashboardCache = {
+  /**
+   * Get dashboard analytics from cache or fetch
+   */
+  async getAnalytics<T = unknown>(
+    userId: string,
+    period: string,
+    fetcher: () => Promise<T>,
+    ttl: number = 5 * 60 * 1000 // 5 minutes default
+  ): Promise<T> {
+    const key = `dashboard:analytics:${userId}:${period}`
+    const cached = cache.get(key)
+    if (cached) {
+      console.log(`[Cache] Hit for key: ${key}`)
+      return cached
+    }
+
+    console.log(`[Cache] Miss for key: ${key}`)
+    const data = await fetcher()
+    cache.set(key, data, ttl)
+    return data
+  },
+
+  /**
+   * Get cost summary from cache or fetch
+   */
+  async getCostSummary<T = unknown>(
+    userId: string,
+    startDate?: string,
+    endDate?: string,
+    fetcher: () => Promise<T>,
+    ttl: number = 5 * 60 * 1000
+  ): Promise<T> {
+    const key = `dashboard:cost:${userId}:${startDate || 'current'}:${endDate || 'current'}`
+    const cached = cache.get(key)
+    if (cached) {
+      console.log(`[Cache] Hit for key: ${key}`)
+      return cached
+    }
+
+    console.log(`[Cache] Miss for key: ${key}`)
+    const data = await fetcher()
+    cache.set(key, data, ttl)
+    return data
+  },
+
+  /**
+   * Get maintenance calendar from cache or fetch
+   */
+  async getCalendar<T = unknown>(
+    userId: string,
+    month: number,
+    year: number,
+    fetcher: () => Promise<T>,
+    ttl: number = 5 * 60 * 1000
+  ): Promise<T> {
+    const key = `dashboard:calendar:${userId}:${year}-${month}`
+    const cached = cache.get(key)
+    if (cached) {
+      console.log(`[Cache] Hit for key: ${key}`)
+      return cached
+    }
+
+    console.log(`[Cache] Miss for key: ${key}`)
+    const data = await fetcher()
+    cache.set(key, data, ttl)
+    return data
+  },
+
+  /**
+   * Get activity feed from cache or fetch
+   */
+  async getActivityFeed<T = unknown>(
+    userId: string,
+    limit: number,
+    offset: number,
+    fetcher: () => Promise<T>,
+    ttl: number = 2 * 60 * 1000 // 2 minutes for activity feed
+  ): Promise<T> {
+    const key = `dashboard:activity:${userId}:${limit}:${offset}`
+    const cached = cache.get(key)
+    if (cached) {
+      console.log(`[Cache] Hit for key: ${key}`)
+      return cached
+    }
+
+    console.log(`[Cache] Miss for key: ${key}`)
+    const data = await fetcher()
+    cache.set(key, data, ttl)
+    return data
+  },
+
+  /**
+   * Invalidate all dashboard caches for a user
+   */
+  invalidateUser(userId: string): void {
+    cache.invalidatePattern(`dashboard:*:${userId}:*`)
+    console.log(`[Cache] Invalidated all dashboard caches for user: ${userId}`)
+  },
+
+  /**
+   * Invalidate specific dashboard cache types
+   */
+  invalidateAnalytics(userId: string): void {
+    cache.invalidatePattern(`dashboard:analytics:${userId}:*`)
+  },
+
+  invalidateCosts(userId: string): void {
+    cache.invalidatePattern(`dashboard:cost:${userId}:*`)
+  },
+
+  invalidateCalendar(userId: string): void {
+    cache.invalidatePattern(`dashboard:calendar:${userId}:*`)
+  },
+
+  invalidateActivity(userId: string): void {
+    cache.invalidatePattern(`dashboard:activity:${userId}:*`)
+  },
+
+  /**
+   * Clear all dashboard caches
+   */
+  clear: () => cache.invalidatePattern('dashboard:*'),
 }
 
 // Export the main cache instance for direct access if needed

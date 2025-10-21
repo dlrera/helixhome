@@ -236,6 +236,8 @@ model Task {
   @@index([assetId])
   @@index([status])
   @@index([dueDate])
+  @@index([completedAt])
+  @@index([homeId, status])
 }
 
 model RecurringSchedule {
@@ -255,6 +257,7 @@ model RecurringSchedule {
 
   @@unique([assetId, templateId])
   @@index([assetId])
+  @@index([templateId])
   @@index([nextDueDate, isActive])
 }
 
