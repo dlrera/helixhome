@@ -64,11 +64,12 @@ export default function AppLayout({ children, user }: AppLayoutProps) {
 
         {/* Main Content */}
         <main
+          id="main-content"
           className={`flex-1 transition-all duration-300 ${
             isDesktop && !isCollapsed ? 'lg:ml-64' : 'lg:ml-16'
           }`}
         >
-          <div className="container mx-auto px-4 py-6 max-w-7xl">
+          <div className="w-full max-w-7xl mx-auto px-4 py-6">
             {children}
           </div>
         </main>

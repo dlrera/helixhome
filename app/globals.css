@@ -85,7 +85,15 @@
   /* Base application of tokens */
   * {
     @apply border-border;
+    box-sizing: border-box;
   }
+
+  html,
+  body {
+    overflow-x: hidden;
+    max-width: 100vw;
+  }
+
   body {
     @apply bg-background text-foreground;
   }

@@ -40,7 +40,7 @@ export default function UserDropdown({ user }: UserDropdownProps) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="icon" className="rounded-full">
+        <Button variant="ghost" size="icon" className="rounded-full min-w-[44px] min-h-[44px]" aria-label="User menu">
           <Avatar className="h-8 w-8">
             <AvatarImage src={user.image || undefined} alt={user.name || 'User'} />
             <AvatarFallback className="bg-[#216093] text-white">

@@ -56,7 +56,7 @@ export default async function TemplatesPage() {
 
       <div className="border-b pb-6">
         <h1 className="text-4xl font-black text-gray-900 mb-3">Maintenance Templates</h1>
-        <p className="text-lg text-gray-600 max-w-3xl">
+        <p className="text-lg text-gray-600">
           Browse our library of 20+ pre-built maintenance templates to keep your home in top condition.
           Apply templates to your assets to automatically schedule recurring maintenance tasks.
         </p>

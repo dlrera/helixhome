@@ -1,0 +1,268 @@
+{
+  "role": "document",
+  "name": "HelixIntel",
+  "children": [
+    {
+      "role": "button",
+      "name": "Toggle menu"
+    },
+    {
+      "role": "link",
+      "name": "H HelixIntel",
+      "value": "http://localhost:3000/dashboard"
+    },
+    {
+      "role": "button",
+      "name": "Search"
+    },
+    {
+      "role": "link",
+      "name": "",
+      "children": [
+        {
+          "role": "button",
+          "name": ""
+        }
+      ],
+      "value": "http://localhost:3000/notifications"
+    },
+    {
+      "role": "button",
+      "name": "AU",
+      "haspopup": "menu"
+    },
+    {
+      "role": "button",
+      "name": "Dashboard"
+    },
+    {
+      "role": "link",
+      "name": "Overview",
+      "value": "http://localhost:3000/dashboard"
+    },
+    {
+      "role": "link",
+      "name": "Cost Report",
+      "value": "http://localhost:3000/dashboard/costs"
+    },
+    {
+      "role": "link",
+      "name": "Settings",
+      "value": "http://localhost:3000/dashboard/settings"
+    },
+    {
+      "role": "link",
+      "name": "Assets",
+      "value": "http://localhost:3000/assets"
+    },
+    {
+      "role": "link",
+      "name": "Tasks",
+      "value": "http://localhost:3000/tasks"
+    },
+    {
+      "role": "link",
+      "name": "Templates",
+      "value": "http://localhost:3000/templates"
+    },
+    {
+      "role": "link",
+      "name": "Reports",
+      "value": "http://localhost:3000/reports"
+    },
+    {
+      "role": "link",
+      "name": "Settings",
+      "value": "http://localhost:3000/settings"
+    },
+    {
+      "role": "link",
+      "name": "Help",
+      "value": "http://localhost:3000/help"
+    },
+    {
+      "role": "heading",
+      "name": "HelixIntel",
+      "level": 1
+    },
+    {
+      "role": "text leaf",
+      "name": "admin@example.com"
+    },
+    {
+      "role": "button",
+      "name": "Sign out"
+    },
+    {
+      "role": "heading",
+      "name": "Welcome back, Admin User!",
+      "level": 2
+    },
+    {
+      "role": "text leaf",
+      "name": "Here's an overview of your home maintenance status."
+    },
+    {
+      "role": "text leaf",
+      "name": "Total Assets"
+    },
+    {
+      "role": "text leaf",
+      "name": "3"
+    },
+    {
+      "role": "link",
+      "name": "View all assets →",
+      "value": "http://localhost:3000/assets"
+    },
+    {
+      "role": "text leaf",
+      "name": "Pending Tasks"
+    },
+    {
+      "role": "text leaf",
+      "name": "2"
+    },
+    {
+      "role": "link",
+      "name": "View all tasks →",
+      "value": "http://localhost:3000/tasks"
+    },
+    {
+      "role": "text leaf",
+      "name": "Overdue"
+    },
+    {
+      "role": "text leaf",
+      "name": "1"
+    },
+    {
+      "role": "text leaf",
+      "name": "Need attention"
+    },
+    {
+      "role": "text leaf",
+      "name": "Completed This Month"
+    },
+    {
+      "role": "text leaf",
+      "name": "0"
+    },
+    {
+      "role": "text leaf",
+      "name": "No tasks completed yet"
+    },
+    {
+      "role": "text leaf",
+      "name": "Maintenance Analytics"
+    },
+    {
+      "role": "text leaf",
+      "name": "Track completion trends and task distribution"
+    },
+    {
+      "role": "combobox",
+      "name": "Select time period",
+      "autocomplete": "none"
+    },
+    {
+      "role": "text leaf",
+      "name": "Cost Summary"
+    },
+    {
+      "role": "text leaf",
+      "name": "Track maintenance spending and budget"
+    },
+    {
+      "role": "text leaf",
+      "name": "Maintenance Calendar"
+    },
+    {
+      "role": "text leaf",
+      "name": "Monthly view of scheduled maintenance"
+    },
+    {
+      "role": "button",
+      "name": "Go to today"
+    },
+    {
+      "role": "button",
+      "name": "Previous month"
+    },
+    {
+      "role": "text leaf",
+      "name": "November"
+    },
+    {
+      "role": "text leaf",
+      "name": "2025"
+    },
+    {
+      "role": "button",
+      "name": "Next month"
+    },
+    {
+      "role": "text leaf",
+      "name": "Recent Activity"
+    },
+    {
+      "role": "text leaf",
+      "name": "Your latest home maintenance activities"
+    },
+    {
+      "role": "text leaf",
+      "name": "Maintenance Insights"
+    },
+    {
+      "role": "text leaf",
+      "name": "Personalized recommendations and analytics"
+    },
+    {
+      "role": "heading",
+      "name": "Most Maintained Asset",
+      "level": 3
+    },
+    {
+      "role": "text leaf",
+      "name": "HVAC System has 8 completed maintenance tasks."
+    },
+    {
+      "role": "button",
+      "name": "Longest Overdue Task. Click to take action"
+    },
+    {
+      "role": "heading",
+      "name": "Completion Streak",
+      "level": 3
+    },
+    {
+      "role": "text leaf",
+      "name": "You've completed tasks for 5 consecutive days! Keep up the great work."
+    },
+    {
+      "role": "button",
+      "name": "Recommendation. Click to take action"
+    },
+    {
+      "role": "link",
+      "name": "Add new asset",
+      "children": [
+        {
+          "role": "button",
+          "name": "Add new asset"
+        }
+      ],
+      "value": "http://localhost:3000/assets/new"
+    },
+    {
+      "role": "region",
+      "name": "Notifications (F8)",
+      "children": [
+        {
+          "role": "list",
+          "name": ""
+        }
+      ]
+    }
+  ]
+}

@@ -106,13 +106,13 @@ export function TaskDetailClient({ task, requireCompletionPhoto }: TaskDetailCli
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div className="flex items-center gap-4">
-          <Button variant="ghost" size="icon" onClick={handleBack}>
+          <Button variant="ghost" size="icon" onClick={handleBack} className="min-w-[44px] min-h-[44px]" aria-label="Back to tasks">
             <ArrowLeft className="h-5 w-5" />
           </Button>
           <div>
-            <h1 className="text-3xl font-black text-gray-900">Task Details</h1>
+            <h1 className="text-2xl sm:text-3xl font-black text-gray-900">Task Details</h1>
             <p className="text-sm text-gray-600 mt-1">
               Created {format(new Date(task.createdAt), 'MMM d, yyyy')}
             </p>

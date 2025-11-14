@@ -2,7 +2,6 @@ import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { SignOutButton } from "@/components/sign-out-button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Link from "next/link";
 import { Home as HomeIcon, Wrench, CheckCircle, AlertTriangle } from "lucide-react";
@@ -68,28 +67,14 @@ export default async function DashboardPage() {
   ]);
 
   return (
-    <div className="min-h-screen bg-background">
-      <header className="border-b bg-card">
-        <div className="container mx-auto flex h-16 items-center justify-between px-4">
-          <h1 className="text-2xl font-black text-primary">HelixIntel</h1>
-          <div className="flex items-center gap-4">
-            <span className="text-sm text-muted-foreground">
-              {session.user?.email}
-            </span>
-            <SignOutButton />
-          </div>
-        </div>
-      </header>
-
-      <main className="container mx-auto px-4 py-8">
-        <div className="space-y-8">
-          {/* Welcome Section */}
-          <div className="space-y-2">
-            <h2 className="text-3xl font-black">Welcome back, {session.user?.name || 'there'}!</h2>
-            <p className="text-muted-foreground">
-              Here's an overview of your home maintenance status.
-            </p>
-          </div>
+    <div className="space-y-8">
+      {/* Welcome Section */}
+      <div className="space-y-2">
+        <h1 className="text-3xl font-black">Welcome back, {session.user?.name || 'there'}!</h1>
+        <p className="text-muted-foreground">
+          Here's an overview of your home maintenance status.
+        </p>
+      </div>
 
           {/* Quick Stats Cards */}
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -161,10 +146,8 @@ export default async function DashboardPage() {
             <ActivityTimeline />
           </div>
 
-          {/* Maintenance Insights - Full Width */}
-          <MaintenanceInsights />
-        </div>
-      </main>
+      {/* Maintenance Insights - Full Width */}
+      <MaintenanceInsights />
     </div>
   );
 }

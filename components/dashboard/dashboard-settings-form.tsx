@@ -87,6 +87,7 @@ export function DashboardSettingsForm() {
                   </span>
                   <Input
                     type="text"
+                    inputMode="decimal"
                     placeholder="500.00"
                     className="pl-7"
                     {...field}

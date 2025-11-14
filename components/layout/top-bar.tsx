@@ -52,6 +52,7 @@ export default function TopBar({ onMenuClick, onCommandPaletteOpen, user }: TopB
             size="icon"
             onClick={onMenuClick}
             aria-label="Toggle menu"
+            className="min-w-[44px] min-h-[44px]"
           >
             <Menu className="h-5 w-5" />
           </Button>
@@ -74,14 +75,14 @@ export default function TopBar({ onMenuClick, onCommandPaletteOpen, user }: TopB
             size="icon"
             onClick={onCommandPaletteOpen}
             aria-label="Search"
-            className="hidden sm:flex"
+            className="hidden sm:flex min-w-[44px] min-h-[44px]"
           >
             <Search className="h-5 w-5" />
           </Button>
 
           {/* Notifications */}
           <Link href="/notifications">
-            <Button variant="ghost" size="icon" className="relative">
+            <Button variant="ghost" size="icon" className="relative min-w-[44px] min-h-[44px]">
               <Bell className="h-5 w-5" />
               {notificationCount > 0 && (
                 <Badge

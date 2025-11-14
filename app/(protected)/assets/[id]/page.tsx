@@ -82,9 +82,9 @@ export default async function AssetDetailPage({
   })
 
   return (
-    <div className="container mx-auto py-8 px-4 max-w-4xl">
+    <div className="space-y-6">
       <Link href="/assets">
-        <Button variant="ghost" size="sm" className="mb-4">
+        <Button variant="ghost" size="sm" className="min-h-[44px]">
           <ArrowLeft className="mr-2 h-4 w-4" />
           Back to Assets
         </Button>

@@ -102,6 +102,7 @@ export default function SignInPage() {
             <Input
               id="email"
               type="email"
+              inputMode="email"
               placeholder="name@example.com"
               value={formData.email}
               onChange={(e) =>

@@ -66,18 +66,22 @@ export default function AssetList({ initialAssets }: AssetListProps) {
             className="pl-10"
           />
         </div>
-        <div className="flex gap-1 border rounded-md p-1">
+        <div className="flex gap-1 border rounded-md p-1 flex-shrink-0">
           <Button
             variant={viewMode === 'grid' ? 'default' : 'ghost'}
-            size="sm"
+            size="icon"
             onClick={() => setViewMode('grid')}
+            aria-label="Grid view"
+            className="min-w-[44px] min-h-[44px]"
           >
             <LayoutGrid className="h-4 w-4" />
           </Button>
           <Button
             variant={viewMode === 'list' ? 'default' : 'ghost'}
-            size="sm"
+            size="icon"
             onClick={() => setViewMode('list')}
+            aria-label="List view"
+            className="min-w-[44px] min-h-[44px]"
           >
             <List className="h-4 w-4" />
           </Button>

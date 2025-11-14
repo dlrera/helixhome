@@ -47,6 +47,7 @@ export default function Sidebar({
     <TooltipProvider delayDuration={300}>
       {/* Desktop Sidebar */}
       <aside
+        aria-hidden={!isDesktop}
         className={cn(
           'fixed left-0 top-16 h-[calc(100vh-4rem)] bg-white border-r border-gray-200 transition-all duration-300 z-30',
           'hidden lg:block',
@@ -99,6 +100,7 @@ export default function Sidebar({
               ) : (
                 <Link
                   href={item.href}
+                  aria-label={item.label}
                   className={cn(
                     'flex items-center gap-3 px-3 py-2 rounded-md transition-colors',
                     'hover:bg-gray-100',
@@ -141,6 +143,7 @@ export default function Sidebar({
                           <Link
                             key={subItem.href}
                             href={subItem.href}
+                            aria-label={subItem.label}
                             className={cn(
                               'block px-3 py-1.5 text-sm rounded-md transition-colors',
                               'hover:bg-gray-100',
@@ -169,6 +172,7 @@ export default function Sidebar({
               const linkContent = (
                 <Link
                   href={item.href}
+                  aria-label={item.label}
                   className={cn(
                     'flex items-center gap-3 px-3 py-2 rounded-md transition-colors',
                     'hover:bg-gray-100',
@@ -201,6 +205,7 @@ export default function Sidebar({
 
       {/* Mobile Sidebar */}
       <aside
+        aria-hidden={isDesktop || !isMobileOpen}
         className={cn(
           'fixed left-0 top-16 h-[calc(100vh-4rem)] bg-white border-r border-gray-200 transition-transform duration-300 z-50 w-64',
           'lg:hidden',
@@ -252,6 +257,7 @@ export default function Sidebar({
                     <Link
                       href={item.href}
                       onClick={onMobileClose}
+                      aria-label={item.label}
                       className={cn(
                         'flex items-center gap-3 px-3 py-2 rounded-md transition-colors',
                         'hover:bg-gray-100',
@@ -280,6 +286,7 @@ export default function Sidebar({
                             key={subItem.href}
                             href={subItem.href}
                             onClick={onMobileClose}
+                            aria-label={subItem.label}
                             className={cn(
                               'block px-3 py-1.5 text-sm rounded-md transition-colors',
                               'hover:bg-gray-100',
@@ -310,6 +317,7 @@ export default function Sidebar({
                   key={item.href}
                   href={item.href}
                   onClick={onMobileClose}
+                  aria-label={item.label}
                   className={cn(
                     'flex items-center gap-3 px-3 py-2 rounded-md transition-colors',
                     'hover:bg-gray-100',

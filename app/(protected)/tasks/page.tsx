@@ -74,7 +74,7 @@ export default function TasksPage() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h1 className="text-3xl font-black text-gray-900">Tasks</h1>
           <p className="text-gray-600 mt-2">
@@ -82,14 +82,14 @@ export default function TasksPage() {
             {data && ` • ${data.total} total`}
           </p>
         </div>
-        <div className="flex gap-2">
-          <Link href="/tasks/calendar">
-            <Button variant="outline" className="hidden md:flex">
+        <div className="flex gap-2 flex-shrink-0">
+          <Link href="/tasks/calendar" className="w-full sm:w-auto">
+            <Button variant="outline" className="w-full sm:w-auto">
               <Calendar className="h-4 w-4 mr-2" />
               Calendar View
             </Button>
           </Link>
-          <Button onClick={() => setShowCreateDialog(true)} className="hidden md:flex">
+          <Button onClick={() => setShowCreateDialog(true)} className="w-full sm:w-auto">
             <Plus className="h-4 w-4 mr-2" />
             Create Task
           </Button>
