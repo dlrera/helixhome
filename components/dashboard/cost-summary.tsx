@@ -46,8 +46,8 @@ export const CostSummary = React.memo(function CostSummary() {
       {data && (
         <Tabs defaultValue="overview" className="w-full">
           <TabsList className="grid w-full grid-cols-2 mb-4">
-            <TabsTrigger value="overview">Overview</TabsTrigger>
-            <TabsTrigger value="trends">Trends</TabsTrigger>
+            <TabsTrigger value="overview" className="text-xs sm:text-sm">Overview</TabsTrigger>
+            <TabsTrigger value="trends" className="text-xs sm:text-sm">Trends</TabsTrigger>
           </TabsList>
 
           <TabsContent value="overview" className="mt-0 space-y-4">

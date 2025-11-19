@@ -52,7 +52,7 @@ export const MaintenanceCalendarWidget = React.memo(function MaintenanceCalendar
 
   const headerAction = (
     <div className="flex items-center gap-2">
-      <Button variant="outline" size="sm" onClick={goToToday} aria-label="Go to today" className="min-h-[44px]">
+      <Button variant="outline" size="sm" onClick={goToToday} aria-label="Go to today" className="min-h-[44px] hidden sm:inline-flex">
         Today
       </Button>
       <div className="flex items-center gap-1">
@@ -61,11 +61,11 @@ export const MaintenanceCalendarWidget = React.memo(function MaintenanceCalendar
           size="icon"
           onClick={goToPreviousMonth}
           aria-label="Previous month"
-          className="min-w-[44px] min-h-[44px]"
+          className="min-w-[40px] min-h-[40px] sm:min-w-[44px] sm:min-h-[44px]"
         >
           <ChevronLeft className="h-4 w-4" />
         </Button>
-        <span className="text-sm font-medium min-w-[140px] text-center" aria-live="polite">
+        <span className="text-xs sm:text-sm font-medium min-w-[100px] sm:min-w-[140px] text-center" aria-live="polite">
           {monthNames[currentMonth - 1]} {currentYear}
         </span>
         <Button
@@ -73,7 +73,7 @@ export const MaintenanceCalendarWidget = React.memo(function MaintenanceCalendar
           size="icon"
           onClick={goToNextMonth}
           aria-label="Next month"
-          className="min-w-[44px] min-h-[44px]"
+          className="min-w-[40px] min-h-[40px] sm:min-w-[44px] sm:min-h-[44px]"
         >
           <ChevronRight className="h-4 w-4" />
         </Button>
