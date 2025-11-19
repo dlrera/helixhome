@@ -42,7 +42,7 @@ pnpm typecheck    # Run TypeScript type checking
 ### Database
 
 ```bash
-pnpm db:seed      # Seed database with default data (creates admin@example.com / admin123)
+pnpm db:seed      # Seed database with default data (creates admin@example.com / homeportal)
 npx prisma studio # Open Prisma Studio for database inspection
 npx prisma migrate dev # Create and apply migrations
 npx prisma generate # Generate Prisma Client after schema changes

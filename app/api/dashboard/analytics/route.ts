@@ -17,6 +17,7 @@ import {
 } from 'date-fns'
 import { ZodError, z } from 'zod'
 import { dashboardCache } from '@/lib/utils/cache'
+import { withTiming } from '@/lib/utils/api-performance'
 
 const analyticsQuerySchema = z.object({
   period: z.enum(['week', 'month', 'quarter', 'year']).default('month'),
@@ -28,32 +29,34 @@ const analyticsQuerySchema = z.object({
  * Query params: period (week, month, quarter, year)
  */
 export async function GET(request: NextRequest) {
-  try {
-    const session = await requireAuth()
+  return withTiming('/api/dashboard/analytics', async () => {
+    try {
+      const session = await requireAuth()
 
-    // Parse query parameters
-    const { searchParams } = new URL(request.url)
-    const query = analyticsQuerySchema.parse({
-      period: searchParams.get('period') || 'month',
-    })
+      // Parse query parameters
+      const { searchParams } = new URL(request.url)
+      const query = analyticsQuerySchema.parse({
+        period: searchParams.get('period') || 'month',
+      })
 
-    // PERFORMANCE OPTIMIZATION: Use cache for dashboard analytics
-    const result = await dashboardCache.getAnalytics(
-      session.user.id,
-      query.period,
-      async () => await fetchAnalytics(session.user.id, query.period)
-    )
+      // PERFORMANCE OPTIMIZATION: Use cache for dashboard analytics
+      const result = await dashboardCache.getAnalytics(
+        session.user.id,
+        query.period,
+        async () => await fetchAnalytics(session.user.id, query.period)
+      )
 
-    return successResponse(result)
-  } catch (error) {
-    if (error instanceof Error && error.message === 'Unauthorized') {
-      return unauthorizedResponse()
+      return successResponse(result)
+    } catch (error) {
+      if (error instanceof Error && error.message === 'Unauthorized') {
+        return unauthorizedResponse()
+      }
+      if (error instanceof ZodError) {
+        return validationErrorResponse(error)
+      }
+      return serverErrorResponse(error)
     }
-    if (error instanceof ZodError) {
-      return validationErrorResponse(error)
-    }
-    return serverErrorResponse(error)
-  }
+  })
 }
 
 /**

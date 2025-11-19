@@ -10,7 +10,7 @@ test.describe('Maintenance Templates Workflow', () => {
     // Login before each test
     await page.goto('/auth/signin')
     await page.fill('input[name="email"]', 'admin@example.com')
-    await page.fill('input[name="password"]', 'admin123')
+    await page.fill('input[name="password"]', 'homeportal')
     await page.click('button[type="submit"]')
     await expect(page).toHaveURL('/dashboard')
   })
@@ -21,7 +21,9 @@ test.describe('Maintenance Templates Workflow', () => {
     await expect(page.locator('h1')).toContainText('Maintenance Templates')
 
     // Check that templates are displayed
-    await expect(page.locator('[data-testid="template-card"]').first()).toBeVisible()
+    await expect(
+      page.locator('[data-testid="template-card"]').first()
+    ).toBeVisible()
 
     // Filter by HVAC category
     await page.click('button[role="tab"]:has-text("HVAC")')
@@ -118,7 +120,9 @@ test.describe('Maintenance Templates Workflow', () => {
     await page.locator('[role="dialog"] .cursor-pointer').first().click()
 
     // Apply template modal should appear
-    await expect(page.locator('[role="dialog"]')).toContainText('Apply Template')
+    await expect(page.locator('[role="dialog"]')).toContainText(
+      'Apply Template'
+    )
 
     // Select frequency
     await page.click('button[role="radio"][value="MONTHLY"]')
@@ -134,17 +138,26 @@ test.describe('Maintenance Templates Workflow', () => {
     await page.goto('/templates')
 
     // Look for any applied templates (green indicators)
-    const appliedIndicators = page.locator('.text-green-600:has-text("Applied")')
+    const appliedIndicators = page.locator(
+      '.text-green-600:has-text("Applied")'
+    )
 
     // If there are applied templates, verify the UI
-    if (await appliedIndicators.count() > 0) {
+    if ((await appliedIndicators.count()) > 0) {
       // Check that applied templates have different button state
-      const appliedCard = page.locator('[data-testid="template-card"]').filter({
-        has: page.locator('.text-green-600')
-      }).first()
+      const appliedCard = page
+        .locator('[data-testid="template-card"]')
+        .filter({
+          has: page.locator('.text-green-600'),
+        })
+        .first()
 
-      await expect(appliedCard.locator('button:has-text("Applied")')).toBeVisible()
-      await expect(appliedCard.locator('button:has-text("Applied")')).toHaveClass(/bg-green-600/)
+      await expect(
+        appliedCard.locator('button:has-text("Applied")')
+      ).toBeVisible()
+      await expect(
+        appliedCard.locator('button:has-text("Applied")')
+      ).toHaveClass(/bg-green-600/)
     }
   })
 
@@ -152,8 +165,10 @@ test.describe('Maintenance Templates Workflow', () => {
     // Navigate to first asset with schedules
     await page.goto('/assets')
 
-    const assetWithSchedules = page.locator('[data-testid="asset-card"]').first()
-    if (await assetWithSchedules.count() > 0) {
+    const assetWithSchedules = page
+      .locator('[data-testid="asset-card"]')
+      .first()
+    if ((await assetWithSchedules.count()) > 0) {
       await assetWithSchedules.click()
 
       // Check for schedules section
@@ -162,7 +177,7 @@ test.describe('Maintenance Templates Workflow', () => {
         // Check for schedule cards
         const scheduleCards = page.locator('[data-testid="schedule-card"]')
 
-        if (await scheduleCards.count() > 0) {
+        if ((await scheduleCards.count()) > 0) {
           // Test pause/resume functionality
           const firstSchedule = scheduleCards.first()
           const pauseButton = firstSchedule.locator('button:has-text("Pause")')
@@ -192,11 +207,15 @@ test.describe('Maintenance Templates Workflow', () => {
       await paginationControls.click()
 
       // Verify page changed
-      await expect(page.locator('button.bg-[#216093]:has-text("2")')).toBeVisible()
+      await expect(
+        page.locator('button.bg-[#216093]:has-text("2")')
+      ).toBeVisible()
 
       // Go back to first page
       await page.click('button:has-text("Previous")')
-      await expect(page.locator('button.bg-[#216093]:has-text("1")')).toBeVisible()
+      await expect(
+        page.locator('button.bg-[#216093]:has-text("1")')
+      ).toBeVisible()
     }
   })
 
@@ -211,7 +230,7 @@ test.describe('Maintenance Templates Workflow', () => {
       const taskCards = page.locator('[data-testid="upcoming-task-card"]')
 
       // If there are tasks, verify the UI
-      if (await taskCards.count() > 0) {
+      if ((await taskCards.count()) > 0) {
         const firstTask = taskCards.first()
         await expect(firstTask).toContainText(/due/i)
 

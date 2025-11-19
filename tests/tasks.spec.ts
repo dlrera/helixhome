@@ -5,7 +5,7 @@ test.describe('Task Management', () => {
     // Login before each test
     await page.goto('/auth/signin')
     await page.fill('input[name="email"]', 'admin@example.com')
-    await page.fill('input[name="password"]', 'admin123')
+    await page.fill('input[name="password"]', 'homeportal')
     await page.click('button[type="submit"]')
     await page.waitForURL('/dashboard')
   })
@@ -28,7 +28,10 @@ test.describe('Task Management', () => {
 
     // Fill in task details
     await page.fill('input[name="title"]', 'Test Task from E2E')
-    await page.fill('textarea[name="description"]', 'This is a test task created by Playwright')
+    await page.fill(
+      'textarea[name="description"]',
+      'This is a test task created by Playwright'
+    )
 
     // Set due date to tomorrow
     const tomorrow = new Date()
@@ -105,7 +108,9 @@ test.describe('Task Management', () => {
     if (taskTitle) {
       await expect(page.locator(`text=${taskTitle}`)).toBeVisible()
     }
-    await expect(page.locator('text=Due Date').or(page.locator('text=Priority'))).toBeVisible()
+    await expect(
+      page.locator('text=Due Date').or(page.locator('text=Priority'))
+    ).toBeVisible()
   })
 
   test('should delete a task', async ({ page }) => {
@@ -145,7 +150,9 @@ test.describe('Task Management', () => {
     await page.goto('/tasks/calendar')
 
     // Verify calendar is visible
-    await expect(page.locator('text=Sun').or(page.locator('text=Mon'))).toBeVisible()
+    await expect(
+      page.locator('text=Sun').or(page.locator('text=Mon'))
+    ).toBeVisible()
 
     // Verify view toggle buttons exist
     await expect(page.locator('button:has-text("Month")')).toBeVisible()
@@ -183,7 +190,7 @@ test.describe('Task Statistics on Dashboard', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/auth/signin')
     await page.fill('input[name="email"]', 'admin@example.com')
-    await page.fill('input[name="password"]', 'admin123')
+    await page.fill('input[name="password"]', 'homeportal')
     await page.click('button[type="submit"]')
     await page.waitForURL('/dashboard')
   })
@@ -197,9 +204,9 @@ test.describe('Task Statistics on Dashboard', () => {
 
   test('should show upcoming maintenance tasks', async ({ page }) => {
     // Look for upcoming maintenance widget
-    const upcomingSection = page.locator('text=Upcoming Maintenance').or(
-      page.locator('text=This Week')
-    )
+    const upcomingSection = page
+      .locator('text=Upcoming Maintenance')
+      .or(page.locator('text=This Week'))
 
     // Widget should exist
     await expect(upcomingSection).toBeVisible()

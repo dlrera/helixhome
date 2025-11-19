@@ -165,7 +165,7 @@ export const templateCache = {
     fetcher: () => Promise<T>,
     ttl: number = 10 * 60 * 1000 // 10 minutes default
   ): Promise<T> {
-    const cached = cache.get(key)
+    const cached = cache.get<T>(key)
     if (cached) {
       console.log(`[Cache] Hit for key: ${key}`)
       return cached
@@ -216,7 +216,7 @@ export const scheduleCache = {
     fetcher: () => Promise<T>,
     ttl: number = 5 * 60 * 1000 // 5 minutes default
   ): Promise<T> {
-    const cached = cache.get(key)
+    const cached = cache.get<T>(key)
     if (cached) {
       console.log(`[Cache] Hit for key: ${key}`)
       return cached
@@ -263,7 +263,7 @@ export const dashboardCache = {
     ttl: number = 5 * 60 * 1000 // 5 minutes default
   ): Promise<T> {
     const key = `dashboard:analytics:${userId}:${period}`
-    const cached = cache.get(key)
+    const cached = cache.get<T>(key)
     if (cached) {
       console.log(`[Cache] Hit for key: ${key}`)
       return cached
@@ -280,13 +280,13 @@ export const dashboardCache = {
    */
   async getCostSummary<T = unknown>(
     userId: string,
+    fetcher: () => Promise<T>,
     startDate?: string,
     endDate?: string,
-    fetcher: () => Promise<T>,
     ttl: number = 5 * 60 * 1000
   ): Promise<T> {
     const key = `dashboard:cost:${userId}:${startDate || 'current'}:${endDate || 'current'}`
-    const cached = cache.get(key)
+    const cached = cache.get<T>(key)
     if (cached) {
       console.log(`[Cache] Hit for key: ${key}`)
       return cached
@@ -309,7 +309,7 @@ export const dashboardCache = {
     ttl: number = 5 * 60 * 1000
   ): Promise<T> {
     const key = `dashboard:calendar:${userId}:${year}-${month}`
-    const cached = cache.get(key)
+    const cached = cache.get<T>(key)
     if (cached) {
       console.log(`[Cache] Hit for key: ${key}`)
       return cached
@@ -332,7 +332,7 @@ export const dashboardCache = {
     ttl: number = 2 * 60 * 1000 // 2 minutes for activity feed
   ): Promise<T> {
     const key = `dashboard:activity:${userId}:${limit}:${offset}`
-    const cached = cache.get(key)
+    const cached = cache.get<T>(key)
     if (cached) {
       console.log(`[Cache] Hit for key: ${key}`)
       return cached

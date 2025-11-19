@@ -5,7 +5,7 @@ test.describe('Dashboard Analytics', () => {
     // Login before each test
     await page.goto('/auth/signin')
     await page.fill('input[name="email"]', 'admin@example.com')
-    await page.fill('input[name="password"]', 'admin123')
+    await page.fill('input[name="password"]', 'homeportal')
     await page.click('button[type="submit"]')
     await page.waitForURL('/dashboard')
   })
@@ -20,12 +20,16 @@ test.describe('Dashboard Analytics', () => {
 
   test('should display analytics chart widget', async ({ page }) => {
     // Verify analytics chart is visible
-    await expect(page.locator('text=Completion Trend').or(page.locator('text=Category Breakdown'))).toBeVisible()
+    await expect(
+      page
+        .locator('text=Completion Trend')
+        .or(page.locator('text=Category Breakdown'))
+    ).toBeVisible()
 
     // Verify period selector exists
-    const periodSelector = page.locator('button:has-text("Month")').or(
-      page.locator('select').filter({ hasText: 'Month' })
-    )
+    const periodSelector = page
+      .locator('button:has-text("Month")')
+      .or(page.locator('select').filter({ hasText: 'Month' }))
 
     // Period selector should be visible or interactable
     const isVisible = await periodSelector.count()
@@ -58,26 +62,31 @@ test.describe('Dashboard Analytics', () => {
   test('should display activity timeline', async ({ page }) => {
     // Verify activity timeline widget exists
     await expect(
-      page.locator('text=Recent Activity').or(page.locator('text=Activity Timeline'))
+      page
+        .locator('text=Recent Activity')
+        .or(page.locator('text=Activity Timeline'))
     ).toBeVisible()
   })
 
   test('should display maintenance calendar widget', async ({ page }) => {
     // Verify calendar widget exists
     await expect(
-      page.locator('text=Maintenance Calendar').or(page.locator('text=Calendar'))
+      page
+        .locator('text=Maintenance Calendar')
+        .or(page.locator('text=Calendar'))
     ).toBeVisible()
 
     // Verify calendar navigation exists
-    const prevButton = page.locator('button[aria-label="Previous month"]').or(
-      page.locator('button:has-text("Previous")')
-    )
-    const nextButton = page.locator('button[aria-label="Next month"]').or(
-      page.locator('button:has-text("Next")')
-    )
+    const prevButton = page
+      .locator('button[aria-label="Previous month"]')
+      .or(page.locator('button:has-text("Previous")'))
+    const nextButton = page
+      .locator('button[aria-label="Next month"]')
+      .or(page.locator('button:has-text("Next")'))
 
     // At least one navigation button should exist
-    const hasNavigation = (await prevButton.count()) > 0 || (await nextButton.count()) > 0
+    const hasNavigation =
+      (await prevButton.count()) > 0 || (await nextButton.count()) > 0
     expect(hasNavigation).toBe(true)
   })
 
@@ -95,7 +104,9 @@ test.describe('Dashboard Analytics', () => {
 
     // Verify insights section exists
     await expect(
-      page.locator('text=Maintenance Insights').or(page.locator('text=Insights'))
+      page
+        .locator('text=Maintenance Insights')
+        .or(page.locator('text=Insights'))
     ).toBeVisible()
   })
 })
@@ -104,7 +115,7 @@ test.describe('Dashboard Navigation', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/auth/signin')
     await page.fill('input[name="email"]', 'admin@example.com')
-    await page.fill('input[name="password"]', 'admin123')
+    await page.fill('input[name="password"]', 'homeportal')
     await page.click('button[type="submit"]')
     await page.waitForURL('/dashboard')
   })
@@ -142,7 +153,9 @@ test.describe('Dashboard Navigation', () => {
     await expect(page.locator('h2')).toContainText('Dashboard Settings')
   })
 
-  test('should navigate back to dashboard from cost report', async ({ page }) => {
+  test('should navigate back to dashboard from cost report', async ({
+    page,
+  }) => {
     await page.goto('/dashboard/costs')
 
     // Click back to dashboard button
@@ -158,7 +171,7 @@ test.describe('Cost Report Features', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/auth/signin')
     await page.fill('input[name="email"]', 'admin@example.com')
-    await page.fill('input[name="password"]', 'admin123')
+    await page.fill('input[name="password"]', 'homeportal')
     await page.click('button[type="submit"]')
     await page.waitForURL('/dashboard')
     await page.goto('/dashboard/costs')
@@ -205,11 +218,14 @@ test.describe('Cost Report Features', () => {
     await page.waitForTimeout(500)
 
     // Look for chart or spending breakdown
-    const hasChart = (await page.locator('text=Spending by Category').count()) > 0
+    const hasChart =
+      (await page.locator('text=Spending by Category').count()) > 0
     expect(hasChart).toBe(true)
   })
 
-  test('should show "Set Budget" link when no budget configured', async ({ page }) => {
+  test('should show "Set Budget" link when no budget configured', async ({
+    page,
+  }) => {
     // If budget card shows "Not Set", verify link exists
     const notSetText = page.locator('text=Not Set')
 
@@ -232,7 +248,7 @@ test.describe('Dashboard Settings', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/auth/signin')
     await page.fill('input[name="email"]', 'admin@example.com')
-    await page.fill('input[name="password"]', 'admin123')
+    await page.fill('input[name="password"]', 'homeportal')
     await page.click('button[type="submit"]')
     await page.waitForURL('/dashboard')
     await page.goto('/dashboard/settings')
@@ -244,9 +260,12 @@ test.describe('Dashboard Settings', () => {
     await expect(page.locator('text=Maintenance Budget')).toBeVisible()
 
     // Verify form fields exist
-    const budgetInput = page.locator('input[type="text"]').filter({
-      has: page.locator('xpath=ancestor::*[contains(., "Monthly Budget")]')
-    }).or(page.locator('input').first())
+    const budgetInput = page
+      .locator('input[type="text"]')
+      .filter({
+        has: page.locator('xpath=ancestor::*[contains(., "Monthly Budget")]'),
+      })
+      .or(page.locator('input').first())
 
     await expect(budgetInput).toBeVisible()
   })
@@ -267,32 +286,38 @@ test.describe('Dashboard Settings', () => {
       await page.waitForTimeout(1000)
 
       // Verify success toast or updated value
-      const hasSuccess = (await page.locator('text=updated').count()) > 0 ||
-                        (await page.locator('text=success').count()) > 0
+      const hasSuccess =
+        (await page.locator('text=updated').count()) > 0 ||
+        (await page.locator('text=success').count()) > 0
 
       // Toast should appear or budget should be saved
-      expect(hasSuccess || await budgetInput.inputValue() === '1000').toBe(true)
+      expect(hasSuccess || (await budgetInput.inputValue()) === '1000').toBe(
+        true
+      )
     }
   })
 
   test('should display budget start date picker', async ({ page }) => {
     // Look for date picker button or input
-    const dateButton = page.locator('button').filter({ hasText: /Pick a date|20\d{2}/ })
+    const dateButton = page
+      .locator('button')
+      .filter({ hasText: /Pick a date|20\d{2}/ })
     const dateInput = page.locator('input[type="date"]')
 
     // Either date button or input should exist
-    const hasDatePicker = (await dateButton.count()) > 0 || (await dateInput.count()) > 0
+    const hasDatePicker =
+      (await dateButton.count()) > 0 || (await dateInput.count()) > 0
     expect(hasDatePicker).toBe(true)
   })
 
   test('should show current budget value', async ({ page }) => {
     // Look for current budget display
-    const currentBudget = page.locator('text=Current budget').or(
-      page.locator('text=/\\$\\d+/')
-    )
+    const currentBudget = page
+      .locator('text=Current budget')
+      .or(page.locator('text=/\\$\\d+/'))
 
     // Some budget information should be visible
-    const hasBudgetInfo = await currentBudget.count() > 0
+    const hasBudgetInfo = (await currentBudget.count()) > 0
     expect(hasBudgetInfo).toBe(true)
   })
 
@@ -313,7 +338,7 @@ test.describe('Mobile Responsiveness - Dashboard', () => {
 
     await page.goto('/auth/signin')
     await page.fill('input[name="email"]', 'admin@example.com')
-    await page.fill('input[name="password"]', 'admin123')
+    await page.fill('input[name="password"]', 'homeportal')
     await page.click('button[type="submit"]')
     await page.waitForURL('/dashboard')
   })
@@ -326,9 +351,9 @@ test.describe('Mobile Responsiveness - Dashboard', () => {
 
   test('should display widgets stacked on mobile', async ({ page }) => {
     // Verify widgets are visible (they should stack vertically)
-    const analyticsChart = page.locator('text=Completion Trend').or(
-      page.locator('text=Analytics')
-    )
+    const analyticsChart = page
+      .locator('text=Completion Trend')
+      .or(page.locator('text=Analytics'))
 
     await expect(analyticsChart).toBeVisible()
   })

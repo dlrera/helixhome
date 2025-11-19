@@ -1,12 +1,12 @@
-'use client';
+'use client'
 
-import React, { useState, useCallback } from 'react';
-import { WidgetContainer } from './widget-container';
-import { useActivityFeed } from '@/lib/hooks/use-dashboard';
-import { formatDistanceToNow } from 'date-fns';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { ScrollArea } from '@/components/ui/scroll-area';
+import React, { useState, useCallback } from 'react'
+import { WidgetContainer } from './widget-container'
+import { useActivityFeed } from '@/lib/hooks/use-dashboard'
+import { formatDistanceToNow } from 'date-fns'
+import { Button } from '@/components/ui/button'
+import { Badge } from '@/components/ui/badge'
+import { ScrollArea } from '@/components/ui/scroll-area'
 
 /**
  * Get icon/badge color based on activity type
@@ -23,8 +23,8 @@ const getActivityTypeColor = (activityType: string): string => {
     TEMPLATE_APPLIED: 'bg-purple-500',
     SCHEDULE_CREATED: 'bg-indigo-500',
     SCHEDULE_UPDATED: 'bg-blue-500',
-  };
-  return colorMap[activityType] || 'bg-gray-500';
+  }
+  return colorMap[activityType] || 'bg-gray-500'
 }
 
 /**
@@ -42,8 +42,8 @@ const getActivityTypeLabel = (activityType: string): string => {
     TEMPLATE_APPLIED: 'Template Applied',
     SCHEDULE_CREATED: 'Schedule Created',
     SCHEDULE_UPDATED: 'Schedule Updated',
-  };
-  return labelMap[activityType] || activityType;
+  }
+  return labelMap[activityType] || activityType
 }
 
 /**
@@ -51,13 +51,13 @@ const getActivityTypeLabel = (activityType: string): string => {
  * Performance optimized with React.memo and useCallback
  */
 export const ActivityTimeline = React.memo(function ActivityTimeline() {
-  const [limit, setLimit] = useState(20);
-  const { data, isLoading, error } = useActivityFeed(limit, 0);
+  const [limit, setLimit] = useState(20)
+  const { data, isLoading, error } = useActivityFeed(limit, 0)
 
   // Memoize load more handler
   const loadMore = useCallback(() => {
-    setLimit((prev) => prev + 20);
-  }, []);
+    setLimit((prev) => prev + 20)
+  }, [])
 
   return (
     <WidgetContainer
@@ -96,21 +96,51 @@ export const ActivityTimeline = React.memo(function ActivityTimeline() {
                               {getActivityTypeLabel(activity.activityType)}
                             </Badge>
                             <span className="text-xs text-muted-foreground">
-                              {formatDistanceToNow(new Date(activity.createdAt), { addSuffix: true })}
+                              {formatDistanceToNow(
+                                new Date(activity.createdAt),
+                                { addSuffix: true }
+                              )}
                             </span>
                           </div>
-                          <p className="text-sm font-medium">{activity.description}</p>
-                          {activity.metadata && Object.keys(activity.metadata).length > 0 && (
-                            <div className="mt-1 text-xs text-muted-foreground">
-                              <span className="font-medium">{activity.entityName}</span>
-                              {activity.metadata.category && (
-                                <span className="ml-2">• {activity.metadata.category}</span>
-                              )}
-                              {activity.metadata.priority && (
-                                <span className="ml-2">• Priority: {activity.metadata.priority}</span>
-                              )}
-                            </div>
-                          )}
+                          <p className="text-sm font-medium">
+                            {activity.description}
+                          </p>
+                          {activity.metadata &&
+                            Object.keys(activity.metadata).length > 0 && (
+                              <div className="mt-1 text-xs text-muted-foreground">
+                                <span className="font-medium">
+                                  {activity.entityName}
+                                </span>
+                                {(activity.metadata as Record<string, string>)
+                                  .category && (
+                                  <span className="ml-2">
+                                    •{' '}
+                                    {
+                                      (
+                                        activity.metadata as Record<
+                                          string,
+                                          string
+                                        >
+                                      ).category
+                                    }
+                                  </span>
+                                )}
+                                {(activity.metadata as Record<string, string>)
+                                  .priority && (
+                                  <span className="ml-2">
+                                    • Priority:{' '}
+                                    {
+                                      (
+                                        activity.metadata as Record<
+                                          string,
+                                          string
+                                        >
+                                      ).priority
+                                    }
+                                  </span>
+                                )}
+                              </div>
+                            )}
                         </div>
                       </div>
                     </div>
@@ -135,5 +165,5 @@ export const ActivityTimeline = React.memo(function ActivityTimeline() {
         </div>
       )}
     </WidgetContainer>
-  );
-});
+  )
+})

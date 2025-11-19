@@ -1,4 +1,10 @@
-import { PrismaClient, AssetCategory, Frequency, Difficulty, Priority, TaskStatus, ActivityType } from '@prisma/client'
+import {
+  PrismaClient,
+  AssetCategory,
+  Priority,
+  TaskStatus,
+  ActivityType,
+} from '@prisma/client'
 import bcrypt from 'bcryptjs'
 import { seedMaintenanceTemplates } from './seeds/maintenance-templates'
 
@@ -8,21 +14,27 @@ async function main() {
   console.log('🌱 Seeding database...')
 
   // Create users
-  const adminPassword = await bcrypt.hash('admin123', 12)
+  const adminPassword = await bcrypt.hash('homeportal', 12)
   const adminUser = await prisma.user.upsert({
     where: { email: 'admin@example.com' },
-    update: {},
+    update: {
+      password: adminPassword,
+    },
     create: {
       email: 'admin@example.com',
       name: 'Admin User',
       password: adminPassword,
-      maintenanceBudget: 500.00, // $500/month budget
-      budgetStartDate: new Date(new Date().getFullYear(), new Date().getMonth(), 1), // Start of current month
+      maintenanceBudget: 500.0, // $500/month budget
+      budgetStartDate: new Date(
+        new Date().getFullYear(),
+        new Date().getMonth(),
+        1
+      ), // Start of current month
     },
   })
 
   const testPassword = await bcrypt.hash('test123', 12)
-  const testUser = await prisma.user.upsert({
+  await prisma.user.upsert({
     where: { email: 'test@example.com' },
     update: {},
     create: {
@@ -43,7 +55,7 @@ async function main() {
         street: '123 Main St',
         city: 'Springfield',
         state: 'IL',
-        zip: '62701'
+        zip: '62701',
       }),
     },
   })
@@ -100,7 +112,7 @@ async function main() {
       dueDate: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000), // 3 days from now
       priority: Priority.HIGH,
       status: TaskStatus.PENDING,
-      estimatedCost: 25.00,
+      estimatedCost: 25.0,
     },
   })
 
@@ -113,7 +125,7 @@ async function main() {
       dueDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 days from now
       priority: Priority.MEDIUM,
       status: TaskStatus.PENDING,
-      estimatedCost: 150.00,
+      estimatedCost: 150.0,
     },
   })
 
@@ -141,8 +153,8 @@ async function main() {
       status: TaskStatus.COMPLETED,
       completedAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000), // Completed 3 days ago
       completedBy: adminUser.id,
-      estimatedCost: 50.00,
-      actualCost: 35.00,
+      estimatedCost: 50.0,
+      actualCost: 35.0,
       costNotes: 'Cleaning supplies',
     },
   })
@@ -200,7 +212,7 @@ async function main() {
         entityId: completedTask.id,
         entityName: 'Clean Refrigerator Coils',
         description: 'Completed task: Clean Refrigerator Coils',
-        metadata: JSON.stringify({ cost: 35.00 }),
+        metadata: JSON.stringify({ cost: 35.0 }),
         createdAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000), // 3 days ago
       },
       {
@@ -229,7 +241,9 @@ async function main() {
   console.log('✅ Activity logs created')
 
   console.log('\n📝 Seed Summary:')
-  console.log('   Users: admin@example.com / admin123, test@example.com / test123')
+  console.log(
+    '   Users: admin@example.com / homeportal, test@example.com / test123'
+  )
   console.log('   Home: Main Residence')
   console.log('   Assets: 3 (Furnace, Water Heater, Refrigerator)')
   console.log('   Templates: 20 maintenance templates')

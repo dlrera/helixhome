@@ -17,8 +17,8 @@ describe('Template API Endpoints', () => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         email: 'admin@example.com',
-        password: 'admin123'
-      })
+        password: 'homeportal',
+      }),
     })
     const data = await loginResponse.json()
     authToken = data.token
@@ -27,7 +27,7 @@ describe('Template API Endpoints', () => {
   describe('GET /api/templates', () => {
     it('should return paginated list of templates', async () => {
       const response = await fetch(`${BASE_URL}/api/templates`, {
-        headers: { 'Authorization': `Bearer ${authToken}` }
+        headers: { Authorization: `Bearer ${authToken}` },
       })
 
       expect(response.status).toBe(200)
@@ -40,7 +40,7 @@ describe('Template API Endpoints', () => {
 
     it('should filter templates by category', async () => {
       const response = await fetch(`${BASE_URL}/api/templates?category=HVAC`, {
-        headers: { 'Authorization': `Bearer ${authToken}` }
+        headers: { Authorization: `Bearer ${authToken}` },
       })
 
       expect(response.status).toBe(200)
@@ -51,9 +51,12 @@ describe('Template API Endpoints', () => {
     })
 
     it('should filter templates by difficulty', async () => {
-      const response = await fetch(`${BASE_URL}/api/templates?difficulty=EASY`, {
-        headers: { 'Authorization': `Bearer ${authToken}` }
-      })
+      const response = await fetch(
+        `${BASE_URL}/api/templates?difficulty=EASY`,
+        {
+          headers: { Authorization: `Bearer ${authToken}` },
+        }
+      )
 
       expect(response.status).toBe(200)
       const data = await response.json()
@@ -64,7 +67,7 @@ describe('Template API Endpoints', () => {
 
     it('should search templates by name', async () => {
       const response = await fetch(`${BASE_URL}/api/templates?search=filter`, {
-        headers: { 'Authorization': `Bearer ${authToken}` }
+        headers: { Authorization: `Bearer ${authToken}` },
       })
 
       expect(response.status).toBe(200)
@@ -86,7 +89,7 @@ describe('Template API Endpoints', () => {
 
     beforeAll(async () => {
       const response = await fetch(`${BASE_URL}/api/templates`, {
-        headers: { 'Authorization': `Bearer ${authToken}` }
+        headers: { Authorization: `Bearer ${authToken}` },
       })
       const data = await response.json()
       templateId = data.templates[0].id
@@ -94,7 +97,7 @@ describe('Template API Endpoints', () => {
 
     it('should return single template with full details', async () => {
       const response = await fetch(`${BASE_URL}/api/templates/${templateId}`, {
-        headers: { 'Authorization': `Bearer ${authToken}` }
+        headers: { Authorization: `Bearer ${authToken}` },
       })
 
       expect(response.status).toBe(200)
@@ -106,9 +109,12 @@ describe('Template API Endpoints', () => {
     })
 
     it('should return 404 for non-existent template', async () => {
-      const response = await fetch(`${BASE_URL}/api/templates/non-existent-id`, {
-        headers: { 'Authorization': `Bearer ${authToken}` }
-      })
+      const response = await fetch(
+        `${BASE_URL}/api/templates/non-existent-id`,
+        {
+          headers: { Authorization: `Bearer ${authToken}` },
+        }
+      )
 
       expect(response.status).toBe(404)
     })
@@ -120,7 +126,7 @@ describe('Template API Endpoints', () => {
     beforeAll(async () => {
       // Fetch an asset to use for suggestions
       const response = await fetch(`${BASE_URL}/api/assets`, {
-        headers: { 'Authorization': `Bearer ${authToken}` }
+        headers: { Authorization: `Bearer ${authToken}` },
       })
       const data = await response.json()
       if (data.assets && data.assets.length > 0) {
@@ -134,9 +140,12 @@ describe('Template API Endpoints', () => {
         return
       }
 
-      const response = await fetch(`${BASE_URL}/api/templates/suggestions?assetId=${assetId}`, {
-        headers: { 'Authorization': `Bearer ${authToken}` }
-      })
+      const response = await fetch(
+        `${BASE_URL}/api/templates/suggestions?assetId=${assetId}`,
+        {
+          headers: { Authorization: `Bearer ${authToken}` },
+        }
+      )
 
       expect(response.status).toBe(200)
       const suggestions = await response.json()
@@ -145,9 +154,12 @@ describe('Template API Endpoints', () => {
     })
 
     it('should return 404 for non-existent asset', async () => {
-      const response = await fetch(`${BASE_URL}/api/templates/suggestions?assetId=non-existent`, {
-        headers: { 'Authorization': `Bearer ${authToken}` }
-      })
+      const response = await fetch(
+        `${BASE_URL}/api/templates/suggestions?assetId=non-existent`,
+        {
+          headers: { Authorization: `Bearer ${authToken}` },
+        }
+      )
 
       expect(response.status).toBe(404)
     })
@@ -160,13 +172,13 @@ describe('Template API Endpoints', () => {
     beforeAll(async () => {
       // Get a template and asset for testing
       const templatesResponse = await fetch(`${BASE_URL}/api/templates`, {
-        headers: { 'Authorization': `Bearer ${authToken}` }
+        headers: { Authorization: `Bearer ${authToken}` },
       })
       const templatesData = await templatesResponse.json()
       templateId = templatesData.templates[0].id
 
       const assetsResponse = await fetch(`${BASE_URL}/api/assets`, {
-        headers: { 'Authorization': `Bearer ${authToken}` }
+        headers: { Authorization: `Bearer ${authToken}` },
       })
       const assetsData = await assetsResponse.json()
       if (assetsData.assets && assetsData.assets.length > 0) {
@@ -183,14 +195,14 @@ describe('Template API Endpoints', () => {
       const response = await fetch(`${BASE_URL}/api/templates/apply`, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${authToken}`,
-          'Content-Type': 'application/json'
+          Authorization: `Bearer ${authToken}`,
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           templateId,
           assetId,
-          frequency: 'MONTHLY'
-        })
+          frequency: 'MONTHLY',
+        }),
       })
 
       const data = await response.json()
@@ -211,14 +223,14 @@ describe('Template API Endpoints', () => {
       const response = await fetch(`${BASE_URL}/api/templates/apply`, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${authToken}`,
-          'Content-Type': 'application/json'
+          Authorization: `Bearer ${authToken}`,
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           templateId,
           assetId,
-          frequency: 'INVALID'
-        })
+          frequency: 'INVALID',
+        }),
       })
 
       expect(response.status).toBe(400)
@@ -228,7 +240,7 @@ describe('Template API Endpoints', () => {
   describe('GET /api/schedules', () => {
     it('should return user schedules', async () => {
       const response = await fetch(`${BASE_URL}/api/schedules`, {
-        headers: { 'Authorization': `Bearer ${authToken}` }
+        headers: { Authorization: `Bearer ${authToken}` },
       })
 
       expect(response.status).toBe(200)
@@ -239,9 +251,12 @@ describe('Template API Endpoints', () => {
     })
 
     it('should include inactive schedules when requested', async () => {
-      const response = await fetch(`${BASE_URL}/api/schedules?includeInactive=true`, {
-        headers: { 'Authorization': `Bearer ${authToken}` }
-      })
+      const response = await fetch(
+        `${BASE_URL}/api/schedules?includeInactive=true`,
+        {
+          headers: { Authorization: `Bearer ${authToken}` },
+        }
+      )
 
       expect(response.status).toBe(200)
       const data = await response.json()
@@ -250,15 +265,18 @@ describe('Template API Endpoints', () => {
 
     it('should filter schedules by asset', async () => {
       const assetsResponse = await fetch(`${BASE_URL}/api/assets`, {
-        headers: { 'Authorization': `Bearer ${authToken}` }
+        headers: { Authorization: `Bearer ${authToken}` },
       })
       const assetsData = await assetsResponse.json()
 
       if (assetsData.assets && assetsData.assets.length > 0) {
         const assetId = assetsData.assets[0].id
-        const response = await fetch(`${BASE_URL}/api/schedules?assetId=${assetId}`, {
-          headers: { 'Authorization': `Bearer ${authToken}` }
-        })
+        const response = await fetch(
+          `${BASE_URL}/api/schedules?assetId=${assetId}`,
+          {
+            headers: { Authorization: `Bearer ${authToken}` },
+          }
+        )
 
         expect(response.status).toBe(200)
         const data = await response.json()
@@ -273,9 +291,12 @@ describe('Template API Endpoints', () => {
     let scheduleId: string
 
     beforeAll(async () => {
-      const response = await fetch(`${BASE_URL}/api/schedules?includeInactive=true`, {
-        headers: { 'Authorization': `Bearer ${authToken}` }
-      })
+      const response = await fetch(
+        `${BASE_URL}/api/schedules?includeInactive=true`,
+        {
+          headers: { Authorization: `Bearer ${authToken}` },
+        }
+      )
       const data = await response.json()
       if (data.schedules && data.schedules.length > 0) {
         scheduleId = data.schedules[0].id
@@ -291,12 +312,12 @@ describe('Template API Endpoints', () => {
       const response = await fetch(`${BASE_URL}/api/schedules/${scheduleId}`, {
         method: 'PUT',
         headers: {
-          'Authorization': `Bearer ${authToken}`,
-          'Content-Type': 'application/json'
+          Authorization: `Bearer ${authToken}`,
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          frequency: 'QUARTERLY'
-        })
+          frequency: 'QUARTERLY',
+        }),
       })
 
       expect(response.status).toBe(200)
@@ -308,9 +329,12 @@ describe('Template API Endpoints', () => {
       if (!scheduleId) return
 
       // Get current status
-      const getResponse = await fetch(`${BASE_URL}/api/schedules?includeInactive=true`, {
-        headers: { 'Authorization': `Bearer ${authToken}` }
-      })
+      const getResponse = await fetch(
+        `${BASE_URL}/api/schedules?includeInactive=true`,
+        {
+          headers: { Authorization: `Bearer ${authToken}` },
+        }
+      )
       const getData = await getResponse.json()
       const schedule = getData.schedules.find((s: any) => s.id === scheduleId)
       const currentStatus = schedule.isActive
@@ -319,12 +343,12 @@ describe('Template API Endpoints', () => {
       const response = await fetch(`${BASE_URL}/api/schedules/${scheduleId}`, {
         method: 'PUT',
         headers: {
-          'Authorization': `Bearer ${authToken}`,
-          'Content-Type': 'application/json'
+          Authorization: `Bearer ${authToken}`,
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          isActive: !currentStatus
-        })
+          isActive: !currentStatus,
+        }),
       })
 
       expect(response.status).toBe(200)
@@ -337,9 +361,12 @@ describe('Template API Endpoints', () => {
     let scheduleId: string
 
     beforeAll(async () => {
-      const response = await fetch(`${BASE_URL}/api/schedules?includeInactive=true`, {
-        headers: { 'Authorization': `Bearer ${authToken}` }
-      })
+      const response = await fetch(
+        `${BASE_URL}/api/schedules?includeInactive=true`,
+        {
+          headers: { Authorization: `Bearer ${authToken}` },
+        }
+      )
       const data = await response.json()
       if (data.schedules && data.schedules.length > 0) {
         scheduleId = data.schedules[0].id
@@ -354,7 +381,7 @@ describe('Template API Endpoints', () => {
 
       const response = await fetch(`${BASE_URL}/api/schedules/${scheduleId}`, {
         method: 'DELETE',
-        headers: { 'Authorization': `Bearer ${authToken}` }
+        headers: { Authorization: `Bearer ${authToken}` },
       })
 
       expect(response.status).toBe(200)

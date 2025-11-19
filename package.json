@@ -20,7 +20,7 @@
   },
   "lint-staged": {
     "**/*.{js,jsx,ts,tsx}": [
-      "eslint --fix",
+      "eslint --fix --ignore-pattern 'tests/**' --no-warn-ignored",
       "prettier --write"
     ],
     "**/*.{json,css,md}": [

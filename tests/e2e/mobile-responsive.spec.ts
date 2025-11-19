@@ -42,7 +42,7 @@ async function checkNoHorizontalScroll(page: Page, pageName: string) {
 async function login(page: Page) {
   await page.goto('/login')
   await page.fill('input[type="email"]', 'admin@example.com')
-  await page.fill('input[type="password"]', 'admin123')
+  await page.fill('input[type="password"]', 'homeportal')
   await page.click('button[type="submit"]')
   await page.waitForURL('**/dashboard', { timeout: 10000 })
 }
