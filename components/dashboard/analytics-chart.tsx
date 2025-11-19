@@ -77,7 +77,7 @@ export const AnalyticsChart = React.memo(function AnalyticsChart() {
   const periodSelector = useMemo(
     () => (
       <Select value={period} onValueChange={handlePeriodChange}>
-        <SelectTrigger className="w-[140px]" aria-label="Select time period">
+        <SelectTrigger className="w-full sm:w-[140px]" aria-label="Select time period">
           <SelectValue />
         </SelectTrigger>
         <SelectContent>
@@ -102,9 +102,9 @@ export const AnalyticsChart = React.memo(function AnalyticsChart() {
       {data && (
         <Tabs defaultValue="completion" className="w-full">
           <TabsList className="grid w-full grid-cols-3 mb-4">
-            <TabsTrigger value="completion">Completion Trend</TabsTrigger>
-            <TabsTrigger value="category">By Category</TabsTrigger>
-            <TabsTrigger value="priority">By Priority</TabsTrigger>
+            <TabsTrigger value="completion" className="text-xs sm:text-sm">Completion</TabsTrigger>
+            <TabsTrigger value="category" className="text-xs sm:text-sm">Category</TabsTrigger>
+            <TabsTrigger value="priority" className="text-xs sm:text-sm">Priority</TabsTrigger>
           </TabsList>
 
           <TabsContent value="completion" className="mt-0">

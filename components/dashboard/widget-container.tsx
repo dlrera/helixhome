@@ -27,11 +27,11 @@ export function WidgetContainer({
 }: WidgetContainerProps) {
   return (
     <Card className={cn('h-full', className)}>
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
+      <CardHeader className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-3 sm:space-y-0 pb-4">
         <div className="space-y-1">
-          <CardTitle className="text-xl font-bold">{title}</CardTitle>
+          <CardTitle className="text-lg sm:text-xl font-bold">{title}</CardTitle>
           {description && (
-            <CardDescription className="text-sm text-muted-foreground">
+            <CardDescription className="text-xs sm:text-sm text-muted-foreground">
               {description}
             </CardDescription>
           )}
