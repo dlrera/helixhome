@@ -44,8 +44,8 @@ export default async function AssetsPage() {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold">Assets</h1>
-          <p className="text-gray-600 mt-1">Manage your home assets and equipment</p>
+          <h1 className="text-2xl sm:text-3xl font-bold">Assets</h1>
+          <p className="text-sm sm:text-base text-gray-600 mt-1">Manage your home assets and equipment</p>
         </div>
         <Link href="/assets/new">
           <Button className="w-full sm:w-auto">
