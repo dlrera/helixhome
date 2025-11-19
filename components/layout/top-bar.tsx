@@ -2,7 +2,6 @@
 
 import { Bell, Menu, Search } from 'lucide-react'
 import Link from 'next/link'
-import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import UserDropdown from './user-dropdown'
@@ -19,7 +18,11 @@ interface TopBarProps {
   }
 }
 
-export default function TopBar({ onMenuClick, onCommandPaletteOpen, user }: TopBarProps) {
+export default function TopBar({
+  onMenuClick,
+  onCommandPaletteOpen,
+  user,
+}: TopBarProps) {
   const [notificationCount, setNotificationCount] = useState(0)
 
   // Fetch notification count
@@ -62,7 +65,7 @@ export default function TopBar({ onMenuClick, onCommandPaletteOpen, user }: TopB
               <span className="text-white font-black text-sm">H</span>
             </div>
             <span className="font-black text-xl text-[#216093] hidden sm:inline">
-              HelixIntel
+              Home Portal
             </span>
           </Link>
         </div>
@@ -82,7 +85,11 @@ export default function TopBar({ onMenuClick, onCommandPaletteOpen, user }: TopB
 
           {/* Notifications */}
           <Link href="/notifications">
-            <Button variant="ghost" size="icon" className="relative min-w-[44px] min-h-[44px]">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="relative min-w-[44px] min-h-[44px]"
+            >
               <Bell className="h-5 w-5" />
               {notificationCount > 0 && (
                 <Badge

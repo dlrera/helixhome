@@ -1,24 +1,24 @@
-import type { Metadata } from "next";
-import "./globals.css";
-import { Providers } from "./providers";
-import { Inter } from "next/font/google";
-import { Toaster } from "@/components/ui/toaster";
+import type { Metadata } from 'next'
+import './globals.css'
+import { Providers } from './providers'
+import { Inter } from 'next/font/google'
+import { Toaster } from '@/components/ui/toaster'
 
 const inter = Inter({
-  subsets: ["latin"],
-  weight: ["400", "900"],
-  variable: "--font-sans",
-});
+  subsets: ['latin'],
+  weight: ['400', '900'],
+  variable: '--font-sans',
+})
 
 export const metadata: Metadata = {
-  title: "HelixIntel",
-  description: "A modern web application built with Next.js",
-};
+  title: 'Home Portal',
+  description: 'Your home maintenance management system',
+}
 
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode;
+  children: React.ReactNode
 }>) {
   return (
     <html lang="en" className={inter.variable}>
@@ -33,5 +33,5 @@ export default function RootLayout({
         <Toaster />
       </body>
     </html>
-  );
+  )
 }
