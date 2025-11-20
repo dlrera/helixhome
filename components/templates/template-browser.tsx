@@ -533,8 +533,8 @@ export default function TemplateBrowser({ appliedTemplateIds = [] }: TemplateBro
                         className={`shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 cursor-pointer animate-in fade-in slide-in-from-left-2 ${template.isApplied ? 'border-2 border-green-500 hover:border-green-600' : 'hover:border-[#216093]/30'}`}
                         style={{ animationDelay: `${index * 40}ms`, animationFillMode: 'backwards' }}
                       >
-                        <CardContent className="flex items-center justify-between p-4">
-                          <div className="flex items-center gap-4 flex-1">
+                        <CardContent className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-4 gap-3">
+                          <div className="flex items-center gap-4 flex-1 min-w-0">
                             <div className="flex-shrink-0">
                               <div className="p-2 bg-[#216093]/10 rounded-lg">
                                 <Icon className="h-6 w-6 text-[#216093]" />
@@ -560,7 +560,7 @@ export default function TemplateBrowser({ appliedTemplateIds = [] }: TemplateBro
                                 )}
                               </div>
                               <p className="text-sm text-gray-600 line-clamp-1 mb-2">{template.description}</p>
-                              <div className="flex gap-4">
+                              <div className="flex gap-4 flex-wrap">
                                 <Badge variant="outline" className="text-xs font-medium">
                                   {formatFrequency(template.defaultFrequency)}
                                 </Badge>
@@ -571,7 +571,7 @@ export default function TemplateBrowser({ appliedTemplateIds = [] }: TemplateBro
                               </div>
                             </div>
                           </div>
-                          <div className="flex items-center gap-2 ml-4">
+                          <div className="flex items-center gap-2 sm:ml-4">
                             <Button
                               variant="ghost"
                               size="sm"

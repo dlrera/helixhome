@@ -48,9 +48,9 @@ export default function AssetCard({ asset }: AssetCardProps) {
           </div>
         </CardHeader>
         <CardContent className="space-y-2">
-          <div className="flex items-start justify-between">
+          <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2">
             <h3 className="font-semibold text-lg line-clamp-1">{asset.name}</h3>
-            <Badge variant="secondary" className={categoryColor}>
+            <Badge variant="secondary" className={`${categoryColor} flex-shrink-0`}>
               {formatCategory(asset.category)}
             </Badge>
           </div>
