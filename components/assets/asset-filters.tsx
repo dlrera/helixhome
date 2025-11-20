@@ -22,7 +22,7 @@ const categories: (AssetCategory | 'ALL')[] = [
 
 export default function AssetFilters({ selectedCategory, onCategoryChange }: AssetFiltersProps) {
   return (
-    <div className="flex gap-2 overflow-x-auto pb-2">
+    <div className="flex gap-2 overflow-x-auto pb-2 -mx-3 px-3 sm:mx-0 sm:px-0 scrollbar-hide">
       {categories.map(category => {
         const Icon = category !== 'ALL' ? getCategoryIcon(category) : null
         const isSelected = selectedCategory === category
