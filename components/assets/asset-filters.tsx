@@ -22,7 +22,7 @@ const categories: (AssetCategory | 'ALL')[] = [
 
 export default function AssetFilters({ selectedCategory, onCategoryChange }: AssetFiltersProps) {
   return (
-    <div className="flex gap-2 overflow-x-auto pb-2 -mx-3 px-3 sm:mx-0 sm:px-0 scrollbar-hide">
+    <div className="flex flex-wrap gap-2 pb-2">
       {categories.map(category => {
         const Icon = category !== 'ALL' ? getCategoryIcon(category) : null
         const isSelected = selectedCategory === category
@@ -33,7 +33,6 @@ export default function AssetFilters({ selectedCategory, onCategoryChange }: Ass
             variant={isSelected ? 'default' : 'outline'}
             size="sm"
             onClick={() => onCategoryChange(category)}
-            className="flex-shrink-0"
           >
             {Icon && <Icon className="mr-2 h-4 w-4" />}
             {category === 'ALL' ? 'All' : formatCategory(category)}
