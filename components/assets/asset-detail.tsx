@@ -3,19 +3,54 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
-import { AssetCategory, TaskStatus, Frequency, Difficulty } from '@prisma/client'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import {
+  AssetCategory,
+  TaskStatus,
+  Frequency,
+  Difficulty,
+} from '@prisma/client'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { getCategoryIcon, getCategoryColor, formatCategory } from '@/lib/utils/asset-helpers'
-import { Edit, Trash2, Upload, Calendar, Wrench, Plus, Clock, Sparkles } from 'lucide-react'
+import {
+  getCategoryIcon,
+  getCategoryColor,
+  formatCategory,
+} from '@/lib/utils/asset-helpers'
+import {
+  Edit,
+  Trash2,
+  Upload,
+  Calendar,
+  Wrench,
+  Plus,
+  Clock,
+  Sparkles,
+  FileText,
+  Download,
+} from 'lucide-react'
 import PhotoUploadDialog from './photo-upload-dialog'
 import DeleteAssetDialog from './delete-asset-dialog'
 import ApplyTemplateModal from '@/components/templates/apply-template-modal'
 import { formatDuration, formatFrequency } from '@/lib/utils/template-helpers'
 import ScheduleList from '@/components/schedules/schedule-list'
 import Link from 'next/link'
+
+type SuggestedTemplate = {
+  id: string
+  name: string
+  description: string
+  defaultFrequency: Frequency
+  estimatedDurationMinutes: number
+  difficulty: Difficulty
+}
 
 type AssetDetailProps = {
   asset: {
@@ -27,6 +62,7 @@ type AssetDetailProps = {
     purchaseDate: Date | null
     warrantyExpiryDate: Date | null
     photoUrl: string | null
+    manualUrl: string | null
     createdAt: Date
     home: {
       name: string
@@ -51,21 +87,18 @@ type AssetDetailProps = {
       }
     }>
   }
-  suggestedTemplates?: Array<{
-    id: string
-    name: string
-    description: string
-    defaultFrequency: Frequency
-    estimatedDurationMinutes: number
-    difficulty: Difficulty
-  }>
+  suggestedTemplates?: SuggestedTemplate[]
 }
 
-export default function AssetDetail({ asset, suggestedTemplates = [] }: AssetDetailProps) {
+export default function AssetDetail({
+  asset,
+  suggestedTemplates = [],
+}: AssetDetailProps) {
   const router = useRouter()
   const [showPhotoDialog, setShowPhotoDialog] = useState(false)
   const [showDeleteDialog, setShowDeleteDialog] = useState(false)
-  const [selectedTemplate, setSelectedTemplate] = useState<any>(null)
+  const [selectedTemplate, setSelectedTemplate] =
+    useState<SuggestedTemplate | null>(null)
   const [showApplyModal, setShowApplyModal] = useState(false)
 
   const Icon = getCategoryIcon(asset.category)
@@ -75,7 +108,7 @@ export default function AssetDetail({ asset, suggestedTemplates = [] }: AssetDet
     router.push(`/assets/${asset.id}/edit`)
   }
 
-  const handleApplyTemplate = (template: any) => {
+  const handleApplyTemplate = (template: SuggestedTemplate) => {
     console.log('Opening modal for template:', template)
     setSelectedTemplate(template)
     setShowApplyModal(true)
@@ -129,7 +162,9 @@ export default function AssetDetail({ asset, suggestedTemplates = [] }: AssetDet
             <CardTitle>Photo</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className={`relative bg-gray-100 rounded-md overflow-hidden ${asset.photoUrl ? 'aspect-video' : 'h-32'}`}>
+            <div
+              className={`relative bg-gray-100 rounded-md overflow-hidden ${asset.photoUrl ? 'aspect-video' : 'h-32'}`}
+            >
               {asset.photoUrl ? (
                 <Image
                   src={asset.photoUrl}
@@ -152,6 +187,50 @@ export default function AssetDetail({ asset, suggestedTemplates = [] }: AssetDet
               <Upload className="h-4 w-4 mr-2" />
               {asset.photoUrl ? 'Change Photo' : 'Upload Photo'}
             </Button>
+          </CardContent>
+        </Card>
+
+        {/* Manual / Documentation */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Manual / Documentation</CardTitle>
+          </CardHeader>
+          <CardContent>
+            {asset.manualUrl ? (
+              <div className="flex items-center justify-between p-4 border rounded-lg bg-gray-50">
+                <div className="flex items-center gap-3">
+                  <FileText className="h-8 w-8 text-[#216093]" />
+                  <div>
+                    <p className="font-medium">Asset Manual</p>
+                    <p className="text-sm text-gray-500">
+                      View or download the manual
+                    </p>
+                  </div>
+                </div>
+                <a
+                  href={asset.manualUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  download
+                >
+                  <Button variant="outline" size="sm">
+                    <Download className="h-4 w-4 mr-2" />
+                    Download
+                  </Button>
+                </a>
+              </div>
+            ) : (
+              <div className="flex items-center justify-center p-8 border-2 border-dashed rounded-lg">
+                <div className="text-center">
+                  <FileText className="h-12 w-12 text-gray-300 mx-auto mb-2" />
+                  <p className="text-gray-500 mb-2">No manual uploaded</p>
+                  <Button variant="outline" size="sm" onClick={handleEdit}>
+                    <Upload className="h-4 w-4 mr-2" />
+                    Upload Manual
+                  </Button>
+                </div>
+              </div>
+            )}
           </CardContent>
         </Card>
 
@@ -209,7 +288,8 @@ export default function AssetDetail({ asset, suggestedTemplates = [] }: AssetDet
                     Suggested Maintenance Templates
                   </CardTitle>
                   <CardDescription>
-                    Recommended maintenance for your {formatCategory(asset.category).toLowerCase()}
+                    Recommended maintenance for your{' '}
+                    {formatCategory(asset.category).toLowerCase()}
                   </CardDescription>
                 </div>
                 <Link href="/templates">
@@ -221,14 +301,16 @@ export default function AssetDetail({ asset, suggestedTemplates = [] }: AssetDet
             </CardHeader>
             <CardContent>
               <div className="grid gap-3">
-                {suggestedTemplates.map(template => (
+                {suggestedTemplates.map((template) => (
                   <div
                     key={template.id}
                     className="flex items-center justify-between p-4 border rounded-lg hover:bg-gray-50 transition-colors"
                   >
                     <div className="flex-1">
                       <p className="font-medium">{template.name}</p>
-                      <p className="text-sm text-gray-600 mt-1">{template.description}</p>
+                      <p className="text-sm text-gray-600 mt-1">
+                        {template.description}
+                      </p>
                       <div className="flex items-center gap-4 mt-2">
                         <span className="text-sm text-gray-500">
                           {formatFrequency(template.defaultFrequency)}
@@ -285,15 +367,22 @@ export default function AssetDetail({ asset, suggestedTemplates = [] }: AssetDet
                   <p className="text-gray-500 text-center py-8">No tasks yet</p>
                 ) : (
                   <div className="space-y-3">
-                    {asset.tasks.map(task => (
-                      <div key={task.id} className="flex justify-between items-center p-3 border rounded-md">
+                    {asset.tasks.map((task) => (
+                      <div
+                        key={task.id}
+                        className="flex justify-between items-center p-3 border rounded-md"
+                      >
                         <div>
                           <p className="font-medium">{task.title}</p>
                           <p className="text-sm text-gray-500">
                             Due: {new Date(task.dueDate).toLocaleDateString()}
                           </p>
                         </div>
-                        <Badge variant={task.status === 'PENDING' ? 'default' : 'secondary'}>
+                        <Badge
+                          variant={
+                            task.status === 'PENDING' ? 'default' : 'secondary'
+                          }
+                        >
                           {task.status}
                         </Badge>
                       </div>
@@ -304,7 +393,10 @@ export default function AssetDetail({ asset, suggestedTemplates = [] }: AssetDet
             </Card>
           </TabsContent>
           <TabsContent value="schedules" className="mt-4">
-            <ScheduleList assetId={asset.id} initialSchedules={asset.recurringSchedules} />
+            <ScheduleList
+              assetId={asset.id}
+              initialSchedules={asset.recurringSchedules}
+            />
           </TabsContent>
         </Tabs>
       </div>

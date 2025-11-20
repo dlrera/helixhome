@@ -11,6 +11,7 @@ import {
 } from '@/lib/api/responses'
 import { updateAssetSchema } from '@/lib/validation/asset'
 import { logAssetUpdated, logAssetDeleted } from '@/lib/utils/activity-logger'
+import { deleteFile, extractFilePathFromUrl } from '@/lib/utils/storage'
 import { ZodError } from 'zod'
 
 // GET /api/assets/[id] - Get single asset
@@ -22,7 +23,10 @@ export async function GET(
     const session = await requireAuth()
     const { id } = await params
 
-    const { authorized, reason } = await verifyAssetOwnership(id, session.user.id)
+    const { authorized, reason } = await verifyAssetOwnership(
+      id,
+      session.user.id
+    )
 
     if (!authorized) {
       if (reason === 'not_found') {
@@ -40,19 +44,18 @@ export async function GET(
             id: true,
             name: true,
             address: true,
-          }
+          },
         },
         _count: {
           select: {
             tasks: true,
             recurringSchedules: true,
-          }
-        }
-      }
+          },
+        },
+      },
     })
 
     return successResponse(assetWithDetails)
-
   } catch (error) {
     if (error instanceof Error && error.message === 'Unauthorized') {
       return unauthorizedResponse()
@@ -72,7 +75,10 @@ export async function PUT(
     const body = await request.json()
 
     // Verify ownership
-    const { authorized, reason } = await verifyAssetOwnership(id, session.user.id)
+    const { authorized, reason } = await verifyAssetOwnership(
+      id,
+      session.user.id
+    )
 
     if (!authorized) {
       if (reason === 'not_found') {
@@ -93,9 +99,9 @@ export async function PUT(
           select: {
             id: true,
             name: true,
-          }
-        }
-      }
+          },
+        },
+      },
     })
 
     // Log activity
@@ -108,7 +114,6 @@ export async function PUT(
     })
 
     return successResponse(updatedAsset)
-
   } catch (error) {
     if (error instanceof Error && error.message === 'Unauthorized') {
       return unauthorizedResponse()
@@ -130,7 +135,10 @@ export async function DELETE(
     const { id } = await params
 
     // Verify ownership
-    const { authorized, reason } = await verifyAssetOwnership(id, session.user.id)
+    const { authorized, reason } = await verifyAssetOwnership(
+      id,
+      session.user.id
+    )
 
     if (!authorized) {
       if (reason === 'not_found') {
@@ -139,15 +147,32 @@ export async function DELETE(
       return forbiddenResponse('You do not own this asset')
     }
 
-    // Get asset details before deletion for logging
+    // Get asset details before deletion for logging and file cleanup
     const asset = await prisma.asset.findUnique({
       where: { id },
-      select: { name: true, homeId: true }
+      select: { name: true, homeId: true, photoUrl: true, manualUrl: true },
     })
+
+    // Delete files from Supabase storage
+    if (asset) {
+      if (asset.photoUrl) {
+        const photoPath = extractFilePathFromUrl(asset.photoUrl, 'image')
+        if (photoPath) {
+          await deleteFile(photoPath, 'image')
+        }
+      }
+
+      if (asset.manualUrl) {
+        const manualPath = extractFilePathFromUrl(asset.manualUrl, 'manual')
+        if (manualPath) {
+          await deleteFile(manualPath, 'manual')
+        }
+      }
+    }
 
     // Delete asset (cascades to tasks and recurring schedules)
     await prisma.asset.delete({
-      where: { id }
+      where: { id },
     })
 
     // Log activity
@@ -161,7 +186,6 @@ export async function DELETE(
     }
 
     return new Response(null, { status: 204 })
-
   } catch (error) {
     if (error instanceof Error && error.message === 'Unauthorized') {
       return unauthorizedResponse()

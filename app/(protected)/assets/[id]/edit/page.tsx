@@ -8,7 +8,7 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 
 export default async function EditAssetPage({
-  params
+  params,
 }: {
   params: Promise<{ id: string }>
 }) {
@@ -25,10 +25,10 @@ export default async function EditAssetPage({
     include: {
       home: {
         select: {
-          userId: true
-        }
-      }
-    }
+          userId: true,
+        },
+      },
+    },
   })
 
   if (!asset) {
@@ -43,7 +43,7 @@ export default async function EditAssetPage({
   // Get user's homes for the form
   const homes = await prisma.home.findMany({
     where: { userId: session.user.id },
-    select: { id: true, name: true }
+    select: { id: true, name: true },
   })
 
   const initialData = {
@@ -53,7 +53,10 @@ export default async function EditAssetPage({
     modelNumber: asset.modelNumber || undefined,
     serialNumber: asset.serialNumber || undefined,
     purchaseDate: asset.purchaseDate?.toISOString().split('T')[0] || undefined,
-    warrantyExpiryDate: asset.warrantyExpiryDate?.toISOString().split('T')[0] || undefined,
+    warrantyExpiryDate:
+      asset.warrantyExpiryDate?.toISOString().split('T')[0] || undefined,
+    photoUrl: asset.photoUrl || undefined,
+    manualUrl: asset.manualUrl || undefined,
   }
 
   return (

@@ -18,6 +18,7 @@ import {
 } from '@/components/ui/select'
 import { useToast } from '@/hooks/use-toast'
 import { Loader2 } from 'lucide-react'
+import { FileUpload } from '@/components/file-upload'
 
 const assetSchema = z.object({
   homeId: z.string().min(1, 'Home is required'),
@@ -27,6 +28,8 @@ const assetSchema = z.object({
   serialNumber: z.string().optional(),
   purchaseDate: z.string().optional(),
   warrantyExpiryDate: z.string().optional(),
+  photoUrl: z.string().optional(),
+  manualUrl: z.string().optional(),
 })
 
 type AssetFormData = z.infer<typeof assetSchema>
@@ -37,24 +40,30 @@ interface AssetFormProps {
   assetId?: string
 }
 
-export default function AssetForm({ homes, initialData, assetId }: AssetFormProps) {
+export default function AssetForm({
+  homes,
+  initialData,
+  assetId,
+}: AssetFormProps) {
   const router = useRouter()
   const { toast } = useToast()
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [imageFile, setImageFile] = useState<File | null>(null)
+  const [manualFile, setManualFile] = useState<File | null>(null)
 
   const {
     register,
     handleSubmit,
     setValue,
     watch,
-    formState: { errors }
+    formState: { errors },
   } = useForm<AssetFormData>({
     resolver: zodResolver(assetSchema),
     defaultValues: {
       homeId: initialData?.homeId || homes[0]?.id,
       category: initialData?.category || 'APPLIANCE',
-      ...initialData
-    }
+      ...initialData,
+    },
   })
 
   const selectedCategory = watch('category')
@@ -63,24 +72,25 @@ export default function AssetForm({ homes, initialData, assetId }: AssetFormProp
     setIsSubmitting(true)
 
     try {
-      const url = assetId ? `/api/assets/${assetId}` : '/api/assets'
-      const method = assetId ? 'PUT' : 'POST'
-
       // Show optimistic toast immediately
       toast({
         title: assetId ? 'Saving changes...' : 'Creating asset...',
-        description: 'Please wait'
+        description: 'Please wait',
       })
+
+      // First, create or update the asset to get the ID
+      const url = assetId ? `/api/assets/${assetId}` : '/api/assets'
+      const method = assetId ? 'PUT' : 'POST'
 
       // For updates, exclude homeId from the request body
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { homeId, ...updateData } = data
-      const requestData = assetId ? updateData : data
+      const { homeId, photoUrl, manualUrl, ...updateData } = data
+      const requestData = assetId ? updateData : { homeId, ...updateData }
 
       const response = await fetch(url, {
         method,
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(requestData)
+        body: JSON.stringify(requestData),
       })
 
       if (!response.ok) {
@@ -89,19 +99,72 @@ export default function AssetForm({ homes, initialData, assetId }: AssetFormProp
       }
 
       const asset = await response.json()
+      const actualAssetId = asset.id
+
+      // Upload files if they exist
+      let uploadedPhotoUrl = data.photoUrl
+      let uploadedManualUrl = data.manualUrl
+
+      if (imageFile) {
+        const imageFormData = new FormData()
+        imageFormData.append('file', imageFile)
+        imageFormData.append('assetId', actualAssetId)
+
+        const imageResponse = await fetch('/api/assets/upload-image', {
+          method: 'POST',
+          body: imageFormData,
+        })
+
+        if (imageResponse.ok) {
+          const imageData = await imageResponse.json()
+          uploadedPhotoUrl = imageData.url
+        }
+      }
+
+      if (manualFile) {
+        const manualFormData = new FormData()
+        manualFormData.append('file', manualFile)
+        manualFormData.append('assetId', actualAssetId)
+
+        const manualResponse = await fetch('/api/assets/upload-manual', {
+          method: 'POST',
+          body: manualFormData,
+        })
+
+        if (manualResponse.ok) {
+          const manualData = await manualResponse.json()
+          uploadedManualUrl = manualData.url
+        }
+      }
+
+      // Update asset with file URLs if files were uploaded
+      if (
+        (imageFile && uploadedPhotoUrl) ||
+        (manualFile && uploadedManualUrl)
+      ) {
+        await fetch(`/api/assets/${actualAssetId}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            photoUrl: uploadedPhotoUrl,
+            manualUrl: uploadedManualUrl,
+          }),
+        })
+      }
 
       toast({
         title: assetId ? 'Asset updated' : 'Asset created',
-        description: `${data.name} has been ${assetId ? 'updated' : 'added'} successfully.`
+        description: `${data.name} has been ${assetId ? 'updated' : 'added'} successfully.`,
       })
 
-      router.push(`/assets/${asset.id}`)
+      router.push(`/assets/${actualAssetId}`)
       router.refresh()
     } catch (error) {
       toast({
         title: 'Error',
-        description: error instanceof Error ? error.message : 'Failed to save asset',
-        variant: 'destructive'
+        description:
+          error instanceof Error ? error.message : 'Failed to save asset',
+        variant: 'destructive',
       })
     } finally {
       setIsSubmitting(false)
@@ -121,7 +184,7 @@ export default function AssetForm({ homes, initialData, assetId }: AssetFormProp
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            {homes.map(home => (
+            {homes.map((home) => (
               <SelectItem key={home.id} value={home.id}>
                 {home.name}
               </SelectItem>
@@ -151,7 +214,9 @@ export default function AssetForm({ homes, initialData, assetId }: AssetFormProp
         <Label htmlFor="category">Category *</Label>
         <Select
           value={selectedCategory}
-          onValueChange={(value) => setValue('category', value as AssetCategory)}
+          onValueChange={(value) =>
+            setValue('category', value as AssetCategory)
+          }
         >
           <SelectTrigger>
             <SelectValue />
@@ -194,11 +259,7 @@ export default function AssetForm({ homes, initialData, assetId }: AssetFormProp
       {/* Purchase Date */}
       <div>
         <Label htmlFor="purchaseDate">Purchase Date</Label>
-        <Input
-          id="purchaseDate"
-          type="date"
-          {...register('purchaseDate')}
-        />
+        <Input id="purchaseDate" type="date" {...register('purchaseDate')} />
       </div>
 
       {/* Warranty Expiry */}
@@ -208,6 +269,42 @@ export default function AssetForm({ homes, initialData, assetId }: AssetFormProp
           id="warrantyExpiryDate"
           type="date"
           {...register('warrantyExpiryDate')}
+        />
+      </div>
+
+      {/* Asset Photo */}
+      <div>
+        <Label>Asset Photo</Label>
+        <FileUpload
+          type="image"
+          currentFileUrl={initialData?.photoUrl}
+          onUploadComplete={(file) => {
+            if (file instanceof File) {
+              setImageFile(file)
+            } else if (typeof file === 'string') {
+              setImageFile(null)
+              setValue('photoUrl', file)
+            }
+          }}
+          disabled={isSubmitting}
+        />
+      </div>
+
+      {/* Asset Manual */}
+      <div>
+        <Label>Asset Manual / Documentation</Label>
+        <FileUpload
+          type="manual"
+          currentFileUrl={initialData?.manualUrl}
+          onUploadComplete={(file) => {
+            if (file instanceof File) {
+              setManualFile(file)
+            } else if (typeof file === 'string') {
+              setManualFile(null)
+              setValue('manualUrl', file)
+            }
+          }}
+          disabled={isSubmitting}
         />
       </div>
 

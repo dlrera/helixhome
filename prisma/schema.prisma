@@ -11,6 +11,7 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 // Enums
@@ -171,6 +172,7 @@ model Asset {
   purchaseDate      DateTime?
   warrantyExpiryDate DateTime?
   photoUrl          String?
+  manualUrl         String?       // URL to uploaded manual/document in Supabase
   metadata          String?       // JSON stored as string
   createdAt         DateTime      @default(now())
   updatedAt         DateTime      @updatedAt

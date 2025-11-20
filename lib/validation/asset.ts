@@ -10,6 +10,7 @@ export const createAssetSchema = z.object({
   purchaseDate: z.coerce.date().optional().nullable(),
   warrantyExpiryDate: z.coerce.date().optional().nullable(),
   photoUrl: z.string().url().optional().nullable(),
+  manualUrl: z.string().url().optional().nullable(),
   metadata: z.string().optional().nullable(), // JSON string
 })
 
@@ -21,6 +22,7 @@ export const updateAssetSchema = z.object({
   purchaseDate: z.coerce.date().optional().nullable(),
   warrantyExpiryDate: z.coerce.date().optional().nullable(),
   photoUrl: z.string().url().optional().nullable(),
+  manualUrl: z.string().url().optional().nullable(),
   metadata: z.string().optional().nullable(),
 })
 
