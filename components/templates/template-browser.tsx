@@ -316,18 +316,16 @@ export default function TemplateBrowser({ appliedTemplateIds = [] }: TemplateBro
 
       {/* Category Tabs */}
       <Tabs value={selectedCategory} onValueChange={handleCategoryChange}>
-        <div className="overflow-x-auto pb-2">
-          <TabsList className="inline-flex h-10 items-center justify-start rounded-lg bg-muted p-1 text-muted-foreground w-max">
-            <TabsTrigger value="ALL" className="px-3">All</TabsTrigger>
-            <TabsTrigger value="HVAC" className="px-3">HVAC</TabsTrigger>
-            <TabsTrigger value="PLUMBING" className="px-3">Plumbing</TabsTrigger>
-            <TabsTrigger value="APPLIANCE" className="px-3">Appliances</TabsTrigger>
-            <TabsTrigger value="ELECTRICAL" className="px-3">Electrical</TabsTrigger>
-            <TabsTrigger value="STRUCTURAL" className="px-3">Structural</TabsTrigger>
-            <TabsTrigger value="OUTDOOR" className="px-3">Outdoor</TabsTrigger>
-            <TabsTrigger value="OTHER" className="px-3">Other</TabsTrigger>
-          </TabsList>
-        </div>
+        <TabsList className="flex flex-wrap h-auto items-center justify-start rounded-lg bg-muted p-1 text-muted-foreground gap-1">
+          <TabsTrigger value="ALL" className="px-3">All</TabsTrigger>
+          <TabsTrigger value="HVAC" className="px-3">HVAC</TabsTrigger>
+          <TabsTrigger value="PLUMBING" className="px-3">Plumbing</TabsTrigger>
+          <TabsTrigger value="APPLIANCE" className="px-3">Appliances</TabsTrigger>
+          <TabsTrigger value="ELECTRICAL" className="px-3">Electrical</TabsTrigger>
+          <TabsTrigger value="STRUCTURAL" className="px-3">Structural</TabsTrigger>
+          <TabsTrigger value="OUTDOOR" className="px-3">Outdoor</TabsTrigger>
+          <TabsTrigger value="OTHER" className="px-3">Other</TabsTrigger>
+        </TabsList>
 
         <TabsContent value={selectedCategory} className="mt-6">
           {isLoading ? (
