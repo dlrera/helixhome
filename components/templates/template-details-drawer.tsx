@@ -104,7 +104,7 @@ export default function TemplateDetailsDrawer({
   return (
     <>
       <Sheet open={open} onOpenChange={onOpenChange}>
-        <SheetContent className="w-[400px] sm:w-[540px]">
+        <SheetContent className="w-full sm:w-[540px]">
           {isLoading ? (
             <div className="space-y-4">
               <SheetHeader>

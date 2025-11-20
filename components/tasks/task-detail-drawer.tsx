@@ -153,7 +153,7 @@ export function TaskDetailDrawer({
 
           <div className="mt-6 space-y-6">
             {/* Priority and Due Date */}
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-1">
                 <div className="flex items-center gap-2 text-sm text-muted-foreground">
                   <Tag className="h-4 w-4" />
@@ -269,7 +269,7 @@ export function TaskDetailDrawer({
                         <ImageIcon className="h-3 w-3" />
                         Completion Photos
                       </div>
-                      <div className="grid grid-cols-2 gap-2">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                         {completionPhotos.map((photo: string, index: number) => (
                           <img
                             key={index}

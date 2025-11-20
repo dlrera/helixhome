@@ -144,8 +144,8 @@ export function TaskCalendar({
           <Button variant="outline" size="icon" onClick={handlePrevious}>
             <ChevronLeft className="h-4 w-4" />
           </Button>
-          <div className="min-w-[200px] text-center">
-            <h2 className="text-xl font-bold">
+          <div className="min-w-[180px] sm:min-w-[200px] text-center">
+            <h2 className="text-lg sm:text-xl font-bold">
               {view === 'month'
                 ? format(currentDate, 'MMMM yyyy')
                 : `Week of ${format(weekStart, 'MMM d, yyyy')}`}
@@ -188,7 +188,7 @@ export function TaskCalendar({
         </div>
 
         {/* Calendar Days */}
-        <div className={`grid grid-cols-7 gap-2 ${view === 'week' ? 'min-h-[600px]' : ''}`}>
+        <div className={`grid grid-cols-7 gap-1 sm:gap-2 ${view === 'week' ? 'min-h-[400px] sm:min-h-[600px]' : ''}`}>
           {calendarDays.map((day) => {
             const dayTasks = getTasksForDay(day)
             const isDayToday = isToday(day)
@@ -198,7 +198,7 @@ export function TaskCalendar({
             return (
               <div
                 key={day.toISOString()}
-                className={`${view === 'week' ? 'min-h-[600px]' : 'min-h-[120px]'} border rounded-md p-2 ${
+                className={`${view === 'week' ? 'min-h-[400px] sm:min-h-[600px]' : 'min-h-[100px] sm:min-h-[120px]'} border rounded-md p-1 sm:p-2 ${
                   isDayToday ? 'bg-blue-50 border-blue-300' : 'bg-background'
                 } ${!isCurrentMonth ? 'opacity-40' : ''} ${
                   hasOverdueTasks ? 'border-l-4 border-l-red-500' : ''

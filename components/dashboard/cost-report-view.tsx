@@ -243,56 +243,58 @@ export function CostReportView() {
             </CardHeader>
             <CardContent>
               {hasSpending ? (
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Category</TableHead>
-                      <TableHead className="text-right">Tasks</TableHead>
-                      <TableHead className="text-right">Total Cost</TableHead>
-                      <TableHead className="text-right">Avg Cost</TableHead>
-                      <TableHead className="text-right">% of Total</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {data.categoryBreakdown.map((category, index) => {
-                      const percentage = (category.total / data.totalSpent) * 100;
-                      return (
-                        <TableRow key={category.category}>
-                          <TableCell className="font-medium">
-                            <div className="flex items-center gap-2">
-                              <div
-                                className="h-3 w-3 rounded-full"
-                                style={{
-                                  backgroundColor: colors.chart.categories[index % colors.chart.categories.length],
-                                }}
-                              />
-                              {category.category || "Uncategorized"}
-                            </div>
-                          </TableCell>
-                          <TableCell className="text-right">-</TableCell>
-                          <TableCell className="text-right font-medium">
-                            {formatCurrency(category.total)}
-                          </TableCell>
-                          <TableCell className="text-right">
-                            -
-                          </TableCell>
-                          <TableCell className="text-right">
-                            <Badge variant="secondary">{percentage.toFixed(1)}%</Badge>
-                          </TableCell>
-                        </TableRow>
-                      );
-                    })}
-                    <TableRow className="bg-muted/50 font-bold">
-                      <TableCell>Total</TableCell>
-                      <TableCell className="text-right">
-                        -
-                      </TableCell>
-                      <TableCell className="text-right">{formatCurrency(data.totalSpent)}</TableCell>
-                      <TableCell className="text-right">-</TableCell>
-                      <TableCell className="text-right">100%</TableCell>
-                    </TableRow>
-                  </TableBody>
-                </Table>
+                <div className="overflow-x-auto">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Category</TableHead>
+                        <TableHead className="text-right">Tasks</TableHead>
+                        <TableHead className="text-right">Total Cost</TableHead>
+                        <TableHead className="text-right">Avg Cost</TableHead>
+                        <TableHead className="text-right">% of Total</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {data.categoryBreakdown.map((category, index) => {
+                        const percentage = (category.total / data.totalSpent) * 100;
+                        return (
+                          <TableRow key={category.category}>
+                            <TableCell className="font-medium">
+                              <div className="flex items-center gap-2">
+                                <div
+                                  className="h-3 w-3 rounded-full"
+                                  style={{
+                                    backgroundColor: colors.chart.categories[index % colors.chart.categories.length],
+                                  }}
+                                />
+                                {category.category || "Uncategorized"}
+                              </div>
+                            </TableCell>
+                            <TableCell className="text-right">-</TableCell>
+                            <TableCell className="text-right font-medium">
+                              {formatCurrency(category.total)}
+                            </TableCell>
+                            <TableCell className="text-right">
+                              -
+                            </TableCell>
+                            <TableCell className="text-right">
+                              <Badge variant="secondary">{percentage.toFixed(1)}%</Badge>
+                            </TableCell>
+                          </TableRow>
+                        );
+                      })}
+                      <TableRow className="bg-muted/50 font-bold">
+                        <TableCell>Total</TableCell>
+                        <TableCell className="text-right">
+                          -
+                        </TableCell>
+                        <TableCell className="text-right">{formatCurrency(data.totalSpent)}</TableCell>
+                        <TableCell className="text-right">-</TableCell>
+                        <TableCell className="text-right">100%</TableCell>
+                      </TableRow>
+                    </TableBody>
+                  </Table>
+                </div>
               ) : (
                 <p className="py-8 text-center text-sm text-muted-foreground">
                   No category data available for this period.
@@ -347,58 +349,60 @@ export function CostReportView() {
                 <CardDescription>Month-over-month spending changes</CardDescription>
               </CardHeader>
               <CardContent>
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Month</TableHead>
-                      <TableHead className="text-right">Total Spent</TableHead>
-                      <TableHead className="text-right">Tasks</TableHead>
-                      <TableHead className="text-right">Change</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {data.monthOverMonth.map((month, index) => {
-                      const prevMonth = index > 0 ? data.monthOverMonth[index - 1] : null;
-                      const change = prevMonth
-                        ? month.total - prevMonth.total
-                        : 0;
-                      const changePercent = prevMonth && prevMonth.total > 0
-                        ? (change / prevMonth.total) * 100
-                        : 0;
+                <div className="overflow-x-auto">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Month</TableHead>
+                        <TableHead className="text-right">Total Spent</TableHead>
+                        <TableHead className="text-right">Tasks</TableHead>
+                        <TableHead className="text-right">Change</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {data.monthOverMonth.map((month, index) => {
+                        const prevMonth = index > 0 ? data.monthOverMonth[index - 1] : null;
+                        const change = prevMonth
+                          ? month.total - prevMonth.total
+                          : 0;
+                        const changePercent = prevMonth && prevMonth.total > 0
+                          ? (change / prevMonth.total) * 100
+                          : 0;
 
-                      return (
-                        <TableRow key={month.month}>
-                          <TableCell className="font-medium">{month.month}</TableCell>
-                          <TableCell className="text-right">
-                            {formatCurrency(month.total)}
-                          </TableCell>
-                          <TableCell className="text-right">{month.count}</TableCell>
-                          <TableCell className="text-right">
-                            {index > 0 ? (
-                              <div className="flex items-center justify-end gap-1">
-                                {change > 0 ? (
-                                  <TrendingUp className="h-4 w-4 text-red-600" />
-                                ) : change < 0 ? (
-                                  <TrendingDown className="h-4 w-4 text-green-600" />
-                                ) : null}
-                                <span className={change > 0 ? 'text-red-600' : change < 0 ? 'text-green-600' : ''}>
-                                  {change > 0 ? '+' : ''}{formatCurrency(change)}
-                                  {prevMonth && prevMonth.total > 0 && (
-                                    <span className="text-xs text-muted-foreground ml-1">
-                                      ({changePercent > 0 ? '+' : ''}{changePercent.toFixed(1)}%)
-                                    </span>
-                                  )}
-                                </span>
-                              </div>
-                            ) : (
-                              <span className="text-muted-foreground">-</span>
-                            )}
-                          </TableCell>
-                        </TableRow>
-                      );
-                    })}
-                  </TableBody>
-                </Table>
+                        return (
+                          <TableRow key={month.month}>
+                            <TableCell className="font-medium">{month.month}</TableCell>
+                            <TableCell className="text-right">
+                              {formatCurrency(month.total)}
+                            </TableCell>
+                            <TableCell className="text-right">{month.count}</TableCell>
+                            <TableCell className="text-right">
+                              {index > 0 ? (
+                                <div className="flex items-center justify-end gap-1">
+                                  {change > 0 ? (
+                                    <TrendingUp className="h-4 w-4 text-red-600" />
+                                  ) : change < 0 ? (
+                                    <TrendingDown className="h-4 w-4 text-green-600" />
+                                  ) : null}
+                                  <span className={change > 0 ? 'text-red-600' : change < 0 ? 'text-green-600' : ''}>
+                                    {change > 0 ? '+' : ''}{formatCurrency(change)}
+                                    {prevMonth && prevMonth.total > 0 && (
+                                      <span className="text-xs text-muted-foreground ml-1">
+                                        ({changePercent > 0 ? '+' : ''}{changePercent.toFixed(1)}%)
+                                      </span>
+                                    )}
+                                  </span>
+                                </div>
+                              ) : (
+                                <span className="text-muted-foreground">-</span>
+                              )}
+                            </TableCell>
+                          </TableRow>
+                        );
+                      })}
+                    </TableBody>
+                  </Table>
+                </div>
               </CardContent>
             </Card>
           )}

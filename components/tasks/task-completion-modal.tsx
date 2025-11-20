@@ -212,7 +212,7 @@ export function TaskCompletionModal({
 
             {/* Photo Previews */}
             {photoPreviews.length > 0 && (
-              <div className="grid grid-cols-3 gap-2 mb-2">
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 mb-2">
                 {photoPreviews.map((preview, index) => (
                   <div key={index} className="relative group">
                     <img
