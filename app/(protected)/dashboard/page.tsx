@@ -91,7 +91,7 @@ export default async function DashboardPage() {
       {/* Welcome Section */}
       <div className="space-y-2">
         <h1 className="text-2xl sm:text-3xl font-black">
-          Welcome back, {session.user?.name || 'there'}! 🔄 DEPLOYMENT TEST
+          Welcome back, {session.user?.name || 'there'}!
         </h1>
         <p className="text-sm sm:text-base text-muted-foreground">
           Here&apos;s an overview of your home maintenance status.

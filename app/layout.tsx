@@ -15,10 +15,12 @@ export const metadata: Metadata = {
   description: 'Your home maintenance management system',
 }
 
-export const viewport: Viewport = {
-  width: 'device-width',
-  initialScale: 1,
-  maximumScale: 5,
+export function generateViewport(): Viewport {
+  return {
+    width: 'device-width',
+    initialScale: 1,
+    maximumScale: 5,
+  }
 }
 
 export default function RootLayout({
