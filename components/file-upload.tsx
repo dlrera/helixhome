@@ -1,7 +1,7 @@
 'use client'
 
 import { useCallback, useState } from 'react'
-import { Upload, X, FileText, Loader2 } from 'lucide-react'
+import { Upload, X, FileText } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 
@@ -159,15 +159,11 @@ export function FileUpload({
             type="file"
             accept={acceptedTypes}
             onChange={handleFileInput}
-            disabled={disabled || isUploading}
+            disabled={disabled}
             className="hidden"
           />
           <div className="flex flex-col items-center gap-2">
-            {isUploading ? (
-              <Loader2 className="h-8 w-8 text-muted-foreground animate-spin" />
-            ) : (
-              <Upload className="h-8 w-8 text-muted-foreground" />
-            )}
+            <Upload className="h-8 w-8 text-muted-foreground" />
             <div className="text-sm text-muted-foreground">
               <span className="font-medium text-primary">Click to upload</span>{' '}
               or drag and drop
