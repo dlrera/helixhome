@@ -57,7 +57,7 @@ type AssetDetailProps = {
     id: string
     name: string
     category: AssetCategory
-    location: string | null
+    location?: string | null
     modelNumber: string | null
     serialNumber: string | null
     purchaseDate: Date | null

@@ -12,7 +12,7 @@ type AssetCardProps = {
     id: string
     name: string
     category: AssetCategory
-    location: string | null
+    location?: string | null
     modelNumber: string | null
     photoUrl: string | null
     home: {
