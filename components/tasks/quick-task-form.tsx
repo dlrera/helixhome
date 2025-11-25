@@ -1,41 +1,41 @@
-"use client";
+'use client'
 
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import { Priority } from "@prisma/client";
-import { Loader2 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { z } from 'zod'
+import { Priority } from '@prisma/client'
+import { Loader2 } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
+import { Label } from '@/components/ui/label'
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { useCreateTask } from "@/lib/hooks/use-tasks";
+} from '@/components/ui/select'
+import { useCreateTask } from '@/lib/hooks/use-tasks'
 
 const quickTaskSchema = z.object({
-  title: z.string().min(1, "Title is required").max(200),
+  title: z.string().min(1, 'Title is required').max(200),
   description: z.string().max(2000).optional(),
-  dueDate: z.string().min(1, "Due date is required"),
-  priority: z.enum(["LOW", "MEDIUM", "HIGH", "URGENT"]),
+  dueDate: z.string().min(1, 'Due date is required'),
+  priority: z.enum(['LOW', 'MEDIUM', 'HIGH', 'URGENT']),
   assetId: z.string().optional(),
-});
+  estimatedCost: z.string().optional(),
+})
 
-type QuickTaskFormData = z.infer<typeof quickTaskSchema>;
+type QuickTaskFormData = z.infer<typeof quickTaskSchema>
 
 interface QuickTaskFormProps {
-  homeId: string;
-  assetId?: string;
-  assets?: { id: string; name: string; category: string }[];
-  defaultDueDate?: Date;
-  onSuccess?: () => void;
-  onCancel?: () => void;
+  homeId: string
+  assetId?: string
+  assets?: { id: string; name: string; category: string }[]
+  defaultDueDate?: Date
+  onSuccess?: () => void
+  onCancel?: () => void
 }
 
 export function QuickTaskForm({
@@ -46,12 +46,12 @@ export function QuickTaskForm({
   onSuccess,
   onCancel,
 }: QuickTaskFormProps) {
-  const createTask = useCreateTask();
+  const createTask = useCreateTask()
 
-  const tomorrow = new Date();
-  tomorrow.setDate(tomorrow.getDate() + 1);
-  const defaultDate = defaultDueDate || tomorrow;
-  const dateString = defaultDate.toISOString().split("T")[0];
+  const tomorrow = new Date()
+  tomorrow.setDate(tomorrow.getDate() + 1)
+  const defaultDate = defaultDueDate || tomorrow
+  const dateString = defaultDate.toISOString().split('T')[0]
 
   const {
     register,
@@ -62,27 +62,35 @@ export function QuickTaskForm({
   } = useForm<QuickTaskFormData>({
     resolver: zodResolver(quickTaskSchema),
     defaultValues: {
-      title: "",
-      description: "",
+      title: '',
+      description: '',
       dueDate: dateString,
-      priority: "MEDIUM",
-      assetId: assetId || "",
+      priority: 'MEDIUM',
+      assetId: assetId || '',
+      estimatedCost: '',
     },
-  });
+  })
 
-  const priority = watch("priority");
-  const selectedAssetId = watch("assetId");
+  const priority = watch('priority')
+  const selectedAssetId = watch('assetId')
 
   const onSubmit = async (data: QuickTaskFormData) => {
+    const estimatedCost = data.estimatedCost
+      ? parseFloat(data.estimatedCost)
+      : undefined
     await createTask.mutateAsync({
-      ...data,
+      title: data.title,
+      description: data.description,
       dueDate: new Date(data.dueDate),
+      priority: data.priority,
       homeId,
       assetId: data.assetId || undefined,
-    });
+      estimatedCost:
+        estimatedCost && !isNaN(estimatedCost) ? estimatedCost : undefined,
+    })
 
-    onSuccess?.();
-  };
+    onSuccess?.()
+  }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
@@ -92,18 +100,20 @@ export function QuickTaskForm({
         </Label>
         <Input
           id="title"
-          {...register("title")}
+          {...register('title')}
           placeholder="e.g., Change HVAC filter"
           autoFocus
         />
-        {errors.title && <p className="text-sm text-red-600">{errors.title.message}</p>}
+        {errors.title && (
+          <p className="text-sm text-red-600">{errors.title.message}</p>
+        )}
       </div>
 
       <div className="space-y-2">
         <Label htmlFor="description">Description (optional)</Label>
         <Textarea
           id="description"
-          {...register("description")}
+          {...register('description')}
           placeholder="Add any additional details..."
           rows={3}
         />
@@ -114,13 +124,18 @@ export function QuickTaskForm({
           <Label htmlFor="dueDate">
             Due Date <span className="text-red-500">*</span>
           </Label>
-          <Input id="dueDate" type="date" {...register("dueDate")} />
-          {errors.dueDate && <p className="text-sm text-red-600">{errors.dueDate.message}</p>}
+          <Input id="dueDate" type="date" {...register('dueDate')} />
+          {errors.dueDate && (
+            <p className="text-sm text-red-600">{errors.dueDate.message}</p>
+          )}
         </div>
 
         <div className="space-y-2">
           <Label htmlFor="priority">Priority</Label>
-          <Select value={priority} onValueChange={(value) => setValue("priority", value as Priority)}>
+          <Select
+            value={priority}
+            onValueChange={(value) => setValue('priority', value as Priority)}
+          >
             <SelectTrigger>
               <SelectValue />
             </SelectTrigger>
@@ -134,13 +149,34 @@ export function QuickTaskForm({
         </div>
       </div>
 
+      {/* Estimated Cost */}
+      <div className="space-y-2">
+        <Label htmlFor="estimatedCost">Estimated Cost (optional)</Label>
+        <div className="relative">
+          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
+            $
+          </span>
+          <Input
+            id="estimatedCost"
+            type="number"
+            step="0.01"
+            min="0"
+            {...register('estimatedCost')}
+            placeholder="0.00"
+            className="pl-7"
+          />
+        </div>
+      </div>
+
       {/* Asset Selection - only show if assets are provided and no pre-selected asset */}
       {assets && assets.length > 0 && !assetId && (
         <div className="space-y-2">
           <Label htmlFor="assetId">Link to Asset (optional)</Label>
           <Select
-            value={selectedAssetId || ""}
-            onValueChange={(value) => setValue("assetId", value === "none" ? "" : value)}
+            value={selectedAssetId || ''}
+            onValueChange={(value) =>
+              setValue('assetId', value === 'none' ? '' : value)
+            }
           >
             <SelectTrigger>
               <SelectValue placeholder="Select an asset..." />
@@ -170,10 +206,10 @@ export function QuickTaskForm({
               Creating...
             </>
           ) : (
-            "Create Task"
+            'Create Task'
           )}
         </Button>
       </div>
     </form>
-  );
+  )
 }

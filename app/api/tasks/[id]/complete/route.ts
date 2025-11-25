@@ -1,16 +1,16 @@
-import { NextRequest } from "next/server";
-import { prisma } from "@/lib/prisma";
-import { requireAuth } from "@/lib/api/auth";
+import { NextRequest } from 'next/server'
+import { prisma } from '@/lib/prisma'
+import { requireAuth } from '@/lib/api/auth'
 import {
   unauthorizedResponse,
   validationErrorResponse,
   serverErrorResponse,
   successResponse,
   notFoundResponse,
-} from "@/lib/api/responses";
-import { completeTaskSchema } from "@/lib/validation/task";
-import { logTaskCompleted } from "@/lib/utils/activity-logger";
-import { ZodError } from "zod";
+} from '@/lib/api/responses'
+import { completeTaskSchema } from '@/lib/validation/task'
+import { logTaskCompleted } from '@/lib/utils/activity-logger'
+import { ZodError } from 'zod'
 
 /**
  * POST /api/tasks/[id]/complete
@@ -21,10 +21,10 @@ export async function POST(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const session = await requireAuth();
-    const { id } = await params;
-    const body = await request.json();
-    const data = completeTaskSchema.parse(body);
+    const session = await requireAuth()
+    const { id } = await params
+    const body = await request.json()
+    const data = completeTaskSchema.parse(body)
 
     // Fetch task and verify ownership
     const task = await prisma.task.findUnique({
@@ -34,19 +34,19 @@ export async function POST(
           select: { userId: true },
         },
       },
-    });
+    })
 
     if (!task) {
-      return notFoundResponse("Task");
+      return notFoundResponse('Task')
     }
 
     if (task.home.userId !== session.user.id) {
-      return unauthorizedResponse("Not authorized to complete this task");
+      return unauthorizedResponse('Not authorized to complete this task')
     }
 
     // Check if task is already completed
-    if (task.status === "COMPLETED") {
-      return unauthorizedResponse("Task is already completed");
+    if (task.status === 'COMPLETED') {
+      return unauthorizedResponse('Task is already completed')
     }
 
     // Use transaction to update task and schedule if applicable
@@ -55,13 +55,15 @@ export async function POST(
       const updated = await tx.task.update({
         where: { id },
         data: {
-          status: "COMPLETED",
+          status: 'COMPLETED',
           completedAt: new Date(),
           completedBy: session.user.id,
           completionNotes: data.completionNotes || null,
           completionPhotos: data.completionPhotos
             ? JSON.stringify(data.completionPhotos)
             : null,
+          actualCost: data.actualCost ?? null,
+          costNotes: data.costNotes ?? null,
         },
         include: {
           asset: {
@@ -78,7 +80,7 @@ export async function POST(
             },
           },
         },
-      });
+      })
 
       // If task has a template, update the recurring schedule
       if (task.templateId && task.assetId) {
@@ -91,11 +93,11 @@ export async function POST(
           data: {
             lastCompletedDate: new Date(),
           },
-        });
+        })
       }
 
-      return updated;
-    });
+      return updated
+    })
 
     // Log activity
     await logTaskCompleted({
@@ -104,16 +106,16 @@ export async function POST(
       taskId: updatedTask.id,
       taskTitle: updatedTask.title,
       cost: updatedTask.actualCost ? Number(updatedTask.actualCost) : undefined,
-    });
+    })
 
-    return successResponse({ task: updatedTask });
+    return successResponse({ task: updatedTask })
   } catch (error) {
-    if (error instanceof Error && error.message === "Unauthorized") {
-      return unauthorizedResponse();
+    if (error instanceof Error && error.message === 'Unauthorized') {
+      return unauthorizedResponse()
     }
     if (error instanceof ZodError) {
-      return validationErrorResponse(error);
+      return validationErrorResponse(error)
     }
-    return serverErrorResponse(error);
+    return serverErrorResponse(error)
   }
 }

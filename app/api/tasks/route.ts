@@ -1,15 +1,15 @@
-import { NextRequest } from "next/server";
-import { prisma } from "@/lib/prisma";
-import { requireAuth } from "@/lib/api/auth";
+import { NextRequest } from 'next/server'
+import { prisma } from '@/lib/prisma'
+import { requireAuth } from '@/lib/api/auth'
 import {
   unauthorizedResponse,
   validationErrorResponse,
   serverErrorResponse,
   successResponse,
-} from "@/lib/api/responses";
-import { createTaskSchema, taskFilterSchema } from "@/lib/validation/task";
-import { logTaskCreated } from "@/lib/utils/activity-logger";
-import { ZodError } from "zod";
+} from '@/lib/api/responses'
+import { createTaskSchema, taskFilterSchema } from '@/lib/validation/task'
+import { logTaskCreated } from '@/lib/utils/activity-logger'
+import { ZodError } from 'zod'
 
 /**
  * GET /api/tasks
@@ -17,28 +17,28 @@ import { ZodError } from "zod";
  */
 export async function GET(request: NextRequest) {
   try {
-    const session = await requireAuth();
+    const session = await requireAuth()
 
     // Parse and validate query parameters
-    const { searchParams } = new URL(request.url);
+    const { searchParams } = new URL(request.url)
     const queryParams = {
-      status: searchParams.get("status")?.split(","),
-      priority: searchParams.get("priority")?.split(","),
-      assetId: searchParams.get("assetId") || undefined,
-      startDate: searchParams.get("startDate") || undefined,
-      endDate: searchParams.get("endDate") || undefined,
-      search: searchParams.get("search") || undefined,
-      page: searchParams.get("page") || "1",
-      limit: searchParams.get("limit") || "20",
-    };
+      status: searchParams.get('status')?.split(','),
+      priority: searchParams.get('priority')?.split(','),
+      assetId: searchParams.get('assetId') || undefined,
+      startDate: searchParams.get('startDate') || undefined,
+      endDate: searchParams.get('endDate') || undefined,
+      search: searchParams.get('search') || undefined,
+      page: searchParams.get('page') || '1',
+      limit: searchParams.get('limit') || '20',
+    }
 
-    const filters = taskFilterSchema.parse(queryParams);
+    const filters = taskFilterSchema.parse(queryParams)
 
     // Get user's homes
     const homes = await prisma.home.findMany({
       where: { userId: session.user.id },
       select: { id: true },
-    });
+    })
 
     if (homes.length === 0) {
       return successResponse({
@@ -46,40 +46,45 @@ export async function GET(request: NextRequest) {
         total: 0,
         page: filters.page,
         limit: filters.limit,
-        totalPages: 0
-      });
+        totalPages: 0,
+      })
     }
 
-    const homeIds = homes.map((h) => h.id);
+    const homeIds = homes.map((h) => h.id)
 
     // Build where clause for filtering
-    const where: any = {
+    const where: {
+      homeId: { in: string[] }
+      status?: { in: string[] }
+      priority?: { in: string[] }
+      dueDate?: { lte: Date }
+    } = {
       homeId: { in: homeIds },
-    };
+    }
 
     // Status filter
     if (filters.status && filters.status.length > 0) {
-      where.status = { in: filters.status };
+      where.status = { in: filters.status }
     }
 
     // Priority filter
     if (filters.priority && filters.priority.length > 0) {
-      where.priority = { in: filters.priority };
+      where.priority = { in: filters.priority }
     }
 
     // Asset filter
     if (filters.assetId) {
-      where.assetId = filters.assetId;
+      where.assetId = filters.assetId
     }
 
     // Date range filter
     if (filters.startDate || filters.endDate) {
-      where.dueDate = {};
+      where.dueDate = {}
       if (filters.startDate) {
-        where.dueDate.gte = filters.startDate;
+        where.dueDate.gte = filters.startDate
       }
       if (filters.endDate) {
-        where.dueDate.lte = filters.endDate;
+        where.dueDate.lte = filters.endDate
       }
     }
 
@@ -88,30 +93,30 @@ export async function GET(request: NextRequest) {
       where.OR = [
         { title: { contains: filters.search } },
         { description: { contains: filters.search } },
-      ];
+      ]
     }
 
     // Mark overdue tasks before fetching
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
+    const today = new Date()
+    today.setHours(0, 0, 0, 0)
 
     await prisma.task.updateMany({
       where: {
         homeId: { in: homeIds },
-        status: "PENDING",
+        status: 'PENDING',
         dueDate: { lt: today },
       },
       data: {
-        status: "OVERDUE",
+        status: 'OVERDUE',
       },
-    });
+    })
 
     // Get total count for pagination
-    const total = await prisma.task.count({ where });
+    const total = await prisma.task.count({ where })
 
     // Calculate pagination
-    const skip = (filters.page - 1) * filters.limit;
-    const totalPages = Math.ceil(total / filters.limit);
+    const skip = (filters.page - 1) * filters.limit
+    const totalPages = Math.ceil(total / filters.limit)
 
     // Fetch tasks with relations
     const tasks = await prisma.task.findMany({
@@ -132,13 +137,13 @@ export async function GET(request: NextRequest) {
         },
       },
       orderBy: [
-        { status: "asc" }, // OVERDUE first (alphabetically)
-        { priority: "desc" }, // Then by priority
-        { dueDate: "asc" }, // Then by due date
+        { status: 'asc' }, // OVERDUE first (alphabetically)
+        { priority: 'desc' }, // Then by priority
+        { dueDate: 'asc' }, // Then by due date
       ],
       skip,
       take: filters.limit,
-    });
+    })
 
     return successResponse({
       tasks,
@@ -146,15 +151,15 @@ export async function GET(request: NextRequest) {
       page: filters.page,
       limit: filters.limit,
       totalPages,
-    });
+    })
   } catch (error) {
-    if (error instanceof Error && error.message === "Unauthorized") {
-      return unauthorizedResponse();
+    if (error instanceof Error && error.message === 'Unauthorized') {
+      return unauthorizedResponse()
     }
     if (error instanceof ZodError) {
-      return validationErrorResponse(error);
+      return validationErrorResponse(error)
     }
-    return serverErrorResponse(error);
+    return serverErrorResponse(error)
   }
 }
 
@@ -164,9 +169,9 @@ export async function GET(request: NextRequest) {
  */
 export async function POST(request: NextRequest) {
   try {
-    const session = await requireAuth();
-    const body = await request.json();
-    const data = createTaskSchema.parse(body);
+    const session = await requireAuth()
+    const body = await request.json()
+    const data = createTaskSchema.parse(body)
 
     // Verify user owns the home
     const home = await prisma.home.findFirst({
@@ -174,10 +179,10 @@ export async function POST(request: NextRequest) {
         id: data.homeId,
         userId: session.user.id,
       },
-    });
+    })
 
     if (!home) {
-      return unauthorizedResponse("Home not found or unauthorized");
+      return unauthorizedResponse('Home not found or unauthorized')
     }
 
     // If assetId provided, verify user owns the asset
@@ -187,10 +192,10 @@ export async function POST(request: NextRequest) {
           id: data.assetId,
           homeId: data.homeId,
         },
-      });
+      })
 
       if (!asset) {
-        return unauthorizedResponse("Asset not found or unauthorized");
+        return unauthorizedResponse('Asset not found or unauthorized')
       }
     }
 
@@ -203,7 +208,8 @@ export async function POST(request: NextRequest) {
         priority: data.priority,
         homeId: data.homeId,
         assetId: data.assetId || null,
-        status: "PENDING",
+        status: 'PENDING',
+        estimatedCost: data.estimatedCost ?? null,
       },
       include: {
         asset: {
@@ -220,7 +226,7 @@ export async function POST(request: NextRequest) {
           },
         },
       },
-    });
+    })
 
     // Log activity
     await logTaskCreated({
@@ -229,16 +235,16 @@ export async function POST(request: NextRequest) {
       taskId: task.id,
       taskTitle: task.title,
       priority: task.priority,
-    });
+    })
 
-    return successResponse({ task }, 201);
+    return successResponse({ task }, 201)
   } catch (error) {
-    if (error instanceof Error && error.message === "Unauthorized") {
-      return unauthorizedResponse();
+    if (error instanceof Error && error.message === 'Unauthorized') {
+      return unauthorizedResponse()
     }
     if (error instanceof ZodError) {
-      return validationErrorResponse(error);
+      return validationErrorResponse(error)
     }
-    return serverErrorResponse(error);
+    return serverErrorResponse(error)
   }
 }

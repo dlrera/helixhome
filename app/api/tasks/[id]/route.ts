@@ -1,15 +1,15 @@
-import { NextRequest } from "next/server";
-import { prisma } from "@/lib/prisma";
-import { requireAuth } from "@/lib/api/auth";
+import { NextRequest } from 'next/server'
+import { prisma } from '@/lib/prisma'
+import { requireAuth } from '@/lib/api/auth'
 import {
   unauthorizedResponse,
   validationErrorResponse,
   serverErrorResponse,
   successResponse,
   notFoundResponse,
-} from "@/lib/api/responses";
-import { updateTaskSchema } from "@/lib/validation/task";
-import { ZodError } from "zod";
+} from '@/lib/api/responses'
+import { updateTaskSchema } from '@/lib/validation/task'
+import { ZodError } from 'zod'
 
 /**
  * GET /api/tasks/[id]
@@ -20,8 +20,8 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const session = await requireAuth();
-    const { id } = await params;
+    const session = await requireAuth()
+    const { id } = await params
 
     // Fetch task with all relations
     const task = await prisma.task.findUnique({
@@ -51,23 +51,23 @@ export async function GET(
           },
         },
       },
-    });
+    })
 
     if (!task) {
-      return notFoundResponse("Task");
+      return notFoundResponse('Task')
     }
 
     // Verify user owns the task (via home)
     if (task.home.userId !== session.user.id) {
-      return unauthorizedResponse("Not authorized to access this task");
+      return unauthorizedResponse('Not authorized to access this task')
     }
 
-    return successResponse({ task });
+    return successResponse({ task })
   } catch (error) {
-    if (error instanceof Error && error.message === "Unauthorized") {
-      return unauthorizedResponse();
+    if (error instanceof Error && error.message === 'Unauthorized') {
+      return unauthorizedResponse()
     }
-    return serverErrorResponse(error);
+    return serverErrorResponse(error)
   }
 }
 
@@ -80,10 +80,10 @@ export async function PUT(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const session = await requireAuth();
-    const { id } = await params;
-    const body = await request.json();
-    const data = updateTaskSchema.parse(body);
+    const session = await requireAuth()
+    const { id } = await params
+    const body = await request.json()
+    const data = updateTaskSchema.parse(body)
 
     // Fetch existing task and verify ownership
     const existingTask = await prisma.task.findUnique({
@@ -93,14 +93,14 @@ export async function PUT(
           select: { userId: true },
         },
       },
-    });
+    })
 
     if (!existingTask) {
-      return notFoundResponse("Task");
+      return notFoundResponse('Task')
     }
 
     if (existingTask.home.userId !== session.user.id) {
-      return unauthorizedResponse("Not authorized to update this task");
+      return unauthorizedResponse('Not authorized to update this task')
     }
 
     // If changing assetId, verify user owns the new asset
@@ -110,10 +110,10 @@ export async function PUT(
           id: data.assetId,
           homeId: existingTask.homeId,
         },
-      });
+      })
 
       if (!asset) {
-        return unauthorizedResponse("Asset not found or unauthorized");
+        return unauthorizedResponse('Asset not found or unauthorized')
       }
     }
 
@@ -122,11 +122,18 @@ export async function PUT(
       where: { id },
       data: {
         ...(data.title && { title: data.title }),
-        ...(data.description !== undefined && { description: data.description }),
+        ...(data.description !== undefined && {
+          description: data.description,
+        }),
         ...(data.dueDate && { dueDate: data.dueDate }),
         ...(data.priority && { priority: data.priority }),
         ...(data.status && { status: data.status }),
         ...(data.assetId !== undefined && { assetId: data.assetId }),
+        ...(data.estimatedCost !== undefined && {
+          estimatedCost: data.estimatedCost,
+        }),
+        ...(data.actualCost !== undefined && { actualCost: data.actualCost }),
+        ...(data.costNotes !== undefined && { costNotes: data.costNotes }),
       },
       include: {
         asset: {
@@ -143,17 +150,17 @@ export async function PUT(
           },
         },
       },
-    });
+    })
 
-    return successResponse({ task });
+    return successResponse({ task })
   } catch (error) {
-    if (error instanceof Error && error.message === "Unauthorized") {
-      return unauthorizedResponse();
+    if (error instanceof Error && error.message === 'Unauthorized') {
+      return unauthorizedResponse()
     }
     if (error instanceof ZodError) {
-      return validationErrorResponse(error);
+      return validationErrorResponse(error)
     }
-    return serverErrorResponse(error);
+    return serverErrorResponse(error)
   }
 }
 
@@ -166,8 +173,8 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const session = await requireAuth();
-    const { id } = await params;
+    const session = await requireAuth()
+    const { id } = await params
 
     // Fetch task and verify ownership
     const task = await prisma.task.findUnique({
@@ -177,27 +184,27 @@ export async function DELETE(
           select: { userId: true },
         },
       },
-    });
+    })
 
     if (!task) {
-      return notFoundResponse("Task");
+      return notFoundResponse('Task')
     }
 
     if (task.home.userId !== session.user.id) {
-      return unauthorizedResponse("Not authorized to delete this task");
+      return unauthorizedResponse('Not authorized to delete this task')
     }
 
     // Soft delete by setting status to CANCELLED
     await prisma.task.update({
       where: { id },
-      data: { status: "CANCELLED" },
-    });
+      data: { status: 'CANCELLED' },
+    })
 
-    return successResponse({ message: "Task cancelled successfully" });
+    return successResponse({ message: 'Task cancelled successfully' })
   } catch (error) {
-    if (error instanceof Error && error.message === "Unauthorized") {
-      return unauthorizedResponse();
+    if (error instanceof Error && error.message === 'Unauthorized') {
+      return unauthorizedResponse()
     }
-    return serverErrorResponse(error);
+    return serverErrorResponse(error)
   }
 }

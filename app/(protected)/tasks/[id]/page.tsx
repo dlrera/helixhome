@@ -9,13 +9,15 @@ interface TaskDetailPageProps {
   params: Promise<{ id: string }>
 }
 
-export async function generateMetadata({ params }: TaskDetailPageProps): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: TaskDetailPageProps): Promise<Metadata> {
   const { id } = await params
   const session = await getServerSession(authOptions)
 
   if (!session?.user?.id) {
     return {
-      title: 'Task Details'
+      title: 'Task Details',
     }
   }
 
@@ -26,25 +28,25 @@ export async function generateMetadata({ params }: TaskDetailPageProps): Promise
         title: true,
         home: {
           select: {
-            userId: true
-          }
-        }
-      }
+            userId: true,
+          },
+        },
+      },
     })
 
     if (!task || task.home.userId !== session.user.id) {
       return {
-        title: 'Task Not Found'
+        title: 'Task Not Found',
       }
     }
 
     return {
       title: `${task.title} | Task Details`,
-      description: `Details for task: ${task.title}`
+      description: `Details for task: ${task.title}`,
     }
-  } catch (error) {
+  } catch {
     return {
-      title: 'Task Details'
+      title: 'Task Details',
     }
   }
 }
@@ -65,10 +67,10 @@ export default async function TaskDetailPage({ params }: TaskDetailPageProps) {
       template: true,
       home: {
         select: {
-          userId: true
-        }
-      }
-    }
+          userId: true,
+        },
+      },
+    },
   })
 
   // Check if task exists
@@ -81,17 +83,29 @@ export default async function TaskDetailPage({ params }: TaskDetailPageProps) {
     notFound()
   }
 
-  // Fetch user's requireCompletionPhoto setting
-  const user = await prisma.user.findUnique({
-    where: { id: session.user.id },
-    select: {
-      requireCompletionPhoto: true
-    }
-  })
+  // Fetch user's requireCompletionPhoto setting and assets for the home
+  const [user, assets] = await Promise.all([
+    prisma.user.findUnique({
+      where: { id: session.user.id },
+      select: {
+        requireCompletionPhoto: true,
+      },
+    }),
+    prisma.asset.findMany({
+      where: { homeId: task.homeId },
+      select: {
+        id: true,
+        name: true,
+        category: true,
+      },
+      orderBy: { name: 'asc' },
+    }),
+  ])
 
   return (
     <TaskDetailClient
       task={task}
+      assets={assets}
       requireCompletionPhoto={user?.requireCompletionPhoto || false}
     />
   )

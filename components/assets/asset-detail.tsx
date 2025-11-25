@@ -39,6 +39,13 @@ import {
 import PhotoUploadDialog from './photo-upload-dialog'
 import DeleteAssetDialog from './delete-asset-dialog'
 import ApplyTemplateModal from '@/components/templates/apply-template-modal'
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog'
+import { QuickTaskForm } from '@/components/tasks/quick-task-form'
 import { formatDuration, formatFrequency } from '@/lib/utils/template-helpers'
 import ScheduleList from '@/components/schedules/schedule-list'
 import Link from 'next/link'
@@ -66,6 +73,7 @@ type AssetDetailProps = {
     manualUrl: string | null
     createdAt: Date
     home: {
+      id: string
       name: string
     }
     tasks: Array<{
@@ -98,6 +106,7 @@ export default function AssetDetail({
   const router = useRouter()
   const [showPhotoDialog, setShowPhotoDialog] = useState(false)
   const [showDeleteDialog, setShowDeleteDialog] = useState(false)
+  const [showCreateTask, setShowCreateTask] = useState(false)
   const [selectedTemplate, setSelectedTemplate] =
     useState<SuggestedTemplate | null>(null)
   const [showApplyModal, setShowApplyModal] = useState(false)
@@ -141,6 +150,14 @@ export default function AssetDetail({
             </div>
           </div>
           <div className="flex gap-2">
+            <Button
+              size="sm"
+              onClick={() => setShowCreateTask(true)}
+              className="bg-[#216093] hover:bg-[#1a4d75]"
+            >
+              <Plus className="h-4 w-4 mr-2" />
+              Create Task
+            </Button>
             <Button variant="outline" size="sm" onClick={handleEdit}>
               <Edit className="h-4 w-4 mr-2" />
               Edit
@@ -420,6 +437,22 @@ export default function AssetDetail({
         open={showDeleteDialog}
         onOpenChange={setShowDeleteDialog}
       />
+      <Dialog open={showCreateTask} onOpenChange={setShowCreateTask}>
+        <DialogContent className="sm:max-w-[500px]">
+          <DialogHeader>
+            <DialogTitle>Create Task for {asset.name}</DialogTitle>
+          </DialogHeader>
+          <QuickTaskForm
+            homeId={asset.home.id}
+            assetId={asset.id}
+            onSuccess={() => {
+              setShowCreateTask(false)
+              router.refresh()
+            }}
+            onCancel={() => setShowCreateTask(false)}
+          />
+        </DialogContent>
+      </Dialog>
       {selectedTemplate && (
         <ApplyTemplateModal
           template={selectedTemplate}

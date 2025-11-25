@@ -11,7 +11,7 @@ import {
   DialogDescription,
   DialogFooter,
   DialogHeader,
-  DialogTitle
+  DialogTitle,
 } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
@@ -23,13 +23,15 @@ import { Input } from '@/components/ui/input'
 
 const completeTaskSchema = z.object({
   completionNotes: z.string().optional(),
-  completionPhotos: z.array(z.string()).optional()
+  completionPhotos: z.array(z.string()).optional(),
+  actualCost: z.string().optional(),
+  costNotes: z.string().max(500).optional(),
 })
 
 type CompleteTaskInput = z.infer<typeof completeTaskSchema>
 
 interface TaskCompletionModalProps {
-  task: Task | null
+  task: (Task & { estimatedCost?: number | null }) | null
   open: boolean
   onClose: () => void
   requirePhoto?: boolean
@@ -39,7 +41,7 @@ export function TaskCompletionModal({
   task,
   open,
   onClose,
-  requirePhoto = false
+  requirePhoto = false,
 }: TaskCompletionModalProps) {
   const { toast } = useToast()
   const completeTaskMutation = useCompleteTask()
@@ -51,9 +53,14 @@ export function TaskCompletionModal({
     register,
     handleSubmit,
     reset,
-    formState: { errors }
+    formState: { errors },
   } = useForm<CompleteTaskInput>({
-    resolver: zodResolver(completeTaskSchema)
+    resolver: zodResolver(completeTaskSchema),
+    defaultValues: {
+      completionNotes: '',
+      actualCost: task?.estimatedCost?.toString() || '',
+      costNotes: '',
+    },
   })
 
   const handlePhotoSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -100,7 +107,7 @@ export function TaskCompletionModal({
       toast({
         title: 'Photo upload failed',
         description: 'Failed to process photos. Please try again.',
-        variant: 'destructive'
+        variant: 'destructive',
       })
       return []
     } finally {
@@ -116,7 +123,7 @@ export function TaskCompletionModal({
       toast({
         title: 'Photo required',
         description: 'Please upload at least one photo to complete this task.',
-        variant: 'destructive'
+        variant: 'destructive',
       })
       return
     }
@@ -125,29 +132,33 @@ export function TaskCompletionModal({
     const photoUrls = await uploadPhotos()
 
     // Complete the task
+    const actualCost = data.actualCost ? parseFloat(data.actualCost) : undefined
     completeTaskMutation.mutate(
       {
         taskId: task.id,
         data: {
           completionNotes: data.completionNotes,
-          completionPhotos: photoUrls.length > 0 ? photoUrls : undefined
-        }
+          completionPhotos: photoUrls.length > 0 ? photoUrls : undefined,
+          actualCost: actualCost && !isNaN(actualCost) ? actualCost : undefined,
+          costNotes: data.costNotes,
+        },
       },
       {
         onSuccess: () => {
           toast({
             title: 'Task completed!',
-            description: `"${task.title}" has been marked as complete.`
+            description: `"${task.title}" has been marked as complete.`,
           })
           handleClose()
         },
         onError: (error) => {
           toast({
             title: 'Failed to complete task',
-            description: error instanceof Error ? error.message : 'An error occurred',
-            variant: 'destructive'
+            description:
+              error instanceof Error ? error.message : 'An error occurred',
+            variant: 'destructive',
           })
-        }
+        },
       }
     )
   }
@@ -172,7 +183,8 @@ export function TaskCompletionModal({
             Complete Task
           </DialogTitle>
           <DialogDescription>
-            Add optional notes or photos to document the completion of this task.
+            Add optional notes or photos to document the completion of this
+            task.
           </DialogDescription>
         </DialogHeader>
 
@@ -181,23 +193,69 @@ export function TaskCompletionModal({
           <div className="rounded-md bg-muted p-3">
             <p className="font-medium text-sm">{task.title}</p>
             {task.description && (
-              <p className="text-muted-foreground text-xs mt-1">{task.description}</p>
+              <p className="text-muted-foreground text-xs mt-1">
+                {task.description}
+              </p>
             )}
+          </div>
+
+          {/* Cost Information */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="actualCost">
+                Actual Cost{' '}
+                <span className="text-muted-foreground">(Optional)</span>
+              </Label>
+              <div className="relative">
+                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
+                  $
+                </span>
+                <Input
+                  id="actualCost"
+                  type="number"
+                  step="0.01"
+                  min="0"
+                  placeholder="0.00"
+                  className="pl-7"
+                  {...register('actualCost')}
+                />
+              </div>
+              {task?.estimatedCost && (
+                <p className="text-xs text-muted-foreground">
+                  Estimated: ${task.estimatedCost.toFixed(2)}
+                </p>
+              )}
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="costNotes">
+                Cost Notes{' '}
+                <span className="text-muted-foreground">(Optional)</span>
+              </Label>
+              <Input
+                id="costNotes"
+                placeholder="e.g., Parts from Home Depot"
+                maxLength={500}
+                {...register('costNotes')}
+              />
+            </div>
           </div>
 
           {/* Completion Notes */}
           <div className="space-y-2">
             <Label htmlFor="completionNotes">
-              Completion Notes <span className="text-muted-foreground">(Optional)</span>
+              Completion Notes{' '}
+              <span className="text-muted-foreground">(Optional)</span>
             </Label>
             <Textarea
               id="completionNotes"
               placeholder="Add any notes about how the task was completed..."
-              rows={4}
+              rows={3}
               {...register('completionNotes')}
             />
             {errors.completionNotes && (
-              <p className="text-destructive text-sm">{errors.completionNotes.message}</p>
+              <p className="text-destructive text-sm">
+                {errors.completionNotes.message}
+              </p>
             )}
           </div>
 
@@ -257,12 +315,19 @@ export function TaskCompletionModal({
             )}
 
             {requirePhoto && photoFiles.length === 0 && (
-              <p className="text-destructive text-xs">At least one photo is required</p>
+              <p className="text-destructive text-xs">
+                At least one photo is required
+              </p>
             )}
           </div>
 
           <DialogFooter>
-            <Button type="button" variant="outline" onClick={handleClose} disabled={isLoading}>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={handleClose}
+              disabled={isLoading}
+            >
               Cancel
             </Button>
             <Button type="submit" disabled={isLoading}>
