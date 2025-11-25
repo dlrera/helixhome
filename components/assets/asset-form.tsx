@@ -59,7 +59,8 @@ export default function AssetForm({
     watch,
     formState: { errors },
   } = useForm<AssetFormData>({
-    resolver: zodResolver(assetSchema),
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    resolver: zodResolver(assetSchema) as any,
     defaultValues: {
       homeId: initialData?.homeId || homes[0]?.id,
       category: initialData?.category || 'APPLIANCE',
