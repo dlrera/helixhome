@@ -1,1072 +1,823 @@
-# Task 13 Implementation Checklist: UX Polish & Production Readiness
-
-## Phase 1: Error Boundaries Implementation
-
-### 1.1 Create Error Boundary Component
-
-- [ ] Create error boundary file
-  - [ ] Create `components/error-boundary.tsx`
-  - [ ] Import React Component class
-  - [ ] Add Props interface (children, fallback)
-  - [ ] Add State interface (hasError, error)
-
-- [ ] Implement error handling methods
-  - [ ] Add constructor with initial state
-  - [ ] Implement `getDerivedStateFromError()`
-  - [ ] Implement `componentDidCatch()`
-  - [ ] Add console.error logging
-  - [ ] Optional: Add Sentry integration
-
-- [ ] Create fallback UI
-  - [ ] Add AlertTriangle icon from lucide-react
-  - [ ] Create centered error message layout
-  - [ ] Add "Something went wrong" heading
-  - [ ] Add descriptive error message
-  - [ ] Add "Try again" button that resets state
-  - [ ] Style with HelixIntel colors
-
-- [ ] Test error boundary component
-  - [ ] Create test component that throws error
-  - [ ] Wrap in ErrorBoundary
-  - [ ] Verify fallback UI appears
-  - [ ] Test "Try again" button
-  - [ ] Verify error logged to console
-
-### 1.2 Wrap Critical Components
-
-- [ ] Identify components to wrap
-  - [ ] List all dashboard widgets
-  - [ ] List all data tables
-  - [ ] List all chart components
-  - [ ] List all forms
-  - [ ] Prioritize by criticality
-
-- [ ] Wrap dashboard components
-  - [ ] Wrap AnalyticsChart component
-  - [ ] Wrap CostSummary component
-  - [ ] Wrap MaintenanceCalendarWidget
-  - [ ] Wrap ActivityTimeline component
-  - [ ] Wrap MaintenanceInsights component
-  - [ ] Test each wrapped component
-
-- [ ] Wrap data tables
-  - [ ] Wrap AssetTable component
-  - [ ] Wrap TaskTable component
-  - [ ] Test table error handling
-
-- [ ] Wrap chart components
-  - [ ] Wrap individual Recharts instances
-  - [ ] Or wrap parent chart containers
-  - [ ] Test chart error scenarios
-
-- [ ] Wrap forms
-  - [ ] Wrap AssetForm (create/edit)
-  - [ ] Wrap TaskForm
-  - [ ] Test form error handling
-
-### 1.3 Test Error Scenarios
-
-- [ ] Test component errors
-  - [ ] Force error in dashboard widget
-  - [ ] Verify error boundary catches it
-  - [ ] Verify page doesn't crash
-  - [ ] Verify other widgets still work
-  - [ ] Test "Try again" functionality
-
-- [ ] Test API errors
-  - [ ] Mock API to return 500 error
-  - [ ] Verify error boundary catches component failure
-  - [ ] Check error message is user-friendly
-  - [ ] Verify error logged
-
-- [ ] Test chart errors
-  - [ ] Pass invalid data to chart
-  - [ ] Verify error boundary handles it
-  - [ ] Check fallback UI appears
-
-## Phase 2: Breadcrumb Navigation
-
-### 2.1 Create Breadcrumb Component
-
-- [ ] Create breadcrumb component file
-  - [ ] Create `components/ui/breadcrumb.tsx`
-  - [ ] Import Link from next/link
-  - [ ] Import ChevronRight from lucide-react
-
-- [ ] Define interfaces
-  - [ ] Define BreadcrumbItem interface (label, href?)
-  - [ ] Define BreadcrumbProps interface (items array)
-
-- [ ] Implement component
-  - [ ] Create nav element with aria-label="Breadcrumb"
-  - [ ] Create ordered list (ol)
-  - [ ] Map over items
-  - [ ] Add ChevronRight separator between items
-  - [ ] Render Link for items with href
-  - [ ] Render span for last item (no link)
-  - [ ] Style with muted colors
-  - [ ] Add hover states
-
-- [ ] Test breadcrumb component
-  - [ ] Create example usage
-  - [ ] Verify visual appearance
-  - [ ] Test link navigation
-  - [ ] Test on mobile (touch targets)
-  - [ ] Verify accessibility with screen reader
-
-### 2.2 Add Breadcrumbs to Pages
-
-- [ ] Add to Asset Detail page
-  - [ ] Open `app/assets/[id]/page.tsx`
-  - [ ] Import Breadcrumb component
-  - [ ] Add breadcrumb above main content
-  - [ ] Items: Dashboard → Assets → [Asset Name]
-  - [ ] Test navigation works
-
-- [ ] Add to Task Detail page (if separate page)
-  - [ ] Open task detail page
-  - [ ] Add breadcrumb
-  - [ ] Items: Dashboard → Tasks → [Task Name]
-  - [ ] Test navigation
-
-- [ ] Add to Dashboard sub-pages
-  - [ ] Dashboard/Costs: Dashboard → Cost Report
-  - [ ] Dashboard/Settings: Dashboard → Settings
-  - [ ] Test navigation
-
-- [ ] Add to other detail pages (if any)
-  - [ ] Template detail (if exists)
-  - [ ] Other detail pages
-  - [ ] Test all breadcrumbs
-
-### 2.3 Test Breadcrumb Navigation
-
-- [ ] Test link navigation
-  - [ ] Click each breadcrumb link
-  - [ ] Verify navigation works
-  - [ ] Test back button after navigation
-  - [ ] Verify URL updates correctly
-
-- [ ] Test visual design
-  - [ ] Check separators appear correctly
-  - [ ] Verify colors (muted for links, bold for current)
-  - [ ] Test hover states
-  - [ ] Check spacing and alignment
-
-- [ ] Test on mobile
-  - [ ] Verify breadcrumbs display correctly at 375px
-  - [ ] Check touch targets adequate (44x44px)
-  - [ ] Test that breadcrumbs don't overflow
-  - [ ] Verify wrapping if needed
-
-- [ ] Test accessibility
-  - [ ] Verify aria-label on nav element
-  - [ ] Test with screen reader
-  - [ ] Check keyboard navigation (Tab)
-  - [ ] Verify semantic HTML (nav, ol, li)
-
-## Phase 3: Toast Notifications Testing
-
-### 3.1 Verify Toaster Setup
-
-- [ ] Check Toaster in layout
-  - [ ] Open `app/layout.tsx`
-  - [ ] Verify `import { Toaster } from 'sonner'`
-  - [ ] Verify `<Toaster />` in body
-  - [ ] Check Toaster configuration (position, theme)
-
-- [ ] Test basic toast
-  - [ ] Add test button: `toast('Hello')`
-  - [ ] Verify toast appears
-  - [ ] Check toast dismisses after 4s
-  - [ ] Verify toast is styled correctly
-
-### 3.2 Add Toasts to Actions
-
-- [ ] Asset CRUD toasts
-  - [ ] Asset created: `toast.success('Asset created successfully!')`
-  - [ ] Asset updated: `toast.success('Asset updated!')`
-  - [ ] Asset deleted: `toast.success('Asset deleted')`
-  - [ ] Asset creation error: `toast.error('Failed to create asset')`
-
-- [ ] Task CRUD toasts
-  - [ ] Task created: `toast.success('Task created!')`
-  - [ ] Task completed: `toast.success('Task completed!')`
-  - [ ] Task updated: `toast.success('Task updated!')`
-  - [ ] Task deleted: `toast.success('Task deleted')`
-  - [ ] Task error: `toast.error('Failed to save task')`
-
-- [ ] Template toasts
-  - [ ] Template applied: `toast.success('Template applied!')`
-  - [ ] Template error: `toast.error('Failed to apply template')`
-
-- [ ] Settings toasts
-  - [ ] Settings saved: `toast.success('Settings saved!')`
-  - [ ] Budget updated: `toast.success('Budget updated!')`
-  - [ ] Settings error: `toast.error('Failed to save settings')`
-
-- [ ] Form validation toasts
-  - [ ] Consider: Show validation errors as toast
-  - [ ] Or keep inline error messages
-  - [ ] Decision: _______________
-
-### 3.3 Test Toast Behavior
-
-- [ ] Test success toasts
-  - [ ] Create asset → toast appears
-  - [ ] Update asset → toast appears
-  - [ ] Delete asset → toast appears
-  - [ ] Complete task → toast appears
-  - [ ] Verify all success toasts work
-
-- [ ] Test error toasts
-  - [ ] Trigger API error
-  - [ ] Verify error toast appears
-  - [ ] Check error message is user-friendly
-  - [ ] Verify error details not exposed
-
-- [ ] Test toast duration
-  - [ ] Verify default duration ~4 seconds
-  - [ ] Test manual dismiss (click X)
-  - [ ] Test auto-dismiss
-
-- [ ] Test multiple toasts
-  - [ ] Trigger multiple toasts rapidly
-  - [ ] Verify they stack correctly
-  - [ ] Check all are visible
-  - [ ] Verify they dismiss in order
-
-- [ ] Test toast accessibility
-  - [ ] Test with screen reader
-  - [ ] Verify toast content is announced
-  - [ ] Check aria-live region works
-  - [ ] Verify keyboard dismissable
-
-## Phase 4: Empty States Implementation
-
-### 4.1 Create Empty State Component
-
-- [ ] Create empty state component file
-  - [ ] Create `components/ui/empty-state.tsx`
-  - [ ] Import icons from lucide-react
-  - [ ] Import Button component
-
-- [ ] Define interfaces
-  - [ ] Define EmptyStateProps (icon?, title, description, action?)
-  - [ ] Define action interface (label, onClick)
-
-- [ ] Implement component
-  - [ ] Create centered container
-  - [ ] Add icon (default FileQuestion)
-  - [ ] Add title (h3)
-  - [ ] Add description (p)
-  - [ ] Add action button (optional)
-  - [ ] Style with muted colors
-  - [ ] Add adequate spacing
-
-- [ ] Test empty state component
-  - [ ] Create example usage
-  - [ ] Verify visual appearance
-  - [ ] Test button click
-  - [ ] Test without button
-  - [ ] Test with custom icon
-
-### 4.2 Add Empty States to Pages
-
-- [ ] Add to Assets list page
-  - [ ] Open `app/assets/page.tsx`
-  - [ ] Check if `assets.length === 0`
-  - [ ] Render EmptyState component
-  - [ ] Icon: Package
-  - [ ] Title: "No assets yet"
-  - [ ] Description: "Start by adding your first home asset..."
-  - [ ] Action: "Add Asset" → navigate to /assets/create
-
-- [ ] Add to Tasks list page
-  - [ ] Open `app/tasks/page.tsx`
-  - [ ] Check if `tasks.length === 0`
-  - [ ] Render EmptyState
-  - [ ] Icon: CheckSquare
-  - [ ] Title: "No tasks"
-  - [ ] Description: "You're all caught up!"
-  - [ ] Action: "Browse Templates"
-
-- [ ] Add to Dashboard (optional)
-  - [ ] If no data at all
-  - [ ] Show helpful empty state
-  - [ ] Guide user to add first asset
-
-- [ ] Add to Activity Timeline
-  - [ ] If no activities
-  - [ ] Icon: Activity
-  - [ ] Title: "No activity yet"
-  - [ ] Description: "Activity will appear as you use the app"
-
-- [ ] Add to Templates (unlikely)
-  - [ ] Only if templates can be empty
-  - [ ] Otherwise skip
-
-### 4.3 Test Empty States
-
-- [ ] Test with fresh database
-  - [ ] Create new user or reset database
-  - [ ] Login
-  - [ ] Visit assets page
-  - [ ] Verify empty state appears
-  - [ ] Click CTA button
-  - [ ] Verify navigation works
-
-- [ ] Test tasks empty state
-  - [ ] Delete all tasks (if any)
-  - [ ] Visit tasks page
-  - [ ] Verify empty state
-  - [ ] Test CTA button
-
-- [ ] Test activity empty state
-  - [ ] Visit dashboard with no activity
-  - [ ] Verify empty state in timeline
-  - [ ] Check helpful message
-
-- [ ] Test visual design
-  - [ ] Verify icons display correctly
-  - [ ] Check text is readable (not too faint)
-  - [ ] Verify button is prominent
-  - [ ] Test on mobile (adequate sizing)
-
-## Phase 5: Loading States Verification
-
-### 5.1 Verify Existing Skeletons
-
-- [ ] Check dashboard skeletons
-  - [ ] Load dashboard
-  - [ ] Verify stat cards have skeleton
-  - [ ] Check chart widgets have skeleton
-  - [ ] Verify calendar has skeleton
-  - [ ] Check activity timeline has skeleton
-
-- [ ] Check data table skeletons
-  - [ ] Load assets page
-  - [ ] Verify table skeleton appears
-  - [ ] Load tasks page
-  - [ ] Verify table skeleton
-
-- [ ] Check form skeletons
-  - [ ] Load asset create page
-  - [ ] Check if form has loading state
-  - [ ] Or if loads instantly (may be fine)
-
-### 5.2 Add Missing Skeletons
-
-- [ ] Create breadcrumb skeleton (if needed)
-  - [ ] Create BreadcrumbSkeleton component
-  - [ ] Match breadcrumb layout
-  - [ ] Use shimmer animation
-
-- [ ] Check modal/drawer skeletons
-  - [ ] Verify modals have loading states
-  - [ ] Check drawers have skeletons
-  - [ ] Add if missing
-
-- [ ] Create empty state skeleton (unlikely)
-  - [ ] Only if empty states lazy loaded
-  - [ ] Otherwise skip
-
-### 5.3 Test with Network Throttling
-
-- [ ] Test dashboard loading
-  - [ ] Open Chrome DevTools
-  - [ ] Network tab → Throttling: Slow 3G
-  - [ ] Navigate to dashboard
-  - [ ] Verify skeletons appear immediately
-  - [ ] Check smooth transition to content
-  - [ ] Measure: No layout shift (CLS)
-
-- [ ] Test assets page loading
-  - [ ] Keep Slow 3G throttling
-  - [ ] Navigate to assets
-  - [ ] Verify table skeleton
-  - [ ] Check smooth loading
-
-- [ ] Test tasks page loading
-  - [ ] Navigate to tasks with throttling
-  - [ ] Verify loading state
-  - [ ] Check smooth transition
-
-- [ ] Test forms loading
-  - [ ] Load asset create form
-  - [ ] Verify no jarring layout shifts
-  - [ ] Check form renders smoothly
-
-- [ ] Measure perceived performance
-  - [ ] Time to skeleton: Should be <100ms
-  - [ ] Skeleton to content: Acceptable if shows progress
-  - [ ] Overall perceived speed: Better than blank screen
-
-## Phase 6: E2E Test Expansion
-
-### 6.1 Add Error Boundary Tests
-
-- [ ] Create error boundary test file
-  - [ ] Add to existing test file or create new
-  - [ ] Import necessary utilities
-
-- [ ] Test dashboard widget error
-  ```typescript
-  test('Shows error boundary on widget failure', async ({ page }) => {
-    // Mock API error
-    await page.route('**/api/dashboard/analytics', route =>
-      route.fulfill({ status: 500, body: 'Error' })
-    );
-    await page.goto('/dashboard');
-    // Check error boundary appears
-    await expect(page.getByText('Something went wrong')).toBeVisible();
-    await expect(page.getByRole('button', { name: 'Try again' })).toBeVisible();
-  });
-  ```
-
-- [ ] Test "Try again" button
-  - [ ] Click "Try again"
-  - [ ] Verify component reloads
-  - [ ] Check error cleared
-
-- [ ] Test error doesn't crash page
-  - [ ] Force widget error
-  - [ ] Verify other widgets still work
-  - [ ] Check overall page functional
-
-### 6.2 Add Empty State Tests
-
-- [ ] Test assets empty state
-  ```typescript
-  test('Shows empty state when no assets', async ({ page }) => {
-    // Use fresh user or mock empty response
-    await page.goto('/assets');
-    await expect(page.getByText('No assets yet')).toBeVisible();
-    await expect(page.getByRole('button', { name: 'Add Asset' })).toBeVisible();
-  });
-  ```
-
-- [ ] Test tasks empty state
-  - [ ] Navigate to tasks with no data
-  - [ ] Verify empty state appears
-  - [ ] Test CTA button
-
-- [ ] Test empty state CTAs
-  - [ ] Click "Add Asset" button
-  - [ ] Verify navigation to create page
-  - [ ] Test other CTA buttons
-
-### 6.3 Add Toast Notification Tests
-
-- [ ] Test success toast on asset creation
-  ```typescript
-  test('Shows success toast on asset creation', async ({ page }) => {
-    await page.goto('/assets/create');
-    await page.fill('[name="name"]', 'Test Asset');
-    await page.selectOption('[name="category"]', 'APPLIANCE');
-    await page.click('button[type="submit"]');
-    await expect(page.getByText('Asset created successfully!')).toBeVisible({
-      timeout: 5000,
-    });
-  });
-  ```
-
-- [ ] Test success toast on task completion
-  - [ ] Navigate to task
-  - [ ] Complete task
-  - [ ] Verify toast appears
-
-- [ ] Test error toast (optional)
-  - [ ] Trigger error condition
-  - [ ] Verify error toast
-  - [ ] Check message is helpful
-
-- [ ] Test toast dismissal
-  - [ ] Wait for auto-dismiss
-  - [ ] Or manually dismiss
-  - [ ] Verify toast disappears
-
-### 6.4 Add Breadcrumb Tests
-
-- [ ] Test breadcrumb on asset detail
-  ```typescript
-  test('Breadcrumb navigation on asset detail', async ({ page }) => {
-    await page.goto('/assets/1');
-    const breadcrumb = page.getByRole('navigation', { name: 'Breadcrumb' });
-    await expect(breadcrumb).toBeVisible();
-    await expect(breadcrumb.getByText('Dashboard')).toBeVisible();
-    await expect(breadcrumb.getByText('Assets')).toBeVisible();
-  });
-  ```
-
-- [ ] Test breadcrumb navigation
-  - [ ] Click "Assets" link in breadcrumb
-  - [ ] Verify navigates to /assets
-  - [ ] Click "Dashboard" link
-  - [ ] Verify navigates to /dashboard
-
-- [ ] Test breadcrumb on task detail
-  - [ ] Similar test for task page
-  - [ ] Verify breadcrumb works
-
-### 6.5 Add Full User Flow Tests
-
-- [ ] Test complete onboarding flow
-  ```typescript
-  test('Complete user onboarding', async ({ page }) => {
-    // 1. Login
-    await page.goto('/login');
-    await page.fill('[name="email"]', 'admin@example.com');
-    await page.fill('[name="password"]', 'admin123');
-    await page.click('button[type="submit"]');
-
-    // 2. Create first asset
-    await page.goto('/assets/create');
-    await page.fill('[name="name"]', 'HVAC System');
-    await page.selectOption('[name="category"]', 'HVAC');
-    await page.click('button[type="submit"]');
-    await expect(page.getByText('Asset created successfully!')).toBeVisible();
-
-    // 3. Apply template
-    await page.goto('/templates');
-    await page.getByText('HVAC Maintenance').click();
-    await page.getByRole('button', { name: 'Apply Template' }).click();
-    await page.getByRole('button', { name: 'Confirm' }).click();
-    await expect(page.getByText('Template applied!')).toBeVisible();
-
-    // 4. Verify task created
-    await page.goto('/tasks');
-    await expect(page.getByText('Change HVAC filter')).toBeVisible();
-  });
-  ```
-
-- [ ] Test maintenance workflow
-  - [ ] Create asset
-  - [ ] Apply template
-  - [ ] Complete task
-  - [ ] Verify dashboard updated
-
-- [ ] Test deletion workflow
-  - [ ] Create asset
-  - [ ] Delete asset
-  - [ ] Verify confirmation dialog
-  - [ ] Verify deleted
-
-### 6.6 Run All E2E Tests
-
-- [ ] Run full test suite
-  - [ ] Execute: `pnpm test`
-  - [ ] Note total tests run
-  - [ ] Note pass count
-  - [ ] Note fail count
-  - [ ] Calculate pass rate: ____%
-
-- [ ] Review failures
-  - [ ] List all failing tests
-  - [ ] Categorize by reason
+# Task 12 Implementation Checklist: Accessibility Compliance & WCAG 2.1 AA Certification
+
+## Phase 1: Tool Setup & Installation
+
+### 1.1 Install Browser Extensions
+
+- [ ] Install axe DevTools
+  - [ ] Open Chrome or Edge browser
+  - [ ] Go to Chrome Web Store
+  - [ ] Search "axe DevTools - Web Accessibility Testing"
+  - [ ] Click "Add to Chrome/Edge"
+  - [ ] Pin extension to toolbar for easy access
+  - [ ] Test extension opens correctly
+
+- [ ] Verify Lighthouse availability
+  - [ ] Open Chrome DevTools (F12)
+  - [ ] Check Lighthouse tab exists
+  - [ ] If missing, update Chrome to latest version
+
+- [ ] Install Color Contrast Analyzer (optional)
+  - [ ] Download from Paciello Group website
+  - [ ] Install desktop application
+  - [ ] Test color picker functionality
+
+### 1.2 Setup Screen Reader (Windows)
+
+- [ ] Install NVDA (if on Windows)
+  - [ ] Download from https://www.nvaccess.org/download/
+  - [ ] Run installer
+  - [ ] Complete installation wizard
+  - [ ] Launch NVDA
+  - [ ] Verify voice output works
+  - [ ] Learn basic commands (NVDA+T, NVDA+Down, H, D, B, F)
+
+- [ ] Or enable VoiceOver (if on macOS)
+  - [ ] Press Cmd+F5 to toggle VoiceOver
+  - [ ] Or System Preferences → Accessibility → VoiceOver
+  - [ ] Enable VoiceOver
+  - [ ] Complete tutorial (recommended)
+  - [ ] Learn basic commands (VO+A, VO+Right/Left, VO+Space)
+
+### 1.3 Setup CLI Tools (Optional)
+
+- [ ] Install Pa11y globally
+  - [ ] Run: `npm install -g pa11y`
+  - [ ] Test: `pa11y --version`
+  - [ ] Verify installation successful
+
+- [ ] Install Playwright axe integration
+  - [ ] Run: `pnpm add -D @axe-core/playwright`
+  - [ ] Verify package added to devDependencies
+
+## Phase 2: Automated Accessibility Audits
+
+### 2.1 Lighthouse Accessibility Audits
+
+- [ ] Run Lighthouse on Landing/Home page
+  - [ ] Navigate to `/`
+  - [ ] Open DevTools (F12)
+  - [ ] Go to Lighthouse tab
+  - [ ] Select "Accessibility" category only
+  - [ ] Click "Analyze page load"
+  - [ ] Note score: ___ /100
+  - [ ] Review all issues
+  - [ ] Save report: `lighthouse-home.html`
+
+- [ ] Run Lighthouse on Login page
+  - [ ] Navigate to `/login`
+  - [ ] Run Lighthouse accessibility audit
+  - [ ] Note score: ___ /100
+  - [ ] Review issues
+  - [ ] Save report: `lighthouse-login.html`
+
+- [ ] Run Lighthouse on Dashboard
+  - [ ] Navigate to `/dashboard`
+  - [ ] Run Lighthouse accessibility audit
+  - [ ] Note score: ___ /100
+  - [ ] Review issues
+  - [ ] Save report: `lighthouse-dashboard.html`
+
+- [ ] Run Lighthouse on Dashboard/Costs
+  - [ ] Navigate to `/dashboard/costs`
+  - [ ] Run audit
+  - [ ] Note score: ___ /100
+  - [ ] Save report
+
+- [ ] Run Lighthouse on Dashboard/Settings
+  - [ ] Navigate to `/dashboard/settings`
+  - [ ] Run audit
+  - [ ] Note score: ___ /100
+  - [ ] Save report
+
+- [ ] Run Lighthouse on Assets page
+  - [ ] Navigate to `/assets`
+  - [ ] Run audit
+  - [ ] Note score: ___ /100
+  - [ ] Save report
+
+- [ ] Run Lighthouse on Asset Detail page
+  - [ ] Navigate to `/assets/[id]`
+  - [ ] Run audit
+  - [ ] Note score: ___ /100
+  - [ ] Save report
+
+- [ ] Run Lighthouse on Asset Create page
+  - [ ] Navigate to `/assets/create`
+  - [ ] Run audit
+  - [ ] Note score: ___ /100
+  - [ ] Save report
+
+- [ ] Run Lighthouse on Tasks page
+  - [ ] Navigate to `/tasks`
+  - [ ] Run audit
+  - [ ] Note score: ___ /100
+  - [ ] Save report
+
+- [ ] Run Lighthouse on Templates page
+  - [ ] Navigate to `/templates`
+  - [ ] Run audit
+  - [ ] Note score: ___ /100
+  - [ ] Save report
+
+- [ ] Compile Lighthouse results
+  - [ ] Create summary table of all scores
+  - [ ] Identify pages with scores <100
+  - [ ] List all unique issues across pages
+  - [ ] Prioritize issues by severity
+
+### 2.2 axe DevTools Audits
+
+- [ ] Run axe on Landing/Home page
+  - [ ] Navigate to `/`
+  - [ ] Click axe extension icon
+  - [ ] Click "Scan ALL of my page"
+  - [ ] Review Critical issues: ___
+  - [ ] Review Serious issues: ___
+  - [ ] Review Moderate issues: ___
+  - [ ] Review Minor issues: ___
+  - [ ] Take screenshot of results
+  - [ ] Export report as JSON
+
+- [ ] Run axe on Login page
+  - [ ] Navigate to `/login`
+  - [ ] Run axe scan
+  - [ ] Document issues found
+  - [ ] Export report
+
+- [ ] Run axe on Dashboard
+  - [ ] Navigate to `/dashboard`
+  - [ ] Run axe scan
+  - [ ] Document issues found
+  - [ ] Export report
+
+- [ ] Run axe on Dashboard/Costs
+  - [ ] Navigate and scan
+  - [ ] Document issues
+
+- [ ] Run axe on Dashboard/Settings
+  - [ ] Navigate and scan
+  - [ ] Document issues
+
+- [ ] Run axe on Assets page
+  - [ ] Navigate and scan
+  - [ ] Document issues
+
+- [ ] Run axe on Asset Detail page
+  - [ ] Navigate and scan
+  - [ ] Document issues
+
+- [ ] Run axe on Asset Create page
+  - [ ] Navigate and scan
+  - [ ] Document issues
+
+- [ ] Run axe on Tasks page
+  - [ ] Navigate and scan
+  - [ ] Document issues
+
+- [ ] Run axe on Templates page
+  - [ ] Navigate and scan
+  - [ ] Document issues
+
+- [ ] Compile axe results
+  - [ ] Total Critical issues: ___
+  - [ ] Total Serious issues: ___
+  - [ ] Total Moderate issues: ___
+  - [ ] Create master issue list
   - [ ] Prioritize fixes
 
-- [ ] Fix failing tests
-  - [ ] Fix test code issues
-  - [ ] Fix application bugs
-  - [ ] Update assertions if needed
-  - [ ] Re-run until passing
+### 2.3 Categorize All Issues
 
-- [ ] Verify target met
-  - [ ] Target: 250+ tests
-  - [ ] Actual: ____ tests
-  - [ ] Target: 85%+ pass rate
-  - [ ] Actual: ____% pass rate
-  - [ ] If not met, add more tests or fix failures
+- [ ] Create issue tracking document
+  - [ ] List all unique issues
+  - [ ] Note affected pages
+  - [ ] Assign severity (Critical/Serious/Moderate/Minor)
+  - [ ] Group by category (Color, Labels, Keyboard, ARIA, etc.)
+  - [ ] Prioritize by severity and impact
 
-## Phase 7: Visual Regression Testing
+## Phase 3: Color Contrast Verification
 
-### 7.1 Choose Visual Regression Tool
+### 3.1 Test Brand Colors
 
-- [ ] Decide on tool
-  - [ ] Option A: Playwright screenshots (free, built-in)
-  - [ ] Option B: Percy (cloud-based, $$$)
-  - [ ] Option C: Chromatic (Storybook integration, $$$)
-  - [ ] Decision: _______________
+- [ ] Test primary button colors
+  - [ ] #216093 on #FFFFFF
+  - [ ] Use WebAIM Contrast Checker
+  - [ ] Note contrast ratio: ___
+  - [ ] Verify: ≥ 3:1 (UI component) ✓ or ✗
 
-### 7.2 Setup Playwright Screenshots (if chosen)
+- [ ] Test primary button text
+  - [ ] #FFFFFF on #216093
+  - [ ] Note contrast ratio: ___
+  - [ ] Verify: ≥ 4.5:1 (normal text) ✓ or ✗
 
-- [ ] Create visual regression test file
-  - [ ] Create `tests/e2e/visual-regression.spec.ts`
-  - [ ] Import test utilities
+- [ ] Test body text
+  - [ ] #000000 on #FFFFFF
+  - [ ] Note contrast ratio: ___
+  - [ ] Verify: ≥ 4.5:1 ✓ or ✗
 
-- [ ] Configure screenshot options
-  - [ ] Set `maxDiffPixels` threshold
-  - [ ] Configure full page or viewport
-  - [ ] Set animation handling
+- [ ] Test secondary text
+  - [ ] #001B48 on #FFFFFF
+  - [ ] Note contrast ratio: ___
+  - [ ] Verify: ≥ 4.5:1 ✓ or ✗
 
-- [ ] Add screenshot tests for key pages
+- [ ] Test muted text colors
+  - [ ] Inspect all muted text in app
+  - [ ] Use DevTools to check contrast
+  - [ ] List any failing combinations
+  - [ ] Plan fixes
+
+- [ ] Test error/success/warning colors
+  - [ ] Error (#DB162F) on white
+  - [ ] Success (#2E933C) on white
+  - [ ] Warning (#E18331) on white
+  - [ ] Verify all ≥ 4.5:1 for text
+  - [ ] Or ≥ 3:1 for UI components
+
+### 3.2 Check All axe Contrast Violations
+
+- [ ] Review axe contrast issues
+  - [ ] List all "Elements must have sufficient color contrast" violations
+  - [ ] Document element, current colors, current ratio
+  - [ ] For each, plan fix (darken/lighten color, or increase font size)
+
+### 3.3 Fix Insufficient Contrast
+
+- [ ] Fix failing text contrasts
+  - [ ] For each failing element:
+    - [ ] Option 1: Darken text color
+    - [ ] Option 2: Lighten background color
+    - [ ] Option 3: Increase font size to ≥18pt (allows 3:1)
+  - [ ] Apply fix
+  - [ ] Re-test with DevTools
+  - [ ] Verify new ratio ≥ 4.5:1 (or 3:1 for large text)
+
+- [ ] Fix failing UI component contrasts
+  - [ ] Borders: Ensure ≥ 3:1
+  - [ ] Icons: Ensure ≥ 3:1
+  - [ ] Focus indicators: Ensure ≥ 3:1
+  - [ ] Button outlines: Ensure ≥ 3:1
+
+- [ ] Re-run axe contrast checks
+  - [ ] Run axe on all pages again
+  - [ ] Verify contrast violations = 0
+  - [ ] Document remaining issues (if any)
+
+## Phase 4: Screen Reader Testing
+
+### 4.1 NVDA Testing (Windows) or VoiceOver (macOS)
+
+**Dashboard Page**:
+- [ ] Test dashboard with screen reader
+  - [ ] Launch NVDA or VoiceOver
+  - [ ] Navigate to `/dashboard`
+  - [ ] Listen to page title announcement
+  - [ ] Note if title is clear: ✓ or ✗
+  - [ ] Navigate with H key (headings)
+  - [ ] Verify heading structure logical
+  - [ ] Navigate with D key (landmarks)
+  - [ ] Verify landmarks present (navigation, main, etc.)
+  - [ ] Tab through page
+  - [ ] Listen to all element announcements
+  - [ ] Note any unclear or missing announcements
+
+**Assets Page**:
+- [ ] Test assets list with screen reader
+  - [ ] Navigate to `/assets`
+  - [ ] Listen to page title
+  - [ ] Tab through asset cards/table
+  - [ ] Verify asset names announced
+  - [ ] Test "Add Asset" button announcement
+  - [ ] Test filter/search controls
+  - [ ] Note any issues
+
+**Asset Create Form**:
+- [ ] Test asset creation form
+  - [ ] Navigate to `/assets/create`
+  - [ ] Tab through form
+  - [ ] Verify all labels announced
+  - [ ] Test required field indicators
+  - [ ] Enter invalid data
+  - [ ] Check error messages are read
+  - [ ] Submit form
+  - [ ] Verify success feedback
+  - [ ] Note any issues
+
+**Tasks Page**:
+- [ ] Test tasks page with screen reader
+  - [ ] Navigate to `/tasks`
+  - [ ] Tab through tasks
+  - [ ] Verify task details announced
+  - [ ] Test status indicators clear
+  - [ ] Test priority levels clear
+  - [ ] Note any issues
+
+**Templates Page**:
+- [ ] Test templates with screen reader
+  - [ ] Navigate to `/templates`
+  - [ ] Tab through template cards
+  - [ ] Verify template names clear
+  - [ ] Test "Apply Template" button
+  - [ ] Check modal is announced
+  - [ ] Note any issues
+
+### 4.2 Test Interactive Components
+
+- [ ] Test modals/dialogs
+  - [ ] Open a modal
+  - [ ] Verify modal title announced
+  - [ ] Check focus moves to modal
+  - [ ] Verify dialog role announced
+  - [ ] Test close button clear
+  - [ ] Close modal, check focus returns
+
+- [ ] Test dropdown menus
+  - [ ] Open dropdown
+  - [ ] Verify menu announced
+  - [ ] Navigate items with arrows
+  - [ ] Check item announcements clear
+  - [ ] Select item, verify announced
+
+- [ ] Test tooltips (if any)
+  - [ ] Hover/focus element with tooltip
+  - [ ] Verify tooltip content read
+  - [ ] Check tooltip accessible to keyboard users
+
+- [ ] Test data tables (if any)
+  - [ ] Navigate table with arrow keys or Tab
+  - [ ] Verify table structure announced
+  - [ ] Check headers are read
+  - [ ] Verify cell content clear
+
+### 4.3 Test Dynamic Content
+
+- [ ] Test toast notifications
+  - [ ] Trigger a toast notification
+  - [ ] Verify screen reader announces message
+  - [ ] Check aria-live region working
+  - [ ] Test multiple toasts
+
+- [ ] Test loading states
+  - [ ] Trigger loading state
+  - [ ] Verify "Loading" announced
+  - [ ] Check when content loads, it's announced
+
+- [ ] Test live regions
+  - [ ] Test any dynamic content updates
+  - [ ] Verify aria-live regions work
+  - [ ] Check announcements not too verbose
+
+### 4.4 Document Screen Reader Issues
+
+- [ ] Compile screen reader findings
+  - [ ] List all unclear announcements
+  - [ ] Note missing labels
+  - [ ] Document confusing navigation
+  - [ ] Identify issues with dynamic content
+  - [ ] Prioritize fixes
+
+## Phase 5: Keyboard Navigation Testing
+
+### 5.1 Test Basic Keyboard Navigation
+
+- [ ] Test Dashboard keyboard navigation
+  - [ ] Load dashboard
+  - [ ] Close mouse / don't use mouse
+  - [ ] Press Tab to navigate
+  - [ ] Verify focus order logical
+  - [ ] Check focus indicators visible on every element
+  - [ ] Note focus order: ___________________
+  - [ ] Verify no keyboard traps
+  - [ ] Test Shift+Tab backward navigation
+  - [ ] Works correctly: ✓ or ✗
+
+- [ ] Test Assets page keyboard navigation
+  - [ ] Navigate to assets
+  - [ ] Tab through all elements
+  - [ ] Verify logical order
+  - [ ] Check all buttons accessible
+  - [ ] Test filter controls with keyboard
+  - [ ] Note any issues
+
+- [ ] Test Tasks page keyboard navigation
+  - [ ] Navigate to tasks
+  - [ ] Tab through elements
+  - [ ] Verify order logical
+  - [ ] Test all controls accessible
+
+- [ ] Test Templates page keyboard navigation
+  - [ ] Navigate to templates
+  - [ ] Tab through cards
+  - [ ] Test "Apply Template" accessible
+  - [ ] Verify modal keyboard accessible
+
+### 5.2 Test Interactive Elements
+
+- [ ] Test buttons activate correctly
+  - [ ] Find all button types
+  - [ ] Focus button with Tab
+  - [ ] Press Enter → activates: ✓ or ✗
+  - [ ] Press Space → activates: ✓ or ✗
+  - [ ] Test on all major buttons
+
+- [ ] Test links activate correctly
+  - [ ] Focus link with Tab
+  - [ ] Press Enter → navigates: ✓ or ✗
+  - [ ] Test multiple links
+
+- [ ] Test dropdowns
+  - [ ] Focus dropdown trigger
+  - [ ] Press Enter or Space → opens: ✓ or ✗
+  - [ ] Use arrow keys → navigate items: ✓ or ✗
+  - [ ] Press Enter → selects item: ✓ or ✗
+  - [ ] Press Escape → closes: ✓ or ✗
+
+- [ ] Test modals/dialogs
+  - [ ] Open modal with keyboard
+  - [ ] Verify focus moves to modal
+  - [ ] Tab within modal only (focus trapped)
+  - [ ] Press Escape → closes: ✓ or ✗
+  - [ ] Verify focus returns to trigger
+
+- [ ] Test form inputs
+  - [ ] Tab to input field
+  - [ ] Type text → works: ✓ or ✗
+  - [ ] Test checkboxes:
+    - [ ] Space toggles: ✓ or ✗
+  - [ ] Test radio buttons:
+    - [ ] Arrow keys navigate: ✓ or ✗
+  - [ ] Test select/dropdown:
+    - [ ] Arrow keys navigate options: ✓ or ✗
+
+### 5.3 Test Complex Components
+
+- [ ] Test data tables (if any)
+  - [ ] Navigate with arrow keys (if implemented)
+  - [ ] Or Tab through cells
+  - [ ] Verify logical navigation
+  - [ ] Check action buttons accessible
+
+- [ ] Test calendar widget
+  - [ ] Navigate to calendar
+  - [ ] Check if arrow keys navigate dates
+  - [ ] Verify Enter selects date
+  - [ ] Test keyboard accessible
+
+- [ ] Test command palette (Ctrl+K)
+  - [ ] Press Ctrl+K → opens: ✓ or ✗
+  - [ ] Type to search
+  - [ ] Arrow keys navigate results: ✓ or ✗
+  - [ ] Enter selects: ✓ or ✗
+  - [ ] Escape closes: ✓ or ✗
+
+### 5.4 Test Focus Management
+
+- [ ] Test modal focus trap
+  - [ ] Open modal
+  - [ ] Tab through modal elements
+  - [ ] Verify focus doesn't leave modal
+  - [ ] Close modal
+  - [ ] Verify focus returns to trigger element
+
+- [ ] Test delete action focus
+  - [ ] Delete an item
+  - [ ] Verify focus moves to logical place
+  - [ ] Not left on deleted item
+  - [ ] Reasonable focus target
+
+- [ ] Test dynamic content focus
+  - [ ] Trigger dynamic update
+  - [ ] Verify focus doesn't jump unexpectedly
+  - [ ] Check user isn't lost
+
+### 5.5 Document Keyboard Issues
+
+- [ ] Compile keyboard navigation findings
+  - [ ] List any illogical tab orders
+  - [ ] Note missing focus indicators
+  - [ ] Document keyboard traps
+  - [ ] Identify inaccessible elements
+  - [ ] Prioritize fixes
+
+## Phase 6: Fix Missing Accessible Names
+
+### 6.1 Find All Buttons
+
+- [ ] Search codebase for buttons
+  - [ ] Run: `grep -r "<Button" components/ app/`
+  - [ ] Run: `grep -r "<button" components/ app/`
+  - [ ] Run: `grep -r 'size="icon"' components/ app/`
+  - [ ] Create list of all button locations
+
+### 6.2 Audit Icon-Only Buttons
+
+- [ ] Find icon-only buttons
+  - [ ] Search for `size="icon"` buttons
+  - [ ] List all locations
+  - [ ] For each, determine purpose
+  - [ ] Check if accessible name exists
+
+- [ ] Common icon-only buttons to check:
+  - [ ] Close buttons (X icon) on modals
+  - [ ] Edit buttons (pencil icon) in tables
+  - [ ] Delete buttons (trash icon) in tables
+  - [ ] Menu buttons (hamburger icon)
+  - [ ] User menu buttons (avatar icon)
+  - [ ] Settings buttons (gear icon)
+  - [ ] Dropdown triggers (chevron icon)
+
+### 6.3 Add Accessible Names
+
+- [ ] Fix each icon-only button
+  - [ ] For each button without accessible name:
+    ```tsx
+    // Before
+    <Button size="icon">
+      <X />
+    </Button>
+
+    // After (Method 1: aria-label)
+    <Button size="icon" aria-label="Close dialog">
+      <X />
+    </Button>
+
+    // Or After (Method 2: sr-only text)
+    <Button size="icon">
+      <X />
+      <span className="sr-only">Close dialog</span>
+    </Button>
+    ```
+  - [ ] Apply fix
+  - [ ] Test with screen reader
+  - [ ] Verify announced correctly
+
+### 6.4 Review Action Buttons
+
+- [ ] Check table action buttons
+  - [ ] Edit buttons: "Edit [item name]"
+  - [ ] Delete buttons: "Delete [item name]"
+  - [ ] View buttons: "View [item name]"
+  - [ ] Ensure context is clear
+
+- [ ] Check navigation buttons
+  - [ ] Menu toggle: "Open navigation menu" / "Close navigation menu"
+  - [ ] User menu: "Open user menu"
+  - [ ] Settings: "Open settings"
+
+### 6.5 Verify with axe
+
+- [ ] Re-run axe on all pages
+  - [ ] Check for "Buttons must have discernible text" violations
+  - [ ] Verify count reduced to 0
+  - [ ] Note remaining issues (if any)
+
+## Phase 7: Fix Remaining Issues
+
+### 7.1 Fix Critical Issues from axe
+
+- [ ] Address each Critical issue
+  - [ ] Issue: ___________________
+  - [ ] Location: ___________________
+  - [ ] Fix applied: ___________________
+  - [ ] Re-tested: ✓ or ✗
+
+### 7.2 Fix Serious Issues from axe
+
+- [ ] Address each Serious issue
+  - [ ] Issue: ___________________
+  - [ ] Location: ___________________
+  - [ ] Fix applied: ___________________
+  - [ ] Re-tested: ✓ or ✗
+
+### 7.3 Fix Screen Reader Issues
+
+- [ ] Address unclear announcements
+  - [ ] Add aria-label where needed
+  - [ ] Fix missing labels
+  - [ ] Improve label clarity
+  - [ ] Re-test with screen reader
+
+### 7.4 Fix Keyboard Navigation Issues
+
+- [ ] Fix illogical tab orders
+  - [ ] Use tabindex if needed (sparingly)
+  - [ ] Restructure DOM if necessary
+  - [ ] Re-test keyboard navigation
+
+- [ ] Fix missing focus indicators
+  - [ ] Add focus styles where missing
+  - [ ] Ensure 3:1 contrast for focus indicators
+  - [ ] Test visibility
+
+## Phase 8: Re-Test & Verification
+
+### 8.1 Re-Run Lighthouse on All Pages
+
+- [ ] Dashboard: ___ /100 (target: 100)
+- [ ] Dashboard/Costs: ___ /100
+- [ ] Dashboard/Settings: ___ /100
+- [ ] Assets: ___ /100
+- [ ] Asset Detail: ___ /100
+- [ ] Asset Create: ___ /100
+- [ ] Tasks: ___ /100
+- [ ] Templates: ___ /100
+- [ ] Login: ___ /100
+- [ ] Home: ___ /100
+
+- [ ] Verify all scores = 100
+  - [ ] If any < 100, investigate remaining issues
+  - [ ] Document any false positives
+  - [ ] Fix real issues
+
+### 8.2 Re-Run axe on All Pages
+
+- [ ] Dashboard: Critical ___, Serious ___, Moderate ___
+- [ ] Assets: Critical ___, Serious ___, Moderate ___
+- [ ] Tasks: Critical ___, Serious ___, Moderate ___
+- [ ] Templates: Critical ___, Serious ___, Moderate ___
+- [ ] Asset Create: Critical ___, Serious ___, Moderate ___
+- [ ] Login: Critical ___, Serious ___, Moderate ___
+
+- [ ] Verify Critical = 0 on all pages
+- [ ] Verify Serious = 0 on all pages
+- [ ] Moderate issues acceptable if documented
+
+### 8.3 Final Screen Reader Test
+
+- [ ] Quick screen reader test on key pages
+  - [ ] Dashboard - no issues
+  - [ ] Asset create form - no issues
+  - [ ] Templates - no issues
+  - [ ] All major flows work
+
+### 8.4 Final Keyboard Navigation Test
+
+- [ ] Quick keyboard test on key pages
+  - [ ] Dashboard - tab order logical
+  - [ ] Assets - all accessible
+  - [ ] Tasks - all accessible
+  - [ ] Forms - all inputs accessible
+
+## Phase 9: E2E Accessibility Tests
+
+### 9.1 Add Playwright Accessibility Tests
+
+- [ ] Create accessibility test file
+  - [ ] Create `tests/e2e/accessibility.spec.ts`
+  - [ ] Install: `pnpm add -D @axe-core/playwright`
+  - [ ] Import AxeBuilder
+
+- [ ] Add test for Dashboard
   ```typescript
-  test('Dashboard visual regression', async ({ page }) => {
+  test('Dashboard has no a11y violations', async ({ page }) => {
     await page.goto('/dashboard');
-    await page.waitForLoadState('networkidle');
-    await expect(page).toHaveScreenshot('dashboard.png', {
-      fullPage: true,
-      maxDiffPixels: 100,
-    });
+    const results = await new AxeBuilder({ page })
+      .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
+      .analyze();
+    expect(results.violations).toEqual([]);
   });
   ```
 
-- [ ] Add screenshots for all major pages
-  - [ ] Dashboard
-  - [ ] Assets list
-  - [ ] Asset detail
-  - [ ] Asset create
-  - [ ] Tasks list
-  - [ ] Templates
-  - [ ] Login
+- [ ] Add tests for other pages
+  - [ ] Assets page test
+  - [ ] Tasks page test
+  - [ ] Templates page test
+  - [ ] Asset create test
+  - [ ] Login test
 
-### 7.3 Capture Baseline Screenshots
+### 9.2 Run Accessibility Tests
 
-- [ ] Run visual regression tests first time
-  - [ ] Execute: `pnpm test tests/e2e/visual-regression.spec.ts`
-  - [ ] This will generate baseline screenshots
-  - [ ] Screenshots saved in test results folder
-  - [ ] Review baselines visually
-
-- [ ] Commit baselines to git
-  - [ ] Add screenshots to git
-  - [ ] Commit with message: "Add visual regression baselines"
-  - [ ] Future runs will compare against these
-
-### 7.4 Test Visual Regression Detection
-
-- [ ] Make intentional visual change
-  - [ ] Change button color
-  - [ ] Or change spacing
-  - [ ] Small visible change
-
-- [ ] Run visual regression tests
-  - [ ] Execute tests
-  - [ ] Tests should fail (change detected)
-  - [ ] Review diff images
-  - [ ] Verify change is visible in diff
-
-- [ ] Revert change
-  - [ ] Undo visual change
-  - [ ] Re-run tests
-  - [ ] Tests should pass
-
-- [ ] Document process
-  - [ ] How to run visual regression tests
-  - [ ] How to update baselines
-  - [ ] When to review diffs
-
-## Phase 8: Interactive Patterns Documentation
-
-### 8.1 Create Pattern Library Document
-
-- [ ] Create documentation file
-  - [ ] Create `docs/INTERACTIVE-PATTERNS.md`
-  - [ ] Or add section to existing docs
-  - [ ] Use markdown format
-
-### 8.2 Document Modal Pattern
-
-- [ ] Document modal usage
-  - [ ] When to use modals
-  - [ ] Behavior: Focus trap, Escape closes, overlay dismisses
-  - [ ] Example: Asset deletion confirmation
-  - [ ] Code example
-  - [ ] Screenshot
-
-### 8.3 Document Drawer Pattern
-
-- [ ] Document drawer usage
-  - [ ] When to use drawers
-  - [ ] Behavior: Slide animation, Escape closes
-  - [ ] Example: Task detail drawer
-  - [ ] Code example
-
-### 8.4 Document Other Patterns
-
-- [ ] Document tooltips
-  - [ ] When to use
-  - [ ] Behavior: Delay, keyboard accessible
-  - [ ] Example
-
-- [ ] Document dropdowns
-  - [ ] When to use
-  - [ ] Behavior: Arrow keys, Enter selects, outside click closes
-  - [ ] Example
-
-- [ ] Document toast notifications
-  - [ ] When to use
-  - [ ] Types: Success, error, info, loading
-  - [ ] Auto-dismiss duration
-  - [ ] Example
-
-- [ ] Document loading states
-  - [ ] When to use skeletons
-  - [ ] Skeleton should match content
-  - [ ] Example
-
-- [ ] Document empty states
-  - [ ] When to show
-  - [ ] Include helpful message and CTA
-  - [ ] Example
-
-## Phase 9: Manual Color Audit
-
-### 9.1 Brand Color Verification
-
-- [ ] Audit primary color usage (#216093)
-  - [ ] Check all buttons use primary color
-  - [ ] Verify links use primary color
-  - [ ] Check focus states use primary
-  - [ ] Document any inconsistencies
-
-- [ ] Check button variants
-  - [ ] Primary button: #216093 background
-  - [ ] Secondary button: Outline or muted
-  - [ ] Destructive button: Red (#DB162F)
-  - [ ] Ghost button: Transparent
-  - [ ] Verify consistency across app
-
-- [ ] Check text colors
-  - [ ] Headings: #000000 (black) or primary
-  - [ ] Body text: #000000
-  - [ ] Muted text: Appropriate gray
-  - [ ] Verify hierarchy clear
-
-- [ ] Check status colors
-  - [ ] Success: #2E933C (green)
-  - [ ] Error: #DB162F (red)
-  - [ ] Warning: #E18331 (orange)
-  - [ ] Info: Primary or blue
-  - [ ] Verify used consistently
-
-### 9.2 Document Color Usage
-
-- [ ] Create color usage guide
-  - [ ] List all HelixIntel brand colors
-  - [ ] Document where each is used
-  - [ ] Provide hex codes
-  - [ ] Show examples
-
-- [ ] Update CLAUDE.md if needed
-  - [ ] Ensure color palette documented
-  - [ ] Note any deviations or additions
-  - [ ] Provide usage guidelines
-
-### 9.3 Fix Inconsistencies
-
-- [ ] Fix any color inconsistencies found
-  - [ ] Update components to use correct colors
-  - [ ] Ensure CSS variables used
-  - [ ] Test visual appearance
-  - [ ] Verify brand consistency
-
-## Phase 10: Production Deployment Checklist
-
-### 10.1 Create Production Checklist
-
-- [ ] Create checklist document
-  - [ ] Create `docs/PRODUCTION-CHECKLIST.md`
-  - [ ] Or add to CLAUDE.md
-  - [ ] List all pre-launch items
-
-### 10.2 Pre-Launch Verification
-
-- [ ] Environment variables
-  - [ ] Verify DATABASE_URL set
-  - [ ] Check NEXTAUTH_SECRET set
-  - [ ] Verify NEXTAUTH_URL correct
-  - [ ] Check CRON_SECRET set
-  - [ ] All required variables present
-
-- [ ] Database
-  - [ ] Run migrations: `npx prisma migrate deploy`
-  - [ ] Seed database: `pnpm db:seed`
-  - [ ] Verify admin user exists
-  - [ ] Check database backups configured
-
-- [ ] Build and deploy
-  - [ ] Run: `pnpm build`
-  - [ ] Verify build succeeds
-  - [ ] No TypeScript errors
-  - [ ] No ESLint errors
-  - [ ] Deploy to production
-
-- [ ] Post-deploy testing
-  - [ ] Test login works
-  - [ ] Create test asset
-  - [ ] Apply template
-  - [ ] Complete task
-  - [ ] Check dashboard analytics
-  - [ ] Verify all critical flows work
-
-### 10.3 Performance Verification
-
-- [ ] Run Lighthouse on production
-  - [ ] Performance: >90
-  - [ ] Accessibility: 100
-  - [ ] Best Practices: >90
-  - [ ] SEO: >90
-
-- [ ] Test on real devices
-  - [ ] iPhone
-  - [ ] Android phone
-  - [ ] iPad
-  - [ ] Desktop Chrome
-  - [ ] Desktop Safari
-
-### 10.4 Monitoring Setup
-
-- [ ] Error monitoring
-  - [ ] Setup Sentry (optional)
-  - [ ] Or configure error logging
-  - [ ] Test error reporting
-
-- [ ] Analytics
-  - [ ] Setup Vercel Analytics
-  - [ ] Or Google Analytics
-  - [ ] Verify tracking works
-
-- [ ] Uptime monitoring
-  - [ ] Configure uptime checks
-  - [ ] Set up alerts
-  - [ ] Test notifications
-
-## Phase 11: Final Verification & Sign-Off
-
-### 11.1 Run All Tests
-
-- [ ] Run E2E test suite
-  - [ ] Execute: `pnpm test`
-  - [ ] Verify 250+ tests exist
-  - [ ] Verify 85%+ pass rate
+- [ ] Run accessibility test suite
+  - [ ] Execute: `pnpm test tests/e2e/accessibility.spec.ts`
+  - [ ] Verify all tests pass
   - [ ] Fix any failures
-  - [ ] Document results
+  - [ ] Re-run until all pass
 
-- [ ] Run accessibility tests
-  - [ ] From Task 12
-  - [ ] Verify still passing
-  - [ ] Lighthouse: 100/100
+## Phase 10: Documentation
 
-- [ ] Run visual regression tests
-  - [ ] Execute visual tests
-  - [ ] Verify no unexpected changes
-  - [ ] Approve any intentional changes
+### 10.1 Create Accessibility Report
 
-### 11.2 Manual Testing
+- [ ] Document WCAG 2.1 AA compliance
+  - [ ] List all WCAG 2.1 Level A criteria met
+  - [ ] List all WCAG 2.1 Level AA criteria met
+  - [ ] Note any exceptions (if any)
+  - [ ] Certify compliance
 
-- [ ] Test all error boundaries
-  - [ ] Force errors in widgets
-  - [ ] Verify graceful handling
-  - [ ] Test "Try again" buttons
+- [ ] Compile test results
+  - [ ] Lighthouse scores (all pages)
+  - [ ] axe results (all pages)
+  - [ ] Screen reader test summary
+  - [ ] Keyboard navigation test summary
+  - [ ] Color contrast verification
 
-- [ ] Test all breadcrumbs
-  - [ ] Asset detail breadcrumb
-  - [ ] Task detail breadcrumb
-  - [ ] Dashboard sub-pages
-  - [ ] Verify navigation works
+### 10.2 Update CLAUDE.md
 
-- [ ] Test all toast notifications
-  - [ ] Create asset → toast
-  - [ ] Update asset → toast
-  - [ ] Delete asset → toast
-  - [ ] Complete task → toast
-  - [ ] All other actions → toast
+- [ ] Add accessibility section
+  - [ ] Document WCAG 2.1 AA compliance
+  - [ ] List testing tools used
+  - [ ] Provide accessibility testing instructions
+  - [ ] Note keyboard shortcuts
+  - [ ] Document screen reader compatibility
 
-- [ ] Test all empty states
-  - [ ] Assets empty
-  - [ ] Tasks empty
-  - [ ] Activity empty
-  - [ ] Verify helpful messages
+### 10.3 Create Accessibility Testing Guide
 
-- [ ] Test all loading states
-  - [ ] Dashboard loads smoothly
-  - [ ] Tables show skeletons
-  - [ ] Forms load cleanly
-  - [ ] Network throttling test
+- [ ] Document testing process
+  - [ ] How to run Lighthouse audits
+  - [ ] How to use axe DevTools
+  - [ ] How to test with screen readers
+  - [ ] How to test keyboard navigation
+  - [ ] How to run E2E accessibility tests
 
-### 11.3 Cross-Browser Testing
+### 10.4 Update Task Progress
 
-- [ ] Test in Chrome (latest)
-  - [ ] All features work
-  - [ ] No console errors
-  - [ ] Visual appearance correct
+- [ ] Mark all checklist items complete
+  - [ ] Update this file
+  - [ ] Note time spent
+  - [ ] Document achievements
 
-- [ ] Test in Firefox (latest)
-  - [ ] All features work
-  - [ ] No errors
-  - [ ] Appearance correct
-
-- [ ] Test in Safari (latest)
-  - [ ] All features work
-  - [ ] No errors
-  - [ ] Appearance correct
-
-- [ ] Test in Edge (latest)
-  - [ ] All features work
-  - [ ] Appearance correct
-
-- [ ] Test on mobile Safari
-  - [ ] iOS device or simulator
-  - [ ] All features work
-  - [ ] Touch interactions smooth
-
-- [ ] Test on mobile Chrome
-  - [ ] Android device or emulator
-  - [ ] All features work
-  - [ ] Appearance correct
-
-### 11.4 Final Code Quality Checks
-
-- [ ] Run linter
-  - [ ] Execute: `pnpm lint`
-  - [ ] Fix all errors
-  - [ ] Address warnings
-
-- [ ] Run type checker
-  - [ ] Execute: `pnpm typecheck`
-  - [ ] Fix all TypeScript errors
-  - [ ] Verify strict mode compliance
-
-- [ ] Format code
-  - [ ] Execute: `pnpm format`
-  - [ ] Verify all files formatted
-  - [ ] Check `pnpm format:check` passes
-
-- [ ] Review code
-  - [ ] No TODO comments left
-  - [ ] No console.logs in production code
-  - [ ] No commented-out code
-  - [ ] All imports used
-
-## Phase 12: Documentation Updates
-
-### 12.1 Update CLAUDE.md
-
-- [ ] Add error boundary section
-  - [ ] Document error handling pattern
-  - [ ] List wrapped components
-  - [ ] Provide usage examples
-
-- [ ] Add breadcrumb section
-  - [ ] Document breadcrumb pattern
-  - [ ] List pages with breadcrumbs
-  - [ ] Provide usage examples
-
-- [ ] Add toast notification section
-  - [ ] Document toast patterns
-  - [ ] List when to use toasts
-  - [ ] Provide examples
-
-- [ ] Update testing section
-  - [ ] Note 250+ E2E tests
-  - [ ] Document test pass rate
-  - [ ] Add visual regression info
-
-### 12.2 Update Production Checklist
-
-- [ ] Document pre-launch steps
-  - [ ] Environment setup
-  - [ ] Database migration
-  - [ ] Build and deploy process
-  - [ ] Post-deploy verification
-
-- [ ] Document monitoring
-  - [ ] Error tracking
-  - [ ] Analytics
-  - [ ] Uptime monitoring
-
-### 12.3 Create Pattern Library
-
-- [ ] Finalize interactive patterns doc
-  - [ ] All patterns documented
-  - [ ] Code examples included
-  - [ ] Screenshots added
-  - [ ] Usage guidelines clear
+- [ ] Update task history
+  - [ ] Update `tasks/taskhistory.md`
+  - [ ] Mark Task 12 complete
+  - [ ] Note final scores
 
 ## Verification & Sign-Off
 
-### Error Handling Requirements
+### WCAG 2.1 Compliance
 
-- [ ] Error boundaries implemented: 10+ components wrapped
-- [ ] All critical widgets protected
-- [ ] Fallback UI user-friendly
-- [ ] "Try again" functionality works
-- [ ] Errors logged appropriately
+- [ ] Level A: 100% compliant (all criteria met)
+- [ ] Level AA: 100% compliant (all criteria met)
+- [ ] Documented and certified
 
-### Navigation Requirements
+### Lighthouse Requirements
 
-- [ ] Breadcrumbs on asset detail
-- [ ] Breadcrumbs on task detail
-- [ ] Breadcrumbs on dashboard sub-pages
-- [ ] All breadcrumb links work
-- [ ] Accessible with keyboard/screen reader
+- [ ] All pages score 100/100 accessibility
+- [ ] No critical issues
+- [ ] Any warnings documented and justified
 
-### Toast Notification Requirements
+### axe DevTools Requirements
 
-- [ ] Success toasts on all CRUD operations
-- [ ] Error toasts on failures
-- [ ] Toast duration appropriate (4s)
-- [ ] Multiple toasts stack correctly
-- [ ] Accessible with screen reader
+- [ ] Critical issues: 0 on all pages
+- [ ] Serious issues: 0 on all pages
+- [ ] Moderate issues: Documented or resolved
+- [ ] Minor issues: Acceptable
 
-### Empty State Requirements
+### Color Contrast Requirements
 
-- [ ] Empty states on assets page
-- [ ] Empty states on tasks page
-- [ ] Empty states on activity timeline
-- [ ] All empty states have helpful messages
-- [ ] All CTAs work correctly
+- [ ] All text meets 4.5:1 (or 3:1 for large text)
+- [ ] All UI components meet 3:1
+- [ ] Brand colors verified compliant
+- [ ] No contrast failures in automated tests
 
-### Loading State Requirements
+### Screen Reader Requirements
 
-- [ ] Skeletons on dashboard
-- [ ] Skeletons on data tables
-- [ ] Skeletons match content layout
-- [ ] No layout shift (CLS <0.1)
-- [ ] Smooth transitions
+- [ ] Tested with NVDA or VoiceOver
+- [ ] All content announced clearly
+- [ ] Navigation is logical
+- [ ] Forms are fully usable
+- [ ] Interactive elements accessible
+- [ ] Dynamic content announced
 
-### Testing Requirements
+### Keyboard Navigation Requirements
 
-- [ ] E2E tests: 250+ total
-- [ ] Pass rate: 85%+ (213+ passing)
-- [ ] Error boundary tests passing
-- [ ] Empty state tests passing
-- [ ] Toast notification tests passing
-- [ ] Breadcrumb tests passing
-- [ ] Full user flow tests passing
-- [ ] Visual regression tests passing
+- [ ] Tab order logical on all pages
+- [ ] Focus indicators visible (3:1 contrast)
+- [ ] No keyboard traps
+- [ ] All interactive elements accessible
+- [ ] Modal focus management works
+- [ ] Keyboard shortcuts work (Escape, Enter, Space, Arrows)
 
-### UX Score Requirements
+### Button Accessible Names
 
-- [ ] Loading States: 6.0/10 → 8.0+/10
-- [ ] Interactive Components: 7.0/10 → 8.5+/10
-- [ ] Forms & Validation: 7.0/10 → 9.0+/10
-- [ ] Visual Design: 7.5/10 → 9.0+/10
-- [ ] Overall score: 7.8/10 → 8.5+/10
+- [ ] All buttons have accessible names
+- [ ] Icon-only buttons have aria-label or sr-only text
+- [ ] Action buttons have clear context
+- [ ] No "Buttons must have discernible text" violations
 
-### Production Readiness
+### E2E Testing
 
-- [ ] All Tasks 9-13 complete
-- [ ] Production checklist complete
-- [ ] All critical issues resolved
-- [ ] Monitoring configured
+- [ ] Accessibility tests created
+- [ ] All tests pass
+- [ ] Tests cover major pages
+- [ ] CI integration (optional)
+
+### Browser Compatibility
+
+- [ ] Chrome (latest) tested
+- [ ] Firefox (latest) tested
+- [ ] Safari (latest) tested
+- [ ] Edge (latest) tested
+- [ ] Mobile Safari tested
+- [ ] Mobile Chrome tested
+
+### Final Checks
+
+- [ ] WCAG 2.1 AA compliance certified
+- [ ] Lighthouse 100/100 on all pages
+- [ ] axe shows 0 Critical, 0 Serious issues
+- [ ] Screen reader testing complete
+- [ ] Keyboard navigation fully accessible
 - [ ] Documentation complete
-- [ ] Ready for launch 🚀
-
-## Final Checks
-
-- [ ] No console errors in production
-- [ ] All TypeScript errors resolved
-- [ ] ESLint passes
-- [ ] All tests passing (85%+)
-- [ ] Lighthouse scores met
-- [ ] Cross-browser compatible
-- [ ] Mobile-responsive
-- [ ] Accessible (WCAG 2.1 AA)
-- [ ] Performance targets met
-- [ ] Production deployed successfully
+- [ ] Task marked complete
+- [ ] Ready for Task 13 (UX Polish)
 
 ---
 
@@ -1074,38 +825,53 @@
 
 ### Issues Encountered
 
-_Document any issues found during final polish:_
+_Document any accessibility issues found:_
+
+### Fixes Applied
+
+| Issue | Location | Fix | Verified |
+|-------|----------|-----|----------|
+| | | | ⬜ |
+| | | | ⬜ |
 
 ### Time Tracking
 
-- **Estimated Time**: 36 hours (3-4 days)
+- **Estimated Time**: 18 hours (2 days)
 - **Actual Time**: ___ hours
-- **Day 1 (Error Handling & Navigation)**: ___ hours
-- **Day 2 (UX Polish)**: ___ hours
-- **Day 3 (Testing Expansion)**: ___ hours
-- **Day 4 (Visual Regression & Finalization)**: ___ hours
+- **Day 1 (Audits & Contrast)**: ___ hours
+- **Day 2 (Manual Testing & Fixes)**: ___ hours
 
 ### Success Metrics Achieved
 
-- [ ] E2E tests: ___ total (target: 250+)
-- [ ] Pass rate: ___% (target: 85%+)
-- [ ] Loading States: ___/10 (target: 8.0+)
-- [ ] Interactive Components: ___/10 (target: 8.5+)
-- [ ] Forms & Validation: ___/10 (target: 9.0+)
-- [ ] Visual Design: ___/10 (target: 9.0+)
-- [ ] Overall audit score: ___/10 (target: 8.5+)
+- [ ] Lighthouse accessibility: ___ /100 average (target: 100)
+- [ ] axe Critical issues: 0 (target: 0)
+- [ ] axe Serious issues: 0 (target: 0)
+- [ ] WCAG 2.1 AA: 100% compliant (target: 100%)
+- [ ] Accessibility score: 7.0/10 → ___/10 (target: 9.5+)
 
-### Production Launch
+### Test Results Summary
 
-- [ ] Launch date: _______________
-- [ ] Deployed to: _______________
-- [ ] URL: _______________
-- [ ] Initial users: _______________
-- [ ] Monitoring dashboard: _______________
+**Lighthouse Scores**:
+- Dashboard: ___ /100
+- Assets: ___ /100
+- Tasks: ___ /100
+- Templates: ___ /100
+- Average: ___ /100
+
+**axe Results**:
+- Total pages tested: ___
+- Critical issues found: ___
+- Serious issues found: ___
+- All resolved: ✓ or ✗
+
+**Manual Testing**:
+- Screen reader: NVDA / VoiceOver
+- Test duration: ___ hours
+- Issues found: ___
+- All resolved: ✓ or ✗
 
 ---
 
 _Checklist Created: November 2025_
-_Total Items: 400+_
-_Estimated Completion: 36 hours (3-4 days)_
-_Final Task: Production Ready!_ 🎉
+_Total Items: 300+_
+_Estimated Completion: 18 hours (2 days)_

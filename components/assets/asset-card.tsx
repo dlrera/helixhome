@@ -12,6 +12,7 @@ type AssetCardProps = {
     id: string
     name: string
     category: AssetCategory
+    location: string | null
     modelNumber: string | null
     photoUrl: string | null
     home: {
@@ -54,6 +55,11 @@ export default function AssetCard({ asset }: AssetCardProps) {
               {formatCategory(asset.category)}
             </Badge>
           </div>
+          {asset.location && (
+            <p className="text-sm text-gray-600 line-clamp-1">
+              {asset.location}
+            </p>
+          )}
           {asset.modelNumber && (
             <p className="text-sm text-gray-600 line-clamp-1">
               Model: {asset.modelNumber}

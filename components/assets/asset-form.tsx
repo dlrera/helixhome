@@ -24,10 +24,11 @@ const assetSchema = z.object({
   homeId: z.string().min(1, 'Home is required'),
   name: z.string().min(1, 'Asset name is required'),
   category: z.nativeEnum(AssetCategory),
-  modelNumber: z.string().optional(),
-  serialNumber: z.string().optional(),
-  purchaseDate: z.string().optional(),
-  warrantyExpiryDate: z.string().optional(),
+  location: z.string().optional().transform(val => val === '' ? undefined : val),
+  modelNumber: z.string().optional().transform(val => val === '' ? undefined : val),
+  serialNumber: z.string().optional().transform(val => val === '' ? undefined : val),
+  purchaseDate: z.string().optional().transform(val => val === '' ? undefined : val),
+  warrantyExpiryDate: z.string().optional().transform(val => val === '' ? undefined : val),
   photoUrl: z.string().optional(),
   manualUrl: z.string().optional(),
 })
@@ -234,6 +235,16 @@ export default function AssetForm({
         {errors.category && (
           <p className="text-sm text-red-600 mt-1">{errors.category.message}</p>
         )}
+      </div>
+
+      {/* Location */}
+      <div>
+        <Label htmlFor="location">Location</Label>
+        <Input
+          id="location"
+          {...register('location')}
+          placeholder="e.g., Kitchen, Master Bedroom, Garage"
+        />
       </div>
 
       {/* Model Number */}

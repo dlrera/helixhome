@@ -94,6 +94,9 @@ export async function POST(request: NextRequest) {
     const session = await requireAuth()
     const body = await request.json()
 
+    // Diagnostic logging for debugging validation issues
+    console.log('[Asset API] Received body:', JSON.stringify(body, null, 2))
+
     // Validate input
     const data = createAssetSchema.parse(body)
 
@@ -113,6 +116,7 @@ export async function POST(request: NextRequest) {
         homeId: data.homeId,
         name: data.name,
         category: data.category,
+        location: data.location,
         modelNumber: data.modelNumber,
         serialNumber: data.serialNumber,
         purchaseDate: data.purchaseDate,
@@ -146,6 +150,8 @@ export async function POST(request: NextRequest) {
       return unauthorizedResponse()
     }
     if (error instanceof ZodError) {
+      // Diagnostic logging for validation failures
+      console.error('[Asset API] Validation failed:', JSON.stringify(error.issues, null, 2))
       return validationErrorResponse(error)
     }
     return serverErrorResponse(error)

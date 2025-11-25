@@ -57,6 +57,7 @@ type AssetDetailProps = {
     id: string
     name: string
     category: AssetCategory
+    location: string | null
     modelNumber: string | null
     serialNumber: string | null
     purchaseDate: Date | null
@@ -240,6 +241,12 @@ export default function AssetDetail({
             <CardTitle>Details</CardTitle>
           </CardHeader>
           <CardContent className="space-y-3">
+            {asset.location && (
+              <div>
+                <p className="text-sm text-gray-500">Location</p>
+                <p className="font-medium">{asset.location}</p>
+              </div>
+            )}
             {asset.modelNumber && (
               <div>
                 <p className="text-sm text-gray-500">Model Number</p>
