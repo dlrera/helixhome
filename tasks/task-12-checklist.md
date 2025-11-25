@@ -137,51 +137,50 @@
 
 ---
 
-## Issue 4: Task Asset Selection (CRITICAL)
+## Issue 4: Task Asset Selection (CRITICAL) ✅ IMPLEMENTED
 
 ### 4.1 Update QuickTaskForm Component
 
-- [ ] **Update interface**
+- [x] **Update interface**
   - File: `components/tasks/quick-task-form.tsx`
-  - [ ] Add `assets` prop to `QuickTaskFormProps` interface
-  - [ ] Type: `assets?: { id: string; name: string; category: string }[]`
+  - [x] Add `assets` prop to `QuickTaskFormProps` interface
+  - [x] Type: `assets?: { id: string; name: string; category: string }[]`
 
-- [ ] **Add asset selector UI**
+- [x] **Add asset selector UI**
   - File: `components/tasks/quick-task-form.tsx`
-  - [ ] Import Select components (if not already)
-  - [ ] Add Label for "Link to Asset"
-  - [ ] Add Select with SelectTrigger, SelectValue, SelectContent
-  - [ ] Add SelectItem for "No asset" (empty value)
-  - [ ] Map assets to SelectItem options
-  - [ ] Display format: "Asset Name (Category)"
-  - [ ] Wire up value/onChange with react-hook-form
+  - [x] Import Select components (already imported)
+  - [x] Add Label for "Link to Asset (optional)"
+  - [x] Add Select with SelectTrigger, SelectValue, SelectContent
+  - [x] Add SelectItem for "No asset" (value="none")
+  - [x] Map assets to SelectItem options
+  - [x] Display format: "Asset Name (Category)"
+  - [x] Wire up value/onChange with react-hook-form
 
-- [ ] **Position in form**
-  - [ ] Place after Priority selector
-  - [ ] Use full width (not in grid)
-  - [ ] Only render if assets prop provided and has items
+- [x] **Position in form**
+  - [x] Place after Priority selector (full width, not in grid)
+  - [x] Only render if assets prop provided and has items
+  - [x] Also hide if assetId prop is pre-selected (e.g., creating task from asset page)
 
 ### 4.2 Update Tasks Page
 
-- [ ] **Fetch assets for dialog**
+- [x] **Fetch assets for dialog**
   - File: `app/(protected)/tasks/page.tsx`
-  - [ ] Add prisma query to fetch assets for user's home
-  - [ ] Select: id, name, category
-  - [ ] Order by name ascending
+  - [x] Add state for assets: `useState<{ id: string; name: string; category: string }[]>([])`
+  - [x] Fetch assets from `/api/assets?homeId=...` after getting homeId
+  - [x] Map response to required format (id, name, category)
 
-- [ ] **Pass assets to QuickTaskForm**
-  - [ ] Update component render to include assets prop
-  - [ ] Pass fetched assets array
+- [x] **Pass assets to QuickTaskForm**
+  - [x] Update component render to include `assets={assets}` prop
 
 ### 4.3 Update Calendar Page
 
-- [ ] **Fetch assets for dialog**
+- [x] **Fetch assets for dialog**
   - File: `app/(protected)/tasks/calendar/task-calendar-client.tsx`
-  - [ ] Determine how to get assets (prop from parent or fetch)
-  - [ ] May need to update parent server component
+  - [x] Add state for assets
+  - [x] Fetch assets from API (same pattern as Tasks page)
 
-- [ ] **Pass assets to QuickTaskForm**
-  - [ ] Update component render to include assets prop
+- [x] **Pass assets to QuickTaskForm**
+  - [x] Update component render to include `assets={assets}` prop
 
 ### 4.4 Testing
 
@@ -341,12 +340,13 @@ Several issues had to be resolved for successful Vercel deployment:
 |-------|--------|-------|
 | Issue 2: Asset Validation | ✅ Deployed | Schema fixes done, API verified working |
 | Issue 3: Location Field | ✅ Deployed | DB migrated, API returns location field |
-| Issue 4: Asset Selector | ⏳ Not Started | Next priority |
+| Issue 4: Asset Selector | ✅ Implemented | QuickTaskForm, Tasks page, Calendar page updated |
 | Issue 1: Quick Actions | ⏳ Not Started | Low priority |
 | Regression Tests | ⏳ Not Started | After all issues complete |
-| Final Deployment | ⏳ In Progress | Issues 2 & 3 live, 4 & 1 pending |
+| Final Deployment | ⏳ In Progress | Issue 4 needs deploy & testing |
 
 **Started**: 2025-11-25
 **Issues 2 & 3 Deployed**: 2025-11-25
+**Issue 4 Implemented**: 2025-11-25
 **Completed**: ____________________
 **Verified By**: ____________________

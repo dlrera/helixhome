@@ -32,6 +32,7 @@ type QuickTaskFormData = z.infer<typeof quickTaskSchema>;
 interface QuickTaskFormProps {
   homeId: string;
   assetId?: string;
+  assets?: { id: string; name: string; category: string }[];
   defaultDueDate?: Date;
   onSuccess?: () => void;
   onCancel?: () => void;
@@ -40,6 +41,7 @@ interface QuickTaskFormProps {
 export function QuickTaskForm({
   homeId,
   assetId,
+  assets,
   defaultDueDate,
   onSuccess,
   onCancel,
@@ -69,6 +71,7 @@ export function QuickTaskForm({
   });
 
   const priority = watch("priority");
+  const selectedAssetId = watch("assetId");
 
   const onSubmit = async (data: QuickTaskFormData) => {
     await createTask.mutateAsync({
@@ -130,6 +133,29 @@ export function QuickTaskForm({
           </Select>
         </div>
       </div>
+
+      {/* Asset Selection - only show if assets are provided and no pre-selected asset */}
+      {assets && assets.length > 0 && !assetId && (
+        <div className="space-y-2">
+          <Label htmlFor="assetId">Link to Asset (optional)</Label>
+          <Select
+            value={selectedAssetId || ""}
+            onValueChange={(value) => setValue("assetId", value === "none" ? "" : value)}
+          >
+            <SelectTrigger>
+              <SelectValue placeholder="Select an asset..." />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="none">No asset</SelectItem>
+              {assets.map((asset) => (
+                <SelectItem key={asset.id} value={asset.id}>
+                  {asset.name} ({asset.category})
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+      )}
 
       <div className="flex justify-end gap-2 pt-4">
         {onCancel && (

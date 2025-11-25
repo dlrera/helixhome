@@ -24,15 +24,33 @@ interface TaskCalendarClientProps {
 export function TaskCalendarClient({ tasks, requireCompletionPhoto }: TaskCalendarClientProps) {
   const [showCreateDialog, setShowCreateDialog] = useState(false)
   const [homeId, setHomeId] = useState<string | null>(null)
+  const [assets, setAssets] = useState<{ id: string; name: string; category: string }[]>([])
   const [filters, setFilters] = useState<Partial<TaskFilterInput>>({})
 
-  // Get user's home ID
+  // Get user's home ID and assets
   useState(() => {
     fetch('/api/homes')
       .then((res) => res.json())
       .then((data) => {
         if (data.homes && data.homes.length > 0) {
           setHomeId(data.homes[0].id)
+          // Fetch assets for this home
+          fetch(`/api/assets?homeId=${data.homes[0].id}`)
+            .then((res) => res.json())
+            .then((assetData) => {
+              if (assetData.assets) {
+                setAssets(
+                  assetData.assets.map((a: { id: string; name: string; category: string }) => ({
+                    id: a.id,
+                    name: a.name,
+                    category: a.category,
+                  }))
+                )
+              }
+            })
+            .catch(() => {
+              // Handle error silently
+            })
         }
       })
       .catch(() => {
@@ -90,6 +108,7 @@ export function TaskCalendarClient({ tasks, requireCompletionPhoto }: TaskCalend
           {homeId && (
             <QuickTaskForm
               homeId={homeId}
+              assets={assets}
               onSuccess={() => setShowCreateDialog(false)}
               onCancel={() => setShowCreateDialog(false)}
             />

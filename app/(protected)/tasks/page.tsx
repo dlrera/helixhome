@@ -28,19 +28,37 @@ export default function TasksPage() {
   const [filters, setFilters] = useState<Partial<TaskFilterInput>>({});
   const [showCreateDialog, setShowCreateDialog] = useState(false);
   const [homeId, setHomeId] = useState<string | null>(null);
+  const [assets, setAssets] = useState<{ id: string; name: string; category: string }[]>([]);
   const [taskToDelete, setTaskToDelete] = useState<string | null>(null);
 
   const { data, isLoading } = useTasks(filters);
   const completeTask = useCompleteTask();
   const deleteTask = useDeleteTask();
 
-  // Get user's home ID (simplified - in production, handle multiple homes)
+  // Get user's home ID and assets (simplified - in production, handle multiple homes)
   useState(() => {
     fetch("/api/homes")
       .then((res) => res.json())
       .then((data) => {
         if (data.homes && data.homes.length > 0) {
           setHomeId(data.homes[0].id);
+          // Fetch assets for this home
+          fetch(`/api/assets?homeId=${data.homes[0].id}`)
+            .then((res) => res.json())
+            .then((assetData) => {
+              if (assetData.assets) {
+                setAssets(
+                  assetData.assets.map((a: { id: string; name: string; category: string }) => ({
+                    id: a.id,
+                    name: a.name,
+                    category: a.category,
+                  }))
+                );
+              }
+            })
+            .catch(() => {
+              // Handle error silently
+            });
         }
       })
       .catch(() => {
@@ -127,6 +145,7 @@ export default function TasksPage() {
           {homeId && (
             <QuickTaskForm
               homeId={homeId}
+              assets={assets}
               onSuccess={() => setShowCreateDialog(false)}
               onCancel={() => setShowCreateDialog(false)}
             />
