@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import { Plus, Calendar } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
@@ -25,6 +26,7 @@ import { TaskStatus, Priority } from "@prisma/client";
 
 export default function TasksPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [filters, setFilters] = useState<Partial<TaskFilterInput>>({});
   const [showCreateDialog, setShowCreateDialog] = useState(false);
   const [homeId, setHomeId] = useState<string | null>(null);
@@ -34,6 +36,15 @@ export default function TasksPage() {
   const { data, isLoading } = useTasks(filters);
   const completeTask = useCompleteTask();
   const deleteTask = useDeleteTask();
+
+  // Auto-open create dialog if ?create=true is in URL
+  useEffect(() => {
+    if (searchParams.get("create") === "true" && homeId) {
+      setShowCreateDialog(true);
+      // Clear the query param after opening
+      router.replace("/tasks", { scroll: false });
+    }
+  }, [searchParams, homeId, router]);
 
   // Get user's home ID and assets (simplified - in production, handle multiple homes)
   useState(() => {

@@ -184,10 +184,10 @@
 
 ### 4.4 Testing
 
-- [ ] Test: Open create task dialog from /tasks
-- [ ] Test: Asset dropdown appears with assets listed
-- [ ] Test: Select an asset and create task
-- [ ] Test: Verify task.assetId is saved correctly
+- [x] Test: Open create task dialog from /tasks
+- [x] Test: Asset dropdown appears with assets listed (5 assets shown)
+- [x] Test: Select an asset and create task (Water Heater selected)
+- [x] Test: Verify task.assetId is saved correctly (task shows "Water Heater" link)
 - [ ] Test: Create task without selecting asset (should work)
 - [ ] Test: Task detail shows linked asset
 - [ ] Test: Asset detail shows linked task
@@ -195,42 +195,43 @@
 
 ---
 
-## Issue 1: Dashboard Quick Actions (MINOR)
+## Issue 1: Dashboard Quick Actions (MINOR) ✅ IMPLEMENTED
 
 ### 1.1 Create Quick Actions Component
 
-- [ ] **Create new component**
+- [x] **Create new component**
   - File: `components/dashboard/quick-actions.tsx` (NEW)
-  - [ ] Add 'use client' directive
-  - [ ] Import: Link, Plus, Wrench icons, Card components, Button
-  - [ ] Create QuickActions function component
-  - [ ] Return Card with header "Quick Actions"
-  - [ ] Add "Add Asset" button linking to /assets/new
-  - [ ] Add "Create Task" button linking to /tasks?create=true
-  - [ ] Style buttons appropriately (primary + outline variant)
+  - [x] Add 'use client' directive
+  - [x] Import: Link, Plus, Wrench icons, Card components, Button
+  - [x] Create QuickActions function component
+  - [x] Return Card with header "Quick Actions"
+  - [x] Add "Add Asset" button linking to /assets/new (primary brand color)
+  - [x] Add "Create Task" button linking to /tasks?create=true (outline variant)
+  - [x] Style buttons appropriately (responsive flex layout)
 
 ### 1.2 Add to Dashboard
 
-- [ ] **Import and render**
+- [x] **Import and render**
   - File: `app/(protected)/dashboard/page.tsx`
-  - [ ] Import QuickActions component
-  - [ ] Add after Quick Stats cards
-  - [ ] Add before "Enhanced Dashboard Widgets" section
+  - [x] Import QuickActions component
+  - [x] Add after Quick Stats cards
+  - [x] Add before "Enhanced Dashboard Widgets" section
 
-### 1.3 Handle Create Query Param (Optional)
+### 1.3 Handle Create Query Param
 
-- [ ] **Auto-open create dialog**
+- [x] **Auto-open create dialog**
   - File: `app/(protected)/tasks/page.tsx`
-  - [ ] Read `create` query param
-  - [ ] If `create=true`, set dialog open state to true
-  - [ ] Clear query param after opening (optional)
+  - [x] Import useSearchParams and useEffect
+  - [x] Read `create` query param
+  - [x] If `create=true` and homeId loaded, set dialog open state to true
+  - [x] Clear query param after opening with router.replace
 
 ### 1.4 Testing
 
 - [ ] Test: Quick Actions card visible on dashboard
 - [ ] Test: "Add Asset" navigates to /assets/new
-- [ ] Test: "Create Task" navigates to /tasks
-- [ ] Test: Task dialog opens automatically (if implemented)
+- [ ] Test: "Create Task" navigates to /tasks and opens dialog
+- [ ] Test: Task dialog opens automatically
 - [ ] Test: Mobile responsiveness
 - [ ] Test: Keyboard accessibility
 
@@ -340,13 +341,14 @@ Several issues had to be resolved for successful Vercel deployment:
 |-------|--------|-------|
 | Issue 2: Asset Validation | ✅ Deployed | Schema fixes done, API verified working |
 | Issue 3: Location Field | ✅ Deployed | DB migrated, API returns location field |
-| Issue 4: Asset Selector | ✅ Implemented | QuickTaskForm, Tasks page, Calendar page updated |
-| Issue 1: Quick Actions | ⏳ Not Started | Low priority |
-| Regression Tests | ⏳ Not Started | After all issues complete |
-| Final Deployment | ⏳ In Progress | Issue 4 needs deploy & testing |
+| Issue 4: Asset Selector | ✅ Deployed | Tasks page verified, asset linking works |
+| Issue 1: Quick Actions | ✅ Implemented | Dashboard component, auto-open dialog |
+| Regression Tests | ⏳ Not Started | After deployment verified |
+| Final Deployment | ⏳ In Progress | Issue 1 needs deploy & testing |
 
 **Started**: 2025-11-25
 **Issues 2 & 3 Deployed**: 2025-11-25
-**Issue 4 Implemented**: 2025-11-25
+**Issue 4 Deployed**: 2025-11-25
+**Issue 1 Implemented**: 2025-11-25
 **Completed**: ____________________
 **Verified By**: ____________________

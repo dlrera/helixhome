@@ -16,6 +16,7 @@ import { ActivityTimeline } from '@/components/dashboard/activity-timeline'
 import { MaintenanceCalendarWidget } from '@/components/dashboard/maintenance-calendar-widget'
 import { CostSummary } from '@/components/dashboard/cost-summary'
 import { MaintenanceInsights } from '@/components/dashboard/maintenance-insights'
+import { QuickActions } from '@/components/dashboard/quick-actions'
 import {
   AnalyticsChartSkeleton,
   CostSummarySkeleton,
@@ -166,6 +167,9 @@ export default async function DashboardPage() {
           </CardContent>
         </Card>
       </div>
+
+      {/* Quick Actions */}
+      <QuickActions />
 
       {/* Enhanced Dashboard Widgets - Progressive Loading */}
       <div className="grid gap-6 lg:grid-cols-2">
