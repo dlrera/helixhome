@@ -1,4 +1,5 @@
 import { NextRequest } from 'next/server'
+import { Prisma } from '@prisma/client'
 import { prisma } from '@/lib/prisma'
 import { requireAuth } from '@/lib/api/auth'
 import {
@@ -53,12 +54,7 @@ export async function GET(request: NextRequest) {
     const homeIds = homes.map((h) => h.id)
 
     // Build where clause for filtering
-    const where: {
-      homeId: { in: string[] }
-      status?: { in: string[] }
-      priority?: { in: string[] }
-      dueDate?: { lte: Date }
-    } = {
+    const where: Prisma.TaskWhereInput = {
       homeId: { in: homeIds },
     }
 
