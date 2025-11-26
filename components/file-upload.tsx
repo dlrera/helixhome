@@ -30,7 +30,7 @@ export function FileUpload({
       ? 'image/jpeg,image/jpg,image/png,image/webp'
       : 'application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document'
 
-  const maxSize = type === 'image' ? 5 : 10 // MB
+  const maxSize = 4 // MB - Vercel Hobby tier has ~4.5MB request body limit
 
   const handleFile = useCallback(
     async (file: File) => {
