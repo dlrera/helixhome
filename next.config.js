@@ -11,6 +11,17 @@ const nextConfig = {
     ignoreDuringBuilds: true,
   },
 
+  // Allow images from Supabase Storage
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '*.supabase.co',
+        pathname: '/storage/v1/object/public/**',
+      },
+    ],
+  },
+
   // PERFORMANCE OPTIMIZATION: Task 7a
   compiler: {
     // Remove console.log in production
