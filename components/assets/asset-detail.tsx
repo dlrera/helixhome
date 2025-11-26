@@ -188,7 +188,7 @@ export default function AssetDetail({
                   src={asset.photoUrl}
                   alt={asset.name}
                   fill
-                  className="object-cover"
+                  className="object-contain"
                 />
               ) : (
                 <div className="w-full h-full flex items-center justify-center">
