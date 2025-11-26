@@ -16,9 +16,10 @@ export const BUCKETS = {
 } as const
 
 // File size limits (in bytes)
+// Note: Vercel Hobby tier has ~4.5MB request body limit
 export const FILE_SIZE_LIMITS = {
-  IMAGE: 5 * 1024 * 1024, // 5MB
-  MANUAL: 10 * 1024 * 1024, // 10MB
+  IMAGE: 4 * 1024 * 1024, // 4MB (reduced for Vercel compatibility)
+  MANUAL: 4 * 1024 * 1024, // 4MB (reduced for Vercel compatibility)
 } as const
 
 // Allowed file types

@@ -2,7 +2,14 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -18,7 +25,7 @@ interface PhotoUploadDialogProps {
 export default function PhotoUploadDialog({
   assetId,
   open,
-  onOpenChange
+  onOpenChange,
 }: PhotoUploadDialogProps) {
   const router = useRouter()
   const { toast } = useToast()
@@ -42,7 +49,7 @@ export default function PhotoUploadDialog({
 
       const response = await fetch(`/api/assets/${assetId}/photo`, {
         method: 'POST',
-        body: formData
+        body: formData,
       })
 
       if (!response.ok) {
@@ -52,7 +59,7 @@ export default function PhotoUploadDialog({
 
       toast({
         title: 'Photo uploaded',
-        description: 'Asset photo has been updated successfully.'
+        description: 'Asset photo has been updated successfully.',
       })
 
       router.refresh()
@@ -61,8 +68,9 @@ export default function PhotoUploadDialog({
     } catch (error) {
       toast({
         title: 'Error',
-        description: error instanceof Error ? error.message : 'Failed to upload photo',
-        variant: 'destructive'
+        description:
+          error instanceof Error ? error.message : 'Failed to upload photo',
+        variant: 'destructive',
       })
     } finally {
       setIsUploading(false)
@@ -75,7 +83,7 @@ export default function PhotoUploadDialog({
         <DialogHeader>
           <DialogTitle>Upload Photo</DialogTitle>
           <DialogDescription>
-            Upload a photo of this asset (max 5MB, JPEG/PNG/WebP)
+            Upload a photo of this asset (max 4MB, JPEG/PNG/WebP)
           </DialogDescription>
         </DialogHeader>
         <div className="space-y-4">
@@ -95,7 +103,11 @@ export default function PhotoUploadDialog({
           )}
         </div>
         <DialogFooter>
-          <Button variant="outline" onClick={() => onOpenChange(false)} disabled={isUploading}>
+          <Button
+            variant="outline"
+            onClick={() => onOpenChange(false)}
+            disabled={isUploading}
+          >
             Cancel
           </Button>
           <Button onClick={handleUpload} disabled={!file || isUploading}>

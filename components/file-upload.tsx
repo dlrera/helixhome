@@ -170,8 +170,8 @@ export function FileUpload({
             </div>
             <div className="text-xs text-muted-foreground">
               {type === 'image'
-                ? 'PNG, JPG, WebP up to 5MB'
-                : 'PDF, DOC, DOCX up to 10MB'}
+                ? 'PNG, JPG, WebP up to 4MB'
+                : 'PDF, DOC, DOCX up to 4MB'}
             </div>
           </div>
         </div>
