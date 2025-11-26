@@ -1,33 +1,66 @@
-"use client";
+'use client'
 
-import { useState } from "react";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { useToast } from "@/hooks/use-toast";
+import { useState } from 'react'
+import Link from 'next/link'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { useToast } from '@/hooks/use-toast'
+import {
+  forgotPasswordSchema,
+  type ForgotPasswordFormData,
+} from '@/lib/validation/auth'
+import { Mail, ArrowLeft } from 'lucide-react'
 
 export default function ForgotPasswordPage() {
-  const { toast } = useToast();
-  const [email, setEmail] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const [emailSent, setEmailSent] = useState(false);
+  const { toast } = useToast()
+  const [isLoading, setIsLoading] = useState(false)
+  const [emailSent, setEmailSent] = useState(false)
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    getValues,
+  } = useForm<ForgotPasswordFormData>({
+    resolver: zodResolver(forgotPasswordSchema),
+  })
 
-    // Simulate email sending (placeholder for future implementation)
-    setTimeout(() => {
-      setEmailSent(true);
-      setIsLoading(false);
+  const onSubmit = async (data: ForgotPasswordFormData) => {
+    setIsLoading(true)
+
+    try {
+      const response = await fetch('/api/auth/forgot-password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      })
+
+      if (response.ok) {
+        setEmailSent(true)
+        toast({
+          title: 'Email sent',
+          description: 'Check your inbox for password reset instructions.',
+        })
+      } else {
+        toast({
+          title: 'Error',
+          description: 'Something went wrong. Please try again.',
+          variant: 'destructive',
+        })
+      }
+    } catch {
       toast({
-        title: "Reset link sent",
-        description:
-          "If an account exists with this email, you will receive password reset instructions.",
-      });
-    }, 1500);
-  };
+        title: 'Error',
+        description: 'Something went wrong. Please try again.',
+        variant: 'destructive',
+      })
+    } finally {
+      setIsLoading(false)
+    }
+  }
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background">
@@ -38,44 +71,52 @@ export default function ForgotPasswordPage() {
           </h1>
           <p className="text-muted-foreground">
             {emailSent
-              ? "Check your email for reset instructions"
+              ? 'Check your email for reset instructions'
               : "Enter your email address and we'll send you a reset link"}
           </p>
         </div>
 
         {!emailSent ? (
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
               <Input
                 id="email"
                 type="email"
+                inputMode="email"
                 placeholder="name@example.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
+                {...register('email')}
                 disabled={isLoading}
+                aria-invalid={!!errors.email}
               />
+              {errors.email && (
+                <p className="text-sm text-destructive">
+                  {errors.email.message}
+                </p>
+              )}
             </div>
 
             <Button type="submit" className="w-full" disabled={isLoading}>
-              {isLoading ? "Sending..." : "Send reset link"}
+              {isLoading ? 'Sending...' : 'Send reset link'}
             </Button>
 
             <div className="text-center">
               <Link
                 href="/auth/signin"
-                className="text-sm text-primary hover:underline"
+                className="inline-flex items-center gap-2 text-sm text-primary hover:underline"
               >
+                <ArrowLeft className="h-4 w-4" />
                 Back to sign in
               </Link>
             </div>
           </form>
         ) : (
           <div className="space-y-6">
-            <div className="rounded-lg bg-success/10 p-4 text-center">
-              <p className="text-sm text-success">
-                Password reset instructions have been sent to your email.
+            <div className="flex flex-col items-center rounded-lg bg-primary/10 p-6">
+              <Mail className="mb-4 h-12 w-12 text-primary" />
+              <p className="text-center text-sm">
+                If an account exists for <strong>{getValues('email')}</strong>,
+                you will receive an email with password reset instructions.
               </p>
             </div>
 
@@ -84,24 +125,14 @@ export default function ForgotPasswordPage() {
             </Button>
 
             <button
-              onClick={() => {
-                setEmailSent(false);
-                setEmail("");
-              }}
+              onClick={() => setEmailSent(false)}
               className="w-full text-center text-sm text-muted-foreground hover:text-foreground"
             >
-              Didn't receive the email? Try again
+              Didn&apos;t receive the email? Try again
             </button>
           </div>
         )}
-
-        <div className="rounded-lg border border-warning/50 bg-warning/10 p-4">
-          <p className="text-xs text-warning">
-            <strong>Note:</strong> Email functionality is not yet implemented.
-            This is a placeholder for future password reset features.
-          </p>
-        </div>
       </div>
     </div>
-  );
+  )
 }

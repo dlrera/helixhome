@@ -98,9 +98,10 @@ model User {
   maintenanceBudget      Float? // Monthly maintenance budget
   budgetStartDate        DateTime? // When budget tracking began
 
-  homes         Home[]
-  notifications Notification[]
-  activityLogs  ActivityLog[]
+  homes               Home[]
+  notifications       Notification[]
+  activityLogs        ActivityLog[]
+  passwordResetTokens PasswordResetToken[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -299,4 +300,18 @@ model ActivityLog {
 
   @@index([homeId, createdAt])
   @@index([userId, createdAt])
+}
+
+model PasswordResetToken {
+  id        String    @id @default(cuid())
+  userId    String
+  token     String    @unique
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([token])
+  @@index([userId])
 }
