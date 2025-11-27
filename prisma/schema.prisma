@@ -9,8 +9,8 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
   directUrl = env("DIRECT_URL")
 }
 
@@ -88,20 +88,21 @@ model User {
   email         String    @unique
   emailVerified DateTime?
   image         String?
-  password      String?   // For credentials provider
+  password      String? // For credentials provider
   accounts      Account[]
   sessions      Session[]
 
   // User preferences
-  requireCompletionPhoto Boolean @default(false) // Require photo when completing tasks
+  requireCompletionPhoto Boolean   @default(false) // Require photo when completing tasks
   dashboardLayout        String? // JSON stored as string - customizable widget positions and visibility
   maintenanceBudget      Float? // Monthly maintenance budget
   budgetStartDate        DateTime? // When budget tracking began
 
-  homes               Home[]
-  notifications       Notification[]
-  activityLogs        ActivityLog[]
-  passwordResetTokens PasswordResetToken[]
+  homes                Home[]
+  notifications        Notification[]
+  activityLogs         ActivityLog[]
+  passwordResetTokens  PasswordResetToken[]
+  maintenanceTemplates MaintenanceTemplate[] // User-customized templates
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -148,12 +149,14 @@ model VerificationToken {
 
 // CMMS Models
 model Home {
-  id        String   @id @default(cuid())
-  userId    String
-  name      String
-  address   String?  // JSON stored as string
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id          String   @id @default(cuid())
+  userId      String
+  name        String
+  address     String? // JSON stored as string
+  climateZone String? // e.g., "Humid", "Cold", "Temperate", "Arid" - for recommendations
+  yearBuilt   Int? // Year the home was built - for age-based recommendations
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   assets       Asset[]
@@ -164,23 +167,23 @@ model Home {
 }
 
 model Asset {
-  id                String        @id @default(cuid())
-  homeId            String
-  name              String
-  category          AssetCategory
-  location          String?       // Physical location within home (e.g., Kitchen, Garage)
-  modelNumber       String?
-  serialNumber      String?
-  purchaseDate      DateTime?
+  id                 String        @id @default(cuid())
+  homeId             String
+  name               String
+  category           AssetCategory
+  location           String? // Physical location within home (e.g., Kitchen, Garage)
+  modelNumber        String?
+  serialNumber       String?
+  purchaseDate       DateTime?
   warrantyExpiryDate DateTime?
-  photoUrl          String?
-  manualUrl         String?       // URL to uploaded manual/document in Supabase
-  metadata          String?       // JSON stored as string
-  createdAt         DateTime      @default(now())
-  updatedAt         DateTime      @updatedAt
+  photoUrl           String?
+  manualUrl          String? // URL to uploaded manual/document in Supabase
+  metadata           String? // JSON stored as string
+  createdAt          DateTime      @default(now())
+  updatedAt          DateTime      @updatedAt
 
-  home              Home               @relation(fields: [homeId], references: [id], onDelete: Cascade)
-  tasks             Task[]
+  home               Home                @relation(fields: [homeId], references: [id], onDelete: Cascade)
+  tasks              Task[]
   recurringSchedules RecurringSchedule[]
 
   @@index([homeId])
@@ -188,26 +191,46 @@ model Asset {
 }
 
 model MaintenanceTemplate {
-  id                      String     @id @default(cuid())
-  name                    String
-  description             String
-  category                AssetCategory
-  defaultFrequency        Frequency
-  estimatedDurationMinutes Int       // Required, not optional
-  difficulty              Difficulty // Renamed from difficultyLevel
-  instructions            String?    // JSON stored as string
-  requiredTools           String?    // JSON stored as string
-  safetyPrecautions       String?    // JSON stored as string
-  isSystemTemplate        Boolean    @default(true)
-  isActive                Boolean    @default(true)
-  createdAt               DateTime   @default(now())
-  updatedAt               DateTime   @updatedAt
+  id                       String        @id @default(cuid())
+  name                     String
+  description              String
+  category                 AssetCategory
+  defaultFrequency         Frequency
+  estimatedDurationMinutes Int // Required, not optional
+  difficulty               Difficulty // Renamed from difficultyLevel
+  instructions             String? // JSON stored as string
+  requiredTools            String? // JSON stored as string
+  safetyPrecautions        String? // JSON stored as string
+  isSystemTemplate         Boolean       @default(true)
+  isActive                 Boolean       @default(true)
+
+  // Template Pack relation
+  packId String?
+  pack   TemplatePack? @relation(fields: [packId], references: [id], onDelete: SetNull)
+
+  // Enhanced Metadata
+  tags   String[] // e.g., ["Filter", "Inspection", "Safety"]
+  season String? // "Spring", "Fall", "Winter", "Summer" - for seasonal templates
+
+  // Customization/Cloning support
+  originalTemplateId String?
+  originalTemplate   MaintenanceTemplate?  @relation("TemplateClones", fields: [originalTemplateId], references: [id], onDelete: SetNull)
+  clones             MaintenanceTemplate[] @relation("TemplateClones")
+
+  // User-customized templates
+  userId String?
+  user   User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   tasks              Task[]
   recurringSchedules RecurringSchedule[]
 
   @@index([category])
   @@index([isSystemTemplate, isActive])
+  @@index([packId])
+  @@index([userId])
 }
 
 model Task {
@@ -223,17 +246,17 @@ model Task {
   completedAt      DateTime?
   completedBy      String?
   completionNotes  String?
-  completionPhotos String?    // JSON array stored as string
-  estimatedCost    Float?     // Expected cost for this task
-  actualCost       Float?     // Actual cost after completion
-  costNotes        String?    // Notes about costs
+  completionPhotos String? // JSON array stored as string
+  estimatedCost    Float? // Expected cost for this task
+  actualCost       Float? // Actual cost after completion
+  costNotes        String? // Notes about costs
   notes            String?
   createdAt        DateTime   @default(now())
   updatedAt        DateTime   @updatedAt
 
-  home         Home                  @relation(fields: [homeId], references: [id], onDelete: Cascade)
-  asset        Asset?                @relation(fields: [assetId], references: [id], onDelete: SetNull)
-  template     MaintenanceTemplate?  @relation(fields: [templateId], references: [id], onDelete: SetNull)
+  home          Home                 @relation(fields: [homeId], references: [id], onDelete: Cascade)
+  asset         Asset?               @relation(fields: [assetId], references: [id], onDelete: SetNull)
+  template      MaintenanceTemplate? @relation(fields: [templateId], references: [id], onDelete: SetNull)
   notifications Notification[]
 
   @@index([homeId])
@@ -249,7 +272,7 @@ model RecurringSchedule {
   templateId          String
   assetId             String
   frequency           Frequency
-  customFrequencyDays Int?      // For custom frequencies
+  customFrequencyDays Int? // For custom frequencies
   nextDueDate         DateTime
   lastCompletedDate   DateTime? // Track last completion
   isActive            Boolean   @default(true)
@@ -266,14 +289,14 @@ model RecurringSchedule {
 }
 
 model Notification {
-  id       String             @id @default(cuid())
-  userId   String
-  taskId   String
-  type     NotificationType
-  status   NotificationStatus @default(PENDING)
-  sentAt   DateTime?
-  metadata String?            // JSON stored as string
-  createdAt DateTime          @default(now())
+  id        String             @id @default(cuid())
+  userId    String
+  taskId    String
+  type      NotificationType
+  status    NotificationStatus @default(PENDING)
+  sentAt    DateTime?
+  metadata  String? // JSON stored as string
+  createdAt DateTime           @default(now())
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   task Task @relation(fields: [taskId], references: [id], onDelete: Cascade)
@@ -288,11 +311,11 @@ model ActivityLog {
   userId       String
   homeId       String
   activityType ActivityType
-  entityType   String       // "asset", "task", "template", etc.
+  entityType   String // "asset", "task", "template", etc.
   entityId     String
-  entityName   String       // Denormalized for performance
+  entityName   String // Denormalized for performance
   description  String
-  metadata     String?      // JSON stored as string - additional context
+  metadata     String? // JSON stored as string - additional context
   createdAt    DateTime     @default(now())
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -314,4 +337,28 @@ model PasswordResetToken {
 
   @@index([token])
   @@index([userId])
+}
+
+// Template Pack for grouping maintenance templates
+model TemplatePack {
+  id          String         @id @default(cuid())
+  name        String
+  description String
+  category    AssetCategory? // Optional: if the whole pack is category-specific
+  tags        String[] // e.g., ["Seasonal", "Safety", "Old Home"]
+
+  // Rules for recommendations
+  applicableClimateZones String[] // e.g., ["Humid", "Cold"]
+  minHomeAge             Int? // e.g., 20 years
+  maxHomeAge             Int?
+
+  isSystemPack Boolean @default(true)
+  isActive     Boolean @default(true)
+
+  templates MaintenanceTemplate[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([isSystemPack, isActive])
 }
