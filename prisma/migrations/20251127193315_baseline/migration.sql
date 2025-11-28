@@ -1,3 +1,4 @@
+npm warn Unknown project config "frozen-lockfile". This will stop working in the next major version of npm.
 -- CreateEnum
 CREATE TYPE "AssetCategory" AS ENUM ('APPLIANCE', 'HVAC', 'PLUMBING', 'ELECTRICAL', 'STRUCTURAL', 'OUTDOOR', 'OTHER');
 
@@ -83,6 +84,8 @@ CREATE TABLE "Home" (
     "userId" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "address" TEXT,
+    "climateZone" TEXT,
+    "yearBuilt" INTEGER,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -95,11 +98,13 @@ CREATE TABLE "Asset" (
     "homeId" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "category" "AssetCategory" NOT NULL,
+    "location" TEXT,
     "modelNumber" TEXT,
     "serialNumber" TEXT,
     "purchaseDate" TIMESTAMP(3),
     "warrantyExpiryDate" TIMESTAMP(3),
     "photoUrl" TEXT,
+    "manualUrl" TEXT,
     "metadata" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
@@ -121,6 +126,11 @@ CREATE TABLE "MaintenanceTemplate" (
     "safetyPrecautions" TEXT,
     "isSystemTemplate" BOOLEAN NOT NULL DEFAULT true,
     "isActive" BOOLEAN NOT NULL DEFAULT true,
+    "packId" TEXT,
+    "tags" TEXT[],
+    "season" TEXT,
+    "originalTemplateId" TEXT,
+    "userId" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -198,6 +208,36 @@ CREATE TABLE "ActivityLog" (
     CONSTRAINT "ActivityLog_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "PasswordResetToken" (
+    "id" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
+    "token" TEXT NOT NULL,
+    "expiresAt" TIMESTAMP(3) NOT NULL,
+    "usedAt" TIMESTAMP(3),
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "PasswordResetToken_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "TemplatePack" (
+    "id" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+    "description" TEXT NOT NULL,
+    "category" "AssetCategory",
+    "tags" TEXT[],
+    "applicableClimateZones" TEXT[],
+    "minHomeAge" INTEGER,
+    "maxHomeAge" INTEGER,
+    "isSystemPack" BOOLEAN NOT NULL DEFAULT true,
+    "isActive" BOOLEAN NOT NULL DEFAULT true,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "TemplatePack_pkey" PRIMARY KEY ("id")
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 
@@ -218,6 +258,12 @@ CREATE INDEX "MaintenanceTemplate_category_idx" ON "MaintenanceTemplate"("catego
 
 -- CreateIndex
 CREATE INDEX "MaintenanceTemplate_isSystemTemplate_isActive_idx" ON "MaintenanceTemplate"("isSystemTemplate", "isActive");
+
+-- CreateIndex
+CREATE INDEX "MaintenanceTemplate_packId_idx" ON "MaintenanceTemplate"("packId");
+
+-- CreateIndex
+CREATE INDEX "MaintenanceTemplate_userId_idx" ON "MaintenanceTemplate"("userId");
 
 -- CreateIndex
 CREATE INDEX "Task_homeId_idx" ON "Task"("homeId");
@@ -264,6 +310,18 @@ CREATE INDEX "ActivityLog_homeId_createdAt_idx" ON "ActivityLog"("homeId", "crea
 -- CreateIndex
 CREATE INDEX "ActivityLog_userId_createdAt_idx" ON "ActivityLog"("userId", "createdAt");
 
+-- CreateIndex
+CREATE UNIQUE INDEX "PasswordResetToken_token_key" ON "PasswordResetToken"("token");
+
+-- CreateIndex
+CREATE INDEX "PasswordResetToken_token_idx" ON "PasswordResetToken"("token");
+
+-- CreateIndex
+CREATE INDEX "PasswordResetToken_userId_idx" ON "PasswordResetToken"("userId");
+
+-- CreateIndex
+CREATE INDEX "TemplatePack_isSystemPack_isActive_idx" ON "TemplatePack"("isSystemPack", "isActive");
+
 -- AddForeignKey
 ALTER TABLE "Account" ADD CONSTRAINT "Account_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
@@ -275,6 +333,15 @@ ALTER TABLE "Home" ADD CONSTRAINT "Home_userId_fkey" FOREIGN KEY ("userId") REFE
 
 -- AddForeignKey
 ALTER TABLE "Asset" ADD CONSTRAINT "Asset_homeId_fkey" FOREIGN KEY ("homeId") REFERENCES "Home"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "MaintenanceTemplate" ADD CONSTRAINT "MaintenanceTemplate_packId_fkey" FOREIGN KEY ("packId") REFERENCES "TemplatePack"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "MaintenanceTemplate" ADD CONSTRAINT "MaintenanceTemplate_originalTemplateId_fkey" FOREIGN KEY ("originalTemplateId") REFERENCES "MaintenanceTemplate"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "MaintenanceTemplate" ADD CONSTRAINT "MaintenanceTemplate_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Task" ADD CONSTRAINT "Task_homeId_fkey" FOREIGN KEY ("homeId") REFERENCES "Home"("id") ON DELETE CASCADE ON UPDATE CASCADE;
@@ -302,3 +369,7 @@ ALTER TABLE "ActivityLog" ADD CONSTRAINT "ActivityLog_userId_fkey" FOREIGN KEY (
 
 -- AddForeignKey
 ALTER TABLE "ActivityLog" ADD CONSTRAINT "ActivityLog_homeId_fkey" FOREIGN KEY ("homeId") REFERENCES "Home"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "PasswordResetToken" ADD CONSTRAINT "PasswordResetToken_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
