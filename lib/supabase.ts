@@ -1,13 +1,31 @@
-import { createClient } from '@supabase/supabase-js'
+import { createClient, SupabaseClient } from '@supabase/supabase-js'
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+// Lazy-loaded Supabase client to avoid build-time errors when env vars are missing
+let _supabase: SupabaseClient | null = null
 
-if (!supabaseUrl || !supabaseAnonKey) {
-  throw new Error('Missing Supabase environment variables')
+function getSupabaseClient(): SupabaseClient {
+  if (_supabase) return _supabase
+
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+
+  if (!supabaseUrl || !supabaseAnonKey) {
+    throw new Error('Missing Supabase environment variables')
+  }
+
+  _supabase = createClient(supabaseUrl, supabaseAnonKey)
+  return _supabase
 }
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey)
+// Export a proxy that lazily initializes the client
+export const supabase = new Proxy({} as SupabaseClient, {
+  get(_, prop: string | symbol) {
+    const client = getSupabaseClient()
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const value = (client as unknown as Record<string | symbol, unknown>)[prop]
+    return typeof value === 'function' ? value.bind(client) : value
+  },
+})
 
 // Bucket names
 export const BUCKETS = {

@@ -1,0 +1,18 @@
+#!/bin/sh
+
+echo "Running production build before push..."
+echo ""
+
+# Run the production build
+pnpm build
+
+# Check if build succeeded
+if [ $? -ne 0 ]; then
+  echo ""
+  echo "Build failed! Push aborted."
+  echo "Fix the build errors above and try again."
+  exit 1
+fi
+
+echo ""
+echo "Build succeeded! Proceeding with push..."

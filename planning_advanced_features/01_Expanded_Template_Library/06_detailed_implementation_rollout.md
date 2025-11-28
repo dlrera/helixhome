@@ -110,31 +110,31 @@ This document provides a step-by-step execution guide for implementing the Expan
 
 ---
 
-## Phase 4: Frontend UI Components (Refactor & Extend)
+## Phase 4: Frontend UI Components (Refactor & Extend) ✅ COMPLETE
 
 ### Step 4.1: Create/Update Types
 
-- [ ] Create `types/templates.ts` (if it doesn't exist).
-- [ ] Add `TemplatePack` interface.
-- [ ] Update `Template` interface to include `packId`.
+- [x] Create `types/templates.ts` (if it doesn't exist).
+- [x] Add `TemplatePack` interface.
+- [x] Update `Template` interface to include `packId`.
 
 ### Step 4.2: Create Template Pack Card
 
-- [ ] Create `components/templates/template-pack-card.tsx`.
-- [ ] **Cross-Reference**: Use `components/ui/card.tsx` and `components/ui/badge.tsx` for consistent design.
+- [x] Create `components/templates/template-pack-card.tsx`.
+- [x] **Cross-Reference**: Use `components/ui/card.tsx` and `components/ui/badge.tsx` for consistent design.
 
 ### Step 4.3: Refactor Template Browser
 
-- [ ] Open `components/templates/template-browser.tsx`.
-- [ ] Add a new "View Mode" or "Tab" for "Packs".
-- [ ] Implement fetching from `/api/templates/packs` when in Pack mode.
-- [ ] Render `TemplatePackGrid` using the new card component.
-- [ ] **Cross-Reference**: Reuse existing `useQuery` patterns and `Loader2` states.
+- [x] Open `components/templates/template-browser.tsx`.
+- [x] Add a new "View Mode" or "Tab" for "Packs".
+- [x] Implement fetching from `/api/templates/packs` when in Pack mode.
+- [x] Render `TemplatePackGrid` using the new card component.
+- [x] **Cross-Reference**: Reuse existing `useQuery` patterns and `Loader2` states.
 
 ### Step 4.4: Pack Detail View
 
-- [ ] Create `components/templates/template-pack-details.tsx` (or a new page).
-- [ ] Reuse `TemplateList` logic (or extract `TemplateGrid` from `template-browser.tsx` to be reusable).
+- [x] Create `components/templates/template-pack-details.tsx` (or a new page).
+- [x] Reuse `TemplateList` logic (or extract `TemplateGrid` from `template-browser.tsx` to be reusable).
 
 ### Step 4.5: Update Asset Selector
 

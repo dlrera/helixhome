@@ -1,28 +1,61 @@
 'use client'
 
-import React, { useState, useEffect, useRef, useMemo, memo } from 'react'
+import React, { useState, useEffect, useRef, useMemo } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import dynamic from 'next/dynamic'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Skeleton } from '@/components/ui/skeleton'
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
-import { useViewMode } from '@/lib/hooks/use-local-storage'
+import { useViewMode, useLocalStorage } from '@/lib/hooks/use-local-storage'
 import { KeyboardShortcutsDialog } from '@/components/ui/keyboard-shortcuts-dialog'
+import type { TemplatePack, BrowseMode } from '@/types/templates'
 
 // Lazy load heavy components
-const ApplyTemplateModal = dynamic(() => import('./apply-template-modal'), {
-  loading: () => <div className="flex items-center justify-center p-4"><Loader2 className="h-6 w-6 animate-spin" /></div>,
-  ssr: false
+const TemplateDetailsDrawer = dynamic(
+  () => import('./template-details-drawer'),
+  {
+    loading: () => (
+      <div className="flex items-center justify-center p-4">
+        <Loader2 className="h-6 w-6 animate-spin" />
+      </div>
+    ),
+    ssr: false,
+  }
+)
+
+const TemplatePackCard = dynamic(() => import('./template-pack-card'), {
+  loading: () => (
+    <Card className="h-full min-h-[280px] animate-pulse">
+      <CardContent className="p-4">
+        <Skeleton className="h-full w-full" />
+      </CardContent>
+    </Card>
+  ),
+  ssr: false,
 })
 
-const TemplateDetailsDrawer = dynamic(() => import('./template-details-drawer'), {
-  loading: () => <div className="flex items-center justify-center p-4"><Loader2 className="h-6 w-6 animate-spin" /></div>,
-  ssr: false
-})
+const TemplatePackDetailsSheet = dynamic(
+  () => import('./template-pack-details'),
+  {
+    loading: () => (
+      <div className="flex items-center justify-center p-4">
+        <Loader2 className="h-6 w-6 animate-spin" />
+      </div>
+    ),
+    ssr: false,
+  }
+)
+
 import {
   Clock,
   Search,
@@ -38,7 +71,9 @@ import {
   ChevronLeft,
   ChevronRight,
   CheckCircle,
-  Loader2
+  Loader2,
+  FileStack,
+  Library,
 } from 'lucide-react'
 import { AssetCategory, Difficulty, Frequency } from '@prisma/client'
 import { formatDuration, formatFrequency } from '@/lib/utils/template-helpers'
@@ -51,15 +86,16 @@ const categoryIcons = {
   ELECTRICAL: Zap,
   STRUCTURAL: Building,
   OUTDOOR: Trees,
-  OTHER: Wrench
+  OTHER: Wrench,
 }
 
 // Difficulty colors with hover states
 const difficultyColors = {
   EASY: 'bg-green-100 text-green-800 hover:bg-green-200 transition-colors',
-  MODERATE: 'bg-yellow-100 text-yellow-800 hover:bg-yellow-200 transition-colors',
+  MODERATE:
+    'bg-yellow-100 text-yellow-800 hover:bg-yellow-200 transition-colors',
   HARD: 'bg-orange-100 text-orange-800 hover:bg-orange-200 transition-colors',
-  PROFESSIONAL: 'bg-red-100 text-red-800 hover:bg-red-200 transition-colors'
+  PROFESSIONAL: 'bg-red-100 text-red-800 hover:bg-red-200 transition-colors',
 }
 
 interface Template {
@@ -78,19 +114,37 @@ interface TemplateBrowserProps {
   appliedTemplateIds?: string[] // IDs of templates already applied
 }
 
-export default function TemplateBrowser({ appliedTemplateIds = [] }: TemplateBrowserProps) {
-  const [selectedCategory, setSelectedCategory] = useState<AssetCategory | 'ALL'>('ALL')
+export default function TemplateBrowser({
+  appliedTemplateIds = [],
+}: TemplateBrowserProps) {
+  const [selectedCategory, setSelectedCategory] = useState<
+    AssetCategory | 'ALL'
+  >('ALL')
   const [searchQuery, setSearchQuery] = useState('')
   const [debouncedSearchQuery, setDebouncedSearchQuery] = useState('')
 
   // Use custom hook for persistent view mode preference
-  const [viewMode, setViewMode] = useViewMode('helix-templates-view-mode', 'grid')
+  const [viewMode, setViewMode] = useViewMode(
+    'helix-templates-view-mode',
+    'grid'
+  )
+
+  // Browse mode: 'templates' for individual templates, 'packs' for template packs
+  const [browseMode, setBrowseMode] = useLocalStorage<BrowseMode>(
+    'helix-browse-mode',
+    'templates'
+  )
 
   const [currentPage, setCurrentPage] = useState(1)
-  const [loadingTemplateId, setLoadingTemplateId] = useState<string | null>(null)
+  const [loadingTemplateId, setLoadingTemplateId] = useState<string | null>(
+    null
+  )
   const [selectedIndex, setSelectedIndex] = useState<number>(-1)
   const [isPullToRefresh, setIsPullToRefresh] = useState(false)
-  const [selectedTemplateId, setSelectedTemplateId] = useState<string | null>(null)
+  const [selectedTemplateId, setSelectedTemplateId] = useState<string | null>(
+    null
+  )
+  const [selectedPackId, setSelectedPackId] = useState<string | null>(null)
   const searchInputRef = useRef<HTMLInputElement>(null)
   const itemsPerPage = 12
 
@@ -107,7 +161,8 @@ export default function TemplateBrowser({ appliedTemplateIds = [] }: TemplateBro
     queryKey: ['templates', selectedCategory, debouncedSearchQuery],
     queryFn: async () => {
       const params = new URLSearchParams()
-      if (selectedCategory !== 'ALL') params.append('category', selectedCategory)
+      if (selectedCategory !== 'ALL')
+        params.append('category', selectedCategory)
       if (debouncedSearchQuery) params.append('search', debouncedSearchQuery)
 
       const response = await fetch(`/api/templates?${params}`)
@@ -117,30 +172,84 @@ export default function TemplateBrowser({ appliedTemplateIds = [] }: TemplateBro
     staleTime: 5 * 60 * 1000, // 5 minutes - data stays fresh
     gcTime: 10 * 60 * 1000, // 10 minutes - cache retention (was cacheTime in v4)
     refetchOnWindowFocus: false, // Don't refetch on window focus for stable UX
+    enabled: browseMode === 'templates', // Only fetch when in templates mode
+  })
+
+  // Fetch template packs
+  const {
+    data: packsData,
+    isLoading: isLoadingPacks,
+    error: packsError,
+    refetch: refetchPacks,
+  } = useQuery<TemplatePack[]>({
+    queryKey: ['templatePacks', selectedCategory],
+    queryFn: async () => {
+      const params = new URLSearchParams()
+      if (selectedCategory !== 'ALL')
+        params.append('category', selectedCategory)
+      params.append('includeSystem', 'true')
+
+      const response = await fetch(`/api/templates/packs?${params}`)
+      if (!response.ok) throw new Error('Failed to fetch template packs')
+      return response.json()
+    },
+    staleTime: 5 * 60 * 1000,
+    gcTime: 10 * 60 * 1000,
+    refetchOnWindowFocus: false,
+    enabled: browseMode === 'packs', // Only fetch when in packs mode
   })
 
   // Memoize templates with applied status
-  const templates: Template[] = useMemo(() =>
-    (data?.templates || []).map((t: Template) => ({
-      ...t,
-      isApplied: appliedTemplateIds.includes(t.id)
-    })),
+  const templates: Template[] = useMemo(
+    () =>
+      (data?.templates || []).map((t: Template) => ({
+        ...t,
+        isApplied: appliedTemplateIds.includes(t.id),
+      })),
     [data?.templates, appliedTemplateIds]
   )
 
-  // Memoize pagination logic
-  const totalPages = useMemo(() => Math.ceil(templates.length / itemsPerPage), [templates.length, itemsPerPage])
-  const paginatedTemplates = useMemo(() =>
-    templates.slice(
-      (currentPage - 1) * itemsPerPage,
-      currentPage * itemsPerPage
-    ),
+  // Memoize packs (filter by search if applicable)
+  const packs: TemplatePack[] = useMemo(() => {
+    const allPacks = packsData || []
+    if (!debouncedSearchQuery) return allPacks
+    const query = debouncedSearchQuery.toLowerCase()
+    return allPacks.filter(
+      (pack) =>
+        pack.name.toLowerCase().includes(query) ||
+        pack.description.toLowerCase().includes(query) ||
+        pack.tags.some((tag) => tag.toLowerCase().includes(query))
+    )
+  }, [packsData, debouncedSearchQuery])
+
+  // Memoize pagination logic for templates
+  const totalPages = useMemo(
+    () => Math.ceil(templates.length / itemsPerPage),
+    [templates.length, itemsPerPage]
+  )
+  const paginatedTemplates = useMemo(
+    () =>
+      templates.slice(
+        (currentPage - 1) * itemsPerPage,
+        currentPage * itemsPerPage
+      ),
     [templates, currentPage, itemsPerPage]
+  )
+
+  // Pagination for packs
+  const totalPackPages = useMemo(
+    () => Math.ceil(packs.length / itemsPerPage),
+    [packs.length, itemsPerPage]
+  )
+  const paginatedPacks = useMemo(
+    () =>
+      packs.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage),
+    [packs, currentPage, itemsPerPage]
   )
 
   // Reset page when filters change
   const handleCategoryChange = (value: string) => {
-    setSelectedCategory(value as any)
+    setSelectedCategory(value as AssetCategory | 'ALL')
     setCurrentPage(1)
     setSelectedIndex(-1)
   }
@@ -151,35 +260,67 @@ export default function TemplateBrowser({ appliedTemplateIds = [] }: TemplateBro
     setSelectedIndex(-1)
   }
 
+  // Handle browse mode switch
+  const handleBrowseModeChange = (mode: BrowseMode) => {
+    setBrowseMode(mode)
+    setCurrentPage(1)
+    setSelectedIndex(-1)
+  }
+
+  // Handle viewing pack details
+  const handleViewPackDetails = (packId: string) => {
+    setSelectedPackId(packId)
+  }
+
   // Keyboard shortcuts
   useEffect(() => {
     const handleKeyPress = (e: KeyboardEvent) => {
       // / for search focus (like GitHub, Reddit, etc.)
-      if (e.key === '/' && !e.ctrlKey && !e.metaKey && document.activeElement?.tagName !== 'INPUT') {
+      if (
+        e.key === '/' &&
+        !e.ctrlKey &&
+        !e.metaKey &&
+        document.activeElement?.tagName !== 'INPUT'
+      ) {
         e.preventDefault()
         searchInputRef.current?.focus()
         searchInputRef.current?.select()
       }
 
       // G for grid view
-      if (e.key === 'g' && !e.ctrlKey && !e.metaKey && document.activeElement?.tagName !== 'INPUT') {
+      if (
+        e.key === 'g' &&
+        !e.ctrlKey &&
+        !e.metaKey &&
+        document.activeElement?.tagName !== 'INPUT'
+      ) {
         setViewMode('grid')
       }
 
       // L for list view
-      if (e.key === 'l' && !e.ctrlKey && !e.metaKey && document.activeElement?.tagName !== 'INPUT') {
+      if (
+        e.key === 'l' &&
+        !e.ctrlKey &&
+        !e.metaKey &&
+        document.activeElement?.tagName !== 'INPUT'
+      ) {
         setViewMode('list')
       }
 
       // Arrow navigation
-      if (paginatedTemplates.length > 0 && document.activeElement?.tagName !== 'INPUT') {
+      if (
+        paginatedTemplates.length > 0 &&
+        document.activeElement?.tagName !== 'INPUT'
+      ) {
         if (e.key === 'ArrowDown') {
           e.preventDefault()
-          setSelectedIndex(prev => Math.min(prev + 1, paginatedTemplates.length - 1))
+          setSelectedIndex((prev) =>
+            Math.min(prev + 1, paginatedTemplates.length - 1)
+          )
         }
         if (e.key === 'ArrowUp') {
           e.preventDefault()
-          setSelectedIndex(prev => Math.max(prev - 1, -1))
+          setSelectedIndex((prev) => Math.max(prev - 1, -1))
         }
         if (e.key === 'Enter' && selectedIndex >= 0) {
           e.preventDefault()
@@ -200,17 +341,17 @@ export default function TemplateBrowser({ appliedTemplateIds = [] }: TemplateBro
       // Page navigation
       if (e.key === 'ArrowLeft' && e.altKey) {
         e.preventDefault()
-        setCurrentPage(p => Math.max(1, p - 1))
+        setCurrentPage((p) => Math.max(1, p - 1))
       }
       if (e.key === 'ArrowRight' && e.altKey) {
         e.preventDefault()
-        setCurrentPage(p => Math.min(totalPages, p + 1))
+        setCurrentPage((p) => Math.min(totalPages, p + 1))
       }
     }
 
     document.addEventListener('keydown', handleKeyPress)
     return () => document.removeEventListener('keydown', handleKeyPress)
-  }, [paginatedTemplates, selectedIndex, totalPages])
+  }, [paginatedTemplates, selectedIndex, totalPages, setViewMode])
 
   // Pull to refresh on mobile
   useEffect(() => {
@@ -232,13 +373,17 @@ export default function TemplateBrowser({ appliedTemplateIds = [] }: TemplateBro
 
       if (diff > 100 && !isPullToRefresh) {
         setIsPullToRefresh(true)
-        navigator.vibrate && navigator.vibrate(10) // Haptic feedback
+        if (navigator.vibrate) navigator.vibrate(10) // Haptic feedback
       }
     }
 
     const handleTouchEnd = async () => {
       if (isPullToRefresh) {
-        await refetch()
+        if (browseMode === 'templates') {
+          await refetch()
+        } else {
+          await refetchPacks()
+        }
         setIsPullToRefresh(false)
       }
       isPulling = false
@@ -246,7 +391,9 @@ export default function TemplateBrowser({ appliedTemplateIds = [] }: TemplateBro
 
     // Only add on mobile devices
     if ('ontouchstart' in window) {
-      document.addEventListener('touchstart', handleTouchStart, { passive: true })
+      document.addEventListener('touchstart', handleTouchStart, {
+        passive: true,
+      })
       document.addEventListener('touchmove', handleTouchMove, { passive: true })
       document.addEventListener('touchend', handleTouchEnd)
 
@@ -256,7 +403,7 @@ export default function TemplateBrowser({ appliedTemplateIds = [] }: TemplateBro
         document.removeEventListener('touchend', handleTouchEnd)
       }
     }
-  }, [isPullToRefresh, refetch])
+  }, [isPullToRefresh, refetch, refetchPacks, browseMode])
 
   // Define keyboard shortcuts for the dialog
   const keyboardShortcuts = [
@@ -266,11 +413,19 @@ export default function TemplateBrowser({ appliedTemplateIds = [] }: TemplateBro
     { key: 'L', description: 'Switch to list view', category: 'View' },
     { key: '↑', description: 'Navigate up', category: 'Navigation' },
     { key: '↓', description: 'Navigate down', category: 'Navigation' },
-    { key: 'Enter', description: 'View template details', category: 'Navigation' },
-    { key: 'Space', description: 'Apply selected template', category: 'Actions' },
+    {
+      key: 'Enter',
+      description: 'View template details',
+      category: 'Navigation',
+    },
+    {
+      key: 'Space',
+      description: 'Apply selected template',
+      category: 'Actions',
+    },
     { key: 'Alt+←', description: 'Previous page', category: 'Pagination' },
     { key: 'Alt+→', description: 'Next page', category: 'Pagination' },
-  ];
+  ]
 
   return (
     <div className="space-y-6 relative">
@@ -291,6 +446,33 @@ export default function TemplateBrowser({ appliedTemplateIds = [] }: TemplateBro
         </div>
       )}
 
+      {/* Browse Mode Toggle */}
+      <div className="flex items-center justify-center sm:justify-start">
+        <ToggleGroup
+          type="single"
+          value={browseMode}
+          onValueChange={(v) => v && handleBrowseModeChange(v as BrowseMode)}
+          className="bg-muted p-1 rounded-lg"
+        >
+          <ToggleGroupItem
+            value="templates"
+            aria-label="Browse templates"
+            className="min-w-[120px] min-h-[40px] data-[state=on]:bg-white data-[state=on]:shadow-sm"
+          >
+            <Library className="h-4 w-4 mr-2" />
+            Templates
+          </ToggleGroupItem>
+          <ToggleGroupItem
+            value="packs"
+            aria-label="Browse packs"
+            className="min-w-[120px] min-h-[40px] data-[state=on]:bg-white data-[state=on]:shadow-sm"
+          >
+            <FileStack className="h-4 w-4 mr-2" />
+            Packs
+          </ToggleGroupItem>
+        </ToggleGroup>
+      </div>
+
       {/* Search and View Controls */}
       <div className="flex flex-col sm:flex-row gap-4">
         <div className="relative flex-1">
@@ -298,17 +480,33 @@ export default function TemplateBrowser({ appliedTemplateIds = [] }: TemplateBro
           <Input
             ref={searchInputRef}
             type="text"
-            placeholder="Search templates... (Press /)"
+            placeholder={
+              browseMode === 'templates'
+                ? 'Search templates... (Press /)'
+                : 'Search packs... (Press /)'
+            }
             value={searchQuery}
             onChange={(e) => handleSearchChange(e.target.value)}
             className="pl-10"
           />
         </div>
-        <ToggleGroup type="single" value={viewMode} onValueChange={(v) => v && setViewMode(v as 'grid' | 'list')}>
-          <ToggleGroupItem value="grid" aria-label="Grid view" className="min-w-[44px] min-h-[44px]">
+        <ToggleGroup
+          type="single"
+          value={viewMode}
+          onValueChange={(v) => v && setViewMode(v as 'grid' | 'list')}
+        >
+          <ToggleGroupItem
+            value="grid"
+            aria-label="Grid view"
+            className="min-w-[44px] min-h-[44px]"
+          >
             <LayoutGrid className="h-5 w-5" />
           </ToggleGroupItem>
-          <ToggleGroupItem value="list" aria-label="List view" className="min-w-[44px] min-h-[44px]">
+          <ToggleGroupItem
+            value="list"
+            aria-label="List view"
+            className="min-w-[44px] min-h-[44px]"
+          >
             <ListIcon className="h-5 w-5" />
           </ToggleGroupItem>
         </ToggleGroup>
@@ -317,353 +515,575 @@ export default function TemplateBrowser({ appliedTemplateIds = [] }: TemplateBro
       {/* Category Tabs */}
       <Tabs value={selectedCategory} onValueChange={handleCategoryChange}>
         <TabsList className="flex flex-wrap h-auto items-center justify-start rounded-lg bg-muted p-1 text-muted-foreground gap-1">
-          <TabsTrigger value="ALL" className="px-3">All</TabsTrigger>
-          <TabsTrigger value="HVAC" className="px-3">HVAC</TabsTrigger>
-          <TabsTrigger value="PLUMBING" className="px-3">Plumbing</TabsTrigger>
-          <TabsTrigger value="APPLIANCE" className="px-3">Appliances</TabsTrigger>
-          <TabsTrigger value="ELECTRICAL" className="px-3">Electrical</TabsTrigger>
-          <TabsTrigger value="STRUCTURAL" className="px-3">Structural</TabsTrigger>
-          <TabsTrigger value="OUTDOOR" className="px-3">Outdoor</TabsTrigger>
-          <TabsTrigger value="OTHER" className="px-3">Other</TabsTrigger>
+          <TabsTrigger value="ALL" className="px-3">
+            All
+          </TabsTrigger>
+          <TabsTrigger value="HVAC" className="px-3">
+            HVAC
+          </TabsTrigger>
+          <TabsTrigger value="PLUMBING" className="px-3">
+            Plumbing
+          </TabsTrigger>
+          <TabsTrigger value="APPLIANCE" className="px-3">
+            Appliances
+          </TabsTrigger>
+          <TabsTrigger value="ELECTRICAL" className="px-3">
+            Electrical
+          </TabsTrigger>
+          <TabsTrigger value="STRUCTURAL" className="px-3">
+            Structural
+          </TabsTrigger>
+          <TabsTrigger value="OUTDOOR" className="px-3">
+            Outdoor
+          </TabsTrigger>
+          <TabsTrigger value="OTHER" className="px-3">
+            Other
+          </TabsTrigger>
         </TabsList>
 
         <TabsContent value={selectedCategory} className="mt-6">
-          {isLoading ? (
-            viewMode === 'grid' ? (
-              <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-                {[...Array(6)].map((_, i) => (
-                  <Card key={i} className="h-full min-h-[320px] flex flex-col animate-pulse">
-                    <CardHeader className="pb-3">
-                      <div className="flex items-center justify-between mb-2">
-                        <Skeleton className="h-10 w-10 rounded-lg" />
-                        <Skeleton className="h-6 w-20 rounded-full" />
-                      </div>
-                      <Skeleton className="h-6 w-3/4 mb-2" />
-                      <div className="space-y-1">
-                        <Skeleton className="h-4 w-full" />
-                        <Skeleton className="h-4 w-2/3" />
-                      </div>
-                    </CardHeader>
-                    <CardContent className="flex-1 flex flex-col justify-between">
-                      <div className="space-y-3">
-                        <div className="flex items-center justify-between">
-                          <Skeleton className="h-4 w-20" />
-                          <Skeleton className="h-6 w-24 rounded-full" />
-                        </div>
-                        <div className="flex items-center justify-between">
-                          <Skeleton className="h-4 w-16" />
-                          <Skeleton className="h-4 w-20" />
-                        </div>
-                      </div>
-                      <div className="mt-4 flex gap-2">
-                        <Skeleton className="h-9 flex-1 rounded-md" />
-                        <Skeleton className="h-9 flex-1 rounded-md" />
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-            ) : (
-              <div className="space-y-3">
-                {[...Array(6)].map((_, i) => (
-                  <Card key={i} className="animate-pulse">
-                    <CardContent className="flex items-center justify-between p-4">
-                      <div className="flex items-center gap-4 flex-1">
-                        <Skeleton className="h-10 w-10 rounded-lg flex-shrink-0" />
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center gap-2 mb-1">
-                            <Skeleton className="h-5 w-48" />
-                            <Skeleton className="h-5 w-20 rounded-full" />
-                          </div>
-                          <Skeleton className="h-4 w-full max-w-md mb-2" />
-                          <div className="flex gap-4">
-                            <Skeleton className="h-5 w-24 rounded-full" />
-                            <Skeleton className="h-4 w-20" />
-                          </div>
-                        </div>
-                      </div>
-                      <div className="flex gap-2 ml-4">
-                        <Skeleton className="h-9 w-20 rounded-md" />
-                        <Skeleton className="h-9 w-20 rounded-md" />
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-            )
-          ) : error ? (
-            <Card>
-              <CardContent className="text-center py-8">
-                <p className="text-red-600">Error loading templates. Please try again.</p>
-              </CardContent>
-            </Card>
-          ) : templates.length === 0 ? (
-            <Card>
-              <CardContent className="text-center py-8">
-                <p className="text-gray-500">No templates found matching your criteria.</p>
-              </CardContent>
-            </Card>
-          ) : (
+          {/* Templates Browse Mode */}
+          {browseMode === 'templates' && (
             <>
-              {/* Template Grid/List */}
-              {viewMode === 'grid' ? (
-                <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 animate-in fade-in duration-300">
-                  {paginatedTemplates.map((template, index) => {
-                    const Icon = categoryIcons[template.category]
-
-                    return (
+              {isLoading ? (
+                viewMode === 'grid' ? (
+                  <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+                    {[...Array(6)].map((_, i) => (
                       <Card
-                        key={template.id}
-                        className={`relative h-full min-h-[320px] flex flex-col shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer group animate-in fade-in slide-in-from-bottom-2 bg-gradient-to-br from-white to-gray-50/50 ${template.isApplied ? 'border-2 border-green-500 hover:border-green-600' : 'hover:border-[#216093]/30'}`}
-                        style={{ animationDelay: `${index * 50}ms`, animationFillMode: 'backwards' }}
+                        key={i}
+                        className="h-full min-h-[320px] flex flex-col animate-pulse"
                       >
                         <CardHeader className="pb-3">
                           <div className="flex items-center justify-between mb-2">
-                            <div className="flex items-center gap-2">
-                              <div className="p-2 bg-[#216093]/10 rounded-[8px] group-hover:bg-[#216093]/20 transition-colors duration-300">
-                                <Icon className="h-6 w-6 text-[#216093] group-hover:scale-110 transition-transform duration-300" />
-                              </div>
-                              {template.isApplied && (
-                                <CheckCircle className="h-5 w-5 text-green-600" />
-                              )}
-                            </div>
-                            <Badge
-                              className={`${difficultyColors[template.difficulty]} font-medium`}
-                              variant="secondary"
-                            >
-                              {template.difficulty.charAt(0) + template.difficulty.slice(1).toLowerCase()}
-                            </Badge>
+                            <Skeleton className="h-10 w-10 rounded-lg" />
+                            <Skeleton className="h-6 w-20 rounded-full" />
                           </div>
-                          <CardTitle className="text-lg line-clamp-1">{template.name}</CardTitle>
-                          <CardDescription className="line-clamp-2 min-h-[2.5rem]">
-                            {template.description}
-                          </CardDescription>
+                          <Skeleton className="h-6 w-3/4 mb-2" />
+                          <div className="space-y-1">
+                            <Skeleton className="h-4 w-full" />
+                            <Skeleton className="h-4 w-2/3" />
+                          </div>
                         </CardHeader>
                         <CardContent className="flex-1 flex flex-col justify-between">
                           <div className="space-y-3">
-                            <div className="flex items-center justify-between text-sm">
-                              <span className="text-gray-500">Frequency:</span>
-                              <Badge variant="outline" className="font-medium">
-                                {formatFrequency(template.defaultFrequency)}
-                              </Badge>
+                            <div className="flex items-center justify-between">
+                              <Skeleton className="h-4 w-20" />
+                              <Skeleton className="h-6 w-24 rounded-full" />
                             </div>
-                            <div className="flex items-center justify-between text-sm">
-                              <span className="text-gray-500">Duration:</span>
-                              <span className="font-medium flex items-center gap-1">
-                                <Clock className="h-3.5 w-3.5 text-gray-400" />
-                                {formatDuration(template.estimatedDurationMinutes)}
-                              </span>
+                            <div className="flex items-center justify-between">
+                              <Skeleton className="h-4 w-16" />
+                              <Skeleton className="h-4 w-20" />
                             </div>
-                            {template.isApplied && (
-                              <Badge
-                                variant="outline"
-                                className="w-full justify-center text-green-600 border-green-600 bg-green-50"
-                              >
-                                <CheckCircle className="h-3.5 w-3.5 mr-1" />
-                                Applied to asset
-                              </Badge>
-                            )}
                           </div>
-                          <div className="mt-4 space-y-2">
-                            <Button
-                              size="default"
-                              className={`w-full font-semibold transition-all duration-200 min-h-[44px] hover:scale-[1.02] active:scale-[0.98] ${
-                                template.isApplied
-                                  ? 'bg-green-600 hover:bg-green-700 shadow-md hover:shadow-lg'
-                                  : 'bg-[#216093] hover:bg-[#1a4d75] shadow-lg hover:shadow-xl'
-                              }`}
-                              onClick={() => {
-                                setLoadingTemplateId(template.id + '_apply')
-                                window.location.href = `/assets?applyTemplate=${template.id}`
-                              }}
-                              disabled={loadingTemplateId === template.id + '_apply' || template.isApplied}
-                            >
-                              {loadingTemplateId === template.id + '_apply' ? (
-                                <>
-                                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                  Loading...
-                                </>
-                              ) : template.isApplied ? (
-                                <>
-                                  <CheckCircle className="mr-2 h-4 w-4" />
-                                  Applied to Asset
-                                </>
-                              ) : (
-                                <>
-                                  <CheckCircle className="mr-2 h-4 w-4" />
-                                  Apply Template
-                                </>
-                              )}
-                            </Button>
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              className="w-full hover:bg-gray-100 text-gray-600 hover:text-gray-900 min-h-[44px] transition-all duration-200 hover:scale-[1.01] active:scale-[0.99]"
-                              onClick={() => {
-                                setSelectedTemplateId(template.id)
-                              }}
-                            >
-                              {loadingTemplateId === template.id ? (
-                                <Loader2 className="h-4 w-4 animate-spin" />
-                              ) : (
-                                <>
-                                  View Details
-                                  <svg className="ml-1 h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                                  </svg>
-                                </>
-                              )}
-                            </Button>
+                          <div className="mt-4 flex gap-2">
+                            <Skeleton className="h-9 flex-1 rounded-md" />
+                            <Skeleton className="h-9 flex-1 rounded-md" />
                           </div>
                         </CardContent>
                       </Card>
-                    )
-                  })}
-                </div>
-              ) : (
-                <div className="space-y-3 animate-in fade-in duration-300">
-                  {paginatedTemplates.map((template, index) => {
-                    const Icon = categoryIcons[template.category]
-
-                    return (
-                      <Card
-                        key={template.id}
-                        className={`shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 cursor-pointer animate-in fade-in slide-in-from-left-2 ${template.isApplied ? 'border-2 border-green-500 hover:border-green-600' : 'hover:border-[#216093]/30'}`}
-                        style={{ animationDelay: `${index * 40}ms`, animationFillMode: 'backwards' }}
-                      >
-                        <CardContent className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-4 gap-3">
-                          <div className="flex items-center gap-4 flex-1 min-w-0">
-                            <div className="flex-shrink-0">
-                              <div className="p-2 bg-[#216093]/10 rounded-lg">
-                                <Icon className="h-6 w-6 text-[#216093]" />
+                    ))}
+                  </div>
+                ) : (
+                  <div className="space-y-3">
+                    {[...Array(6)].map((_, i) => (
+                      <Card key={i} className="animate-pulse">
+                        <CardContent className="flex items-center justify-between p-4">
+                          <div className="flex items-center gap-4 flex-1">
+                            <Skeleton className="h-10 w-10 rounded-lg flex-shrink-0" />
+                            <div className="flex-1 min-w-0">
+                              <div className="flex items-center gap-2 mb-1">
+                                <Skeleton className="h-5 w-48" />
+                                <Skeleton className="h-5 w-20 rounded-full" />
+                              </div>
+                              <Skeleton className="h-4 w-full max-w-md mb-2" />
+                              <div className="flex gap-4">
+                                <Skeleton className="h-5 w-24 rounded-full" />
+                                <Skeleton className="h-4 w-20" />
                               </div>
                             </div>
-                            <div className="flex-1 min-w-0">
-                              <div className="flex items-center gap-2 mb-1 flex-wrap">
-                                <h3 className="font-semibold text-base truncate">{template.name}</h3>
+                          </div>
+                          <div className="flex gap-2 ml-4">
+                            <Skeleton className="h-9 w-20 rounded-md" />
+                            <Skeleton className="h-9 w-20 rounded-md" />
+                          </div>
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+                )
+              ) : error ? (
+                <Card>
+                  <CardContent className="text-center py-8">
+                    <p className="text-red-600">
+                      Error loading templates. Please try again.
+                    </p>
+                  </CardContent>
+                </Card>
+              ) : templates.length === 0 ? (
+                <Card>
+                  <CardContent className="text-center py-8">
+                    <p className="text-gray-500">
+                      No templates found matching your criteria.
+                    </p>
+                  </CardContent>
+                </Card>
+              ) : (
+                <>
+                  {/* Template Grid/List */}
+                  {viewMode === 'grid' ? (
+                    <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 animate-in fade-in duration-300">
+                      {paginatedTemplates.map((template, index) => {
+                        const Icon = categoryIcons[template.category]
+
+                        return (
+                          <Card
+                            key={template.id}
+                            className={`relative h-full min-h-[320px] flex flex-col shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer group animate-in fade-in slide-in-from-bottom-2 bg-gradient-to-br from-white to-gray-50/50 ${template.isApplied ? 'border-2 border-green-500 hover:border-green-600' : 'hover:border-[#216093]/30'}`}
+                            style={{
+                              animationDelay: `${index * 50}ms`,
+                              animationFillMode: 'backwards',
+                            }}
+                          >
+                            <CardHeader className="pb-3">
+                              <div className="flex items-center justify-between mb-2">
+                                <div className="flex items-center gap-2">
+                                  <div className="p-2 bg-[#216093]/10 rounded-[8px] group-hover:bg-[#216093]/20 transition-colors duration-300">
+                                    <Icon className="h-6 w-6 text-[#216093] group-hover:scale-110 transition-transform duration-300" />
+                                  </div>
+                                  {template.isApplied && (
+                                    <CheckCircle className="h-5 w-5 text-green-600" />
+                                  )}
+                                </div>
                                 <Badge
-                                  className={`${difficultyColors[template.difficulty]} text-xs font-medium`}
+                                  className={`${difficultyColors[template.difficulty]} font-medium`}
                                   variant="secondary"
                                 >
-                                  {template.difficulty.charAt(0) + template.difficulty.slice(1).toLowerCase()}
+                                  {template.difficulty.charAt(0) +
+                                    template.difficulty.slice(1).toLowerCase()}
                                 </Badge>
+                              </div>
+                              <CardTitle className="text-lg line-clamp-1">
+                                {template.name}
+                              </CardTitle>
+                              <CardDescription className="line-clamp-2 min-h-[2.5rem]">
+                                {template.description}
+                              </CardDescription>
+                            </CardHeader>
+                            <CardContent className="flex-1 flex flex-col justify-between">
+                              <div className="space-y-3">
+                                <div className="flex items-center justify-between text-sm">
+                                  <span className="text-gray-500">
+                                    Frequency:
+                                  </span>
+                                  <Badge
+                                    variant="outline"
+                                    className="font-medium"
+                                  >
+                                    {formatFrequency(template.defaultFrequency)}
+                                  </Badge>
+                                </div>
+                                <div className="flex items-center justify-between text-sm">
+                                  <span className="text-gray-500">
+                                    Duration:
+                                  </span>
+                                  <span className="font-medium flex items-center gap-1">
+                                    <Clock className="h-3.5 w-3.5 text-gray-400" />
+                                    {formatDuration(
+                                      template.estimatedDurationMinutes
+                                    )}
+                                  </span>
+                                </div>
                                 {template.isApplied && (
                                   <Badge
                                     variant="outline"
-                                    className="text-xs text-green-600 border-green-600 bg-green-50"
+                                    className="w-full justify-center text-green-600 border-green-600 bg-green-50"
                                   >
-                                    <CheckCircle className="h-3 w-3 mr-1" />
-                                    Applied
+                                    <CheckCircle className="h-3.5 w-3.5 mr-1" />
+                                    Applied to asset
                                   </Badge>
                                 )}
                               </div>
-                              <p className="text-sm text-gray-600 line-clamp-1 mb-2">{template.description}</p>
-                              <div className="flex gap-4 flex-wrap">
-                                <Badge variant="outline" className="text-xs font-medium">
-                                  {formatFrequency(template.defaultFrequency)}
-                                </Badge>
-                                <span className="text-xs text-gray-500 flex items-center gap-1">
-                                  <Clock className="h-3.5 w-3.5 text-gray-400" />
-                                  {formatDuration(template.estimatedDurationMinutes)}
-                                </span>
+                              <div className="mt-4 space-y-2">
+                                <Button
+                                  size="default"
+                                  className={`w-full font-semibold transition-all duration-200 min-h-[44px] hover:scale-[1.02] active:scale-[0.98] ${
+                                    template.isApplied
+                                      ? 'bg-green-600 hover:bg-green-700 shadow-md hover:shadow-lg'
+                                      : 'bg-[#216093] hover:bg-[#1a4d75] shadow-lg hover:shadow-xl'
+                                  }`}
+                                  onClick={() => {
+                                    setLoadingTemplateId(template.id + '_apply')
+                                    window.location.href = `/assets?applyTemplate=${template.id}`
+                                  }}
+                                  disabled={
+                                    loadingTemplateId ===
+                                      template.id + '_apply' ||
+                                    template.isApplied
+                                  }
+                                >
+                                  {loadingTemplateId ===
+                                  template.id + '_apply' ? (
+                                    <>
+                                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                      Loading...
+                                    </>
+                                  ) : template.isApplied ? (
+                                    <>
+                                      <CheckCircle className="mr-2 h-4 w-4" />
+                                      Applied to Asset
+                                    </>
+                                  ) : (
+                                    <>
+                                      <CheckCircle className="mr-2 h-4 w-4" />
+                                      Apply Template
+                                    </>
+                                  )}
+                                </Button>
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  className="w-full hover:bg-gray-100 text-gray-600 hover:text-gray-900 min-h-[44px] transition-all duration-200 hover:scale-[1.01] active:scale-[0.99]"
+                                  onClick={() => {
+                                    setSelectedTemplateId(template.id)
+                                  }}
+                                >
+                                  {loadingTemplateId === template.id ? (
+                                    <Loader2 className="h-4 w-4 animate-spin" />
+                                  ) : (
+                                    <>
+                                      View Details
+                                      <svg
+                                        className="ml-1 h-3 w-3"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        viewBox="0 0 24 24"
+                                      >
+                                        <path
+                                          strokeLinecap="round"
+                                          strokeLinejoin="round"
+                                          strokeWidth={2}
+                                          d="M9 5l7 7-7 7"
+                                        />
+                                      </svg>
+                                    </>
+                                  )}
+                                </Button>
                               </div>
-                            </div>
-                          </div>
-                          <div className="flex items-center gap-2 sm:ml-4">
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              className="hover:bg-gray-100 transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
-                              onClick={() => {
-                                setSelectedTemplateId(template.id)
-                              }}
-                            >
-                              {loadingTemplateId === template.id ? (
-                                <Loader2 className="h-4 w-4 animate-spin" />
-                              ) : (
-                                <>
-                                  Details
-                                  <svg className="ml-1 h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                                  </svg>
-                                </>
-                              )}
-                            </Button>
-                            <Button
-                              size="default"
-                              className={`font-semibold min-w-[120px] transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] ${
-                                template.isApplied
-                                  ? 'bg-green-600 hover:bg-green-700 shadow-md hover:shadow-lg'
-                                  : 'bg-[#216093] hover:bg-[#1a4d75] shadow-md hover:shadow-lg'
-                              }`}
-                              onClick={() => {
-                                setLoadingTemplateId(template.id + '_apply')
-                                window.location.href = `/assets?applyTemplate=${template.id}`
-                              }}
-                              disabled={loadingTemplateId === template.id + '_apply' || template.isApplied}
-                            >
-                              {loadingTemplateId === template.id + '_apply' ? (
-                                <>
-                                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                  Loading...
-                                </>
-                              ) : template.isApplied ? (
-                                <>
-                                  <CheckCircle className="mr-2 h-4 w-4" />
-                                  Applied
-                                </>
-                              ) : (
-                                <>
-                                  <CheckCircle className="mr-2 h-4 w-4" />
-                                  Apply
-                                </>
-                              )}
-                            </Button>
-                          </div>
-                        </CardContent>
-                      </Card>
-                    )
-                  })}
-                </div>
-              )}
+                            </CardContent>
+                          </Card>
+                        )
+                      })}
+                    </div>
+                  ) : (
+                    <div className="space-y-3 animate-in fade-in duration-300">
+                      {paginatedTemplates.map((template, index) => {
+                        const Icon = categoryIcons[template.category]
 
-              {/* Pagination Controls */}
-              {totalPages > 1 && (
-                <div className="flex flex-col sm:flex-row items-center justify-center gap-2 mt-6">
-                  <Button
-                    variant="outline"
-                    size="default"
-                    onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
-                    disabled={currentPage === 1}
-                    className="min-w-[120px] min-h-[44px] transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] disabled:hover:scale-100"
-                  >
-                    <ChevronLeft className="h-4 w-4 mr-1" />
-                    Previous
-                  </Button>
-                  <div className="flex items-center gap-1 flex-wrap justify-center">
-                    {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
+                        return (
+                          <Card
+                            key={template.id}
+                            className={`shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 cursor-pointer animate-in fade-in slide-in-from-left-2 ${template.isApplied ? 'border-2 border-green-500 hover:border-green-600' : 'hover:border-[#216093]/30'}`}
+                            style={{
+                              animationDelay: `${index * 40}ms`,
+                              animationFillMode: 'backwards',
+                            }}
+                          >
+                            <CardContent className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-4 gap-3">
+                              <div className="flex items-center gap-4 flex-1 min-w-0">
+                                <div className="flex-shrink-0">
+                                  <div className="p-2 bg-[#216093]/10 rounded-lg">
+                                    <Icon className="h-6 w-6 text-[#216093]" />
+                                  </div>
+                                </div>
+                                <div className="flex-1 min-w-0">
+                                  <div className="flex items-center gap-2 mb-1 flex-wrap">
+                                    <h3 className="font-semibold text-base truncate">
+                                      {template.name}
+                                    </h3>
+                                    <Badge
+                                      className={`${difficultyColors[template.difficulty]} text-xs font-medium`}
+                                      variant="secondary"
+                                    >
+                                      {template.difficulty.charAt(0) +
+                                        template.difficulty
+                                          .slice(1)
+                                          .toLowerCase()}
+                                    </Badge>
+                                    {template.isApplied && (
+                                      <Badge
+                                        variant="outline"
+                                        className="text-xs text-green-600 border-green-600 bg-green-50"
+                                      >
+                                        <CheckCircle className="h-3 w-3 mr-1" />
+                                        Applied
+                                      </Badge>
+                                    )}
+                                  </div>
+                                  <p className="text-sm text-gray-600 line-clamp-1 mb-2">
+                                    {template.description}
+                                  </p>
+                                  <div className="flex gap-4 flex-wrap">
+                                    <Badge
+                                      variant="outline"
+                                      className="text-xs font-medium"
+                                    >
+                                      {formatFrequency(
+                                        template.defaultFrequency
+                                      )}
+                                    </Badge>
+                                    <span className="text-xs text-gray-500 flex items-center gap-1">
+                                      <Clock className="h-3.5 w-3.5 text-gray-400" />
+                                      {formatDuration(
+                                        template.estimatedDurationMinutes
+                                      )}
+                                    </span>
+                                  </div>
+                                </div>
+                              </div>
+                              <div className="flex items-center gap-2 sm:ml-4">
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  className="hover:bg-gray-100 transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
+                                  onClick={() => {
+                                    setSelectedTemplateId(template.id)
+                                  }}
+                                >
+                                  {loadingTemplateId === template.id ? (
+                                    <Loader2 className="h-4 w-4 animate-spin" />
+                                  ) : (
+                                    <>
+                                      Details
+                                      <svg
+                                        className="ml-1 h-3 w-3"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        viewBox="0 0 24 24"
+                                      >
+                                        <path
+                                          strokeLinecap="round"
+                                          strokeLinejoin="round"
+                                          strokeWidth={2}
+                                          d="M9 5l7 7-7 7"
+                                        />
+                                      </svg>
+                                    </>
+                                  )}
+                                </Button>
+                                <Button
+                                  size="default"
+                                  className={`font-semibold min-w-[120px] transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] ${
+                                    template.isApplied
+                                      ? 'bg-green-600 hover:bg-green-700 shadow-md hover:shadow-lg'
+                                      : 'bg-[#216093] hover:bg-[#1a4d75] shadow-md hover:shadow-lg'
+                                  }`}
+                                  onClick={() => {
+                                    setLoadingTemplateId(template.id + '_apply')
+                                    window.location.href = `/assets?applyTemplate=${template.id}`
+                                  }}
+                                  disabled={
+                                    loadingTemplateId ===
+                                      template.id + '_apply' ||
+                                    template.isApplied
+                                  }
+                                >
+                                  {loadingTemplateId ===
+                                  template.id + '_apply' ? (
+                                    <>
+                                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                      Loading...
+                                    </>
+                                  ) : template.isApplied ? (
+                                    <>
+                                      <CheckCircle className="mr-2 h-4 w-4" />
+                                      Applied
+                                    </>
+                                  ) : (
+                                    <>
+                                      <CheckCircle className="mr-2 h-4 w-4" />
+                                      Apply
+                                    </>
+                                  )}
+                                </Button>
+                              </div>
+                            </CardContent>
+                          </Card>
+                        )
+                      })}
+                    </div>
+                  )}
+
+                  {/* Pagination Controls */}
+                  {totalPages > 1 && (
+                    <div className="flex flex-col sm:flex-row items-center justify-center gap-2 mt-6">
                       <Button
-                        key={page}
-                        variant={page === currentPage ? 'default' : 'outline'}
+                        variant="outline"
                         size="default"
-                        className={`min-w-[44px] min-h-[44px] p-0 transition-all duration-200 hover:scale-[1.05] active:scale-[0.95] ${page === currentPage ? 'bg-[#216093]' : ''}`}
-                        onClick={() => setCurrentPage(page)}
+                        onClick={() =>
+                          setCurrentPage((p) => Math.max(1, p - 1))
+                        }
+                        disabled={currentPage === 1}
+                        className="min-w-[120px] min-h-[44px] transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] disabled:hover:scale-100"
                       >
-                        {page}
+                        <ChevronLeft className="h-4 w-4 mr-1" />
+                        Previous
                       </Button>
+                      <div className="flex items-center gap-1 flex-wrap justify-center">
+                        {Array.from(
+                          { length: totalPages },
+                          (_, i) => i + 1
+                        ).map((page) => (
+                          <Button
+                            key={page}
+                            variant={
+                              page === currentPage ? 'default' : 'outline'
+                            }
+                            size="default"
+                            className={`min-w-[44px] min-h-[44px] p-0 transition-all duration-200 hover:scale-[1.05] active:scale-[0.95] ${page === currentPage ? 'bg-[#216093]' : ''}`}
+                            onClick={() => setCurrentPage(page)}
+                          >
+                            {page}
+                          </Button>
+                        ))}
+                      </div>
+                      <Button
+                        variant="outline"
+                        size="default"
+                        onClick={() =>
+                          setCurrentPage((p) => Math.min(totalPages, p + 1))
+                        }
+                        disabled={currentPage === totalPages}
+                        className="min-w-[120px] min-h-[44px] transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] disabled:hover:scale-100"
+                      >
+                        Next
+                        <ChevronRight className="h-4 w-4 ml-1" />
+                      </Button>
+                    </div>
+                  )}
+                </>
+              )}
+            </>
+          )}
+
+          {/* Packs Browse Mode */}
+          {browseMode === 'packs' && (
+            <>
+              {isLoadingPacks ? (
+                <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+                  {[...Array(6)].map((_, i) => (
+                    <Card
+                      key={i}
+                      className="h-full min-h-[280px] flex flex-col animate-pulse"
+                    >
+                      <CardHeader className="pb-3">
+                        <div className="flex items-center justify-between mb-2">
+                          <Skeleton className="h-11 w-11 rounded-lg" />
+                          <Skeleton className="h-6 w-24 rounded-full" />
+                        </div>
+                        <Skeleton className="h-6 w-3/4 mb-2" />
+                        <div className="space-y-1">
+                          <Skeleton className="h-4 w-full" />
+                          <Skeleton className="h-4 w-2/3" />
+                        </div>
+                      </CardHeader>
+                      <CardContent className="flex-1 flex flex-col justify-between">
+                        <div className="space-y-3">
+                          <div className="flex items-center justify-between">
+                            <Skeleton className="h-4 w-20" />
+                            <Skeleton className="h-5 w-24" />
+                          </div>
+                          <div className="flex gap-1.5">
+                            <Skeleton className="h-5 w-16 rounded-full" />
+                            <Skeleton className="h-5 w-16 rounded-full" />
+                          </div>
+                        </div>
+                        <Skeleton className="h-10 w-full mt-4 rounded-md" />
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              ) : packsError ? (
+                <Card>
+                  <CardContent className="text-center py-8">
+                    <p className="text-red-600">
+                      Error loading template packs. Please try again.
+                    </p>
+                  </CardContent>
+                </Card>
+              ) : packs.length === 0 ? (
+                <Card>
+                  <CardContent className="text-center py-8">
+                    <FileStack className="h-12 w-12 mx-auto mb-4 text-gray-300" />
+                    <p className="text-gray-500">
+                      No template packs found matching your criteria.
+                    </p>
+                    <p className="text-sm text-gray-400 mt-1">
+                      Try adjusting your filters or search query.
+                    </p>
+                  </CardContent>
+                </Card>
+              ) : (
+                <>
+                  {/* Packs Grid */}
+                  <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 animate-in fade-in duration-300">
+                    {paginatedPacks.map((pack, index) => (
+                      <TemplatePackCard
+                        key={pack.id}
+                        pack={pack}
+                        onViewDetails={handleViewPackDetails}
+                        animationDelay={index * 50}
+                      />
                     ))}
                   </div>
-                  <Button
-                    variant="outline"
-                    size="default"
-                    onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
-                    disabled={currentPage === totalPages}
-                    className="min-w-[120px] min-h-[44px] transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] disabled:hover:scale-100"
-                  >
-                    Next
-                    <ChevronRight className="h-4 w-4 ml-1" />
-                  </Button>
-                </div>
+
+                  {/* Pagination Controls for Packs */}
+                  {totalPackPages > 1 && (
+                    <div className="flex flex-col sm:flex-row items-center justify-center gap-2 mt-6">
+                      <Button
+                        variant="outline"
+                        size="default"
+                        onClick={() =>
+                          setCurrentPage((p) => Math.max(1, p - 1))
+                        }
+                        disabled={currentPage === 1}
+                        className="min-w-[120px] min-h-[44px] transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] disabled:hover:scale-100"
+                      >
+                        <ChevronLeft className="h-4 w-4 mr-1" />
+                        Previous
+                      </Button>
+                      <div className="flex items-center gap-1 flex-wrap justify-center">
+                        {Array.from(
+                          { length: totalPackPages },
+                          (_, i) => i + 1
+                        ).map((page) => (
+                          <Button
+                            key={page}
+                            variant={
+                              page === currentPage ? 'default' : 'outline'
+                            }
+                            size="default"
+                            className={`min-w-[44px] min-h-[44px] p-0 transition-all duration-200 hover:scale-[1.05] active:scale-[0.95] ${page === currentPage ? 'bg-[#216093]' : ''}`}
+                            onClick={() => setCurrentPage(page)}
+                          >
+                            {page}
+                          </Button>
+                        ))}
+                      </div>
+                      <Button
+                        variant="outline"
+                        size="default"
+                        onClick={() =>
+                          setCurrentPage((p) => Math.min(totalPackPages, p + 1))
+                        }
+                        disabled={currentPage === totalPackPages}
+                        className="min-w-[120px] min-h-[44px] transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] disabled:hover:scale-100"
+                      >
+                        Next
+                        <ChevronRight className="h-4 w-4 ml-1" />
+                      </Button>
+                    </div>
+                  )}
+                </>
               )}
             </>
           )}
@@ -677,6 +1097,17 @@ export default function TemplateBrowser({ appliedTemplateIds = [] }: TemplateBro
           open={!!selectedTemplateId}
           onOpenChange={(isOpen) => {
             if (!isOpen) setSelectedTemplateId(null)
+          }}
+        />
+      )}
+
+      {/* Template Pack Details Sheet */}
+      {selectedPackId && (
+        <TemplatePackDetailsSheet
+          packId={selectedPackId}
+          open={!!selectedPackId}
+          onOpenChange={(isOpen) => {
+            if (!isOpen) setSelectedPackId(null)
           }}
         />
       )}
