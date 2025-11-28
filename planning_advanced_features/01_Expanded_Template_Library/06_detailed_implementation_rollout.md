@@ -71,31 +71,42 @@ This document provides a step-by-step execution guide for implementing the Expan
 
 ---
 
-## Phase 3: Backend API Implementation
+## Phase 3: Backend API Implementation ✅ COMPLETE
 
 ### Step 3.1: Template Packs List Endpoint
 
-- [ ] Create `app/api/templates/packs/route.ts`.
-- [ ] Implement `GET` with `category` and `includeSystem` filters.
-- [ ] **Cross-Reference**: Ensure response format aligns with what `TemplateBrowser` expects (or plan to update it).
+- [x] Create `app/api/templates/packs/route.ts`.
+- [x] Implement `GET` with `category` and `includeSystem` filters.
+- [x] **Cross-Reference**: Response format includes `templateCount` via `_count`.
 
 ### Step 3.2: Update Template Browsing Endpoint
 
-- [ ] Open `app/api/templates/route.ts`.
-- [ ] Add support for `packId` query param.
-- [ ] **Cross-Reference**: Ensure existing filters (`category`, `search`) remain functional for backward compatibility.
+- [x] Open `app/api/templates/route.ts`.
+- [x] Add support for `packId` query param.
+- [x] **Cross-Reference**: Existing filters (`category`, `search`, `difficulty`) remain functional.
 
 ### Step 3.3: Recommendations Endpoint
 
-- [ ] Create `app/api/templates/recommendations/route.ts`.
-- [ ] **Cross-Reference**: Check `User` model for `HomeProfile` data (or wherever `climateZone`/`yearBuilt` are stored).
-- [ ] Implement scoring logic (Climate Match, Age Match, Asset Category Match).
+- [x] Create `app/api/templates/recommendations/route.ts`.
+- [x] **Cross-Reference**: Uses `Home` model fields `climateZone` and `yearBuilt`.
+- [x] Implement scoring logic (Climate +30, Age +30, Asset Category +20 per match, Seasonal +15).
 
 ### Step 3.4: Apply Template Endpoint
 
-- [ ] Open `app/api/templates/[id]/apply/route.ts` (or create if missing, though `ApplyTemplateModal` implies it might exist or use a different path).
-- [ ] **Cross-Reference**: Check `components/templates/apply-template-modal.tsx` line 86 to confirm the endpoint it calls (`/api/templates/apply`).
-- [ ] Ensure the endpoint handles the new `TemplatePack` context if needed (e.g. tracking which pack a task came from).
+- [x] Verified `app/api/templates/apply/route.ts` exists.
+- [x] **Cross-Reference**: `ApplyTemplateModal` calls `/api/templates/apply` (line 86).
+- [x] Creates `RecurringSchedule` and initial `Task` with activity logging.
+
+### Step 3.5: Clone Template Endpoint (NEW)
+
+- [x] Created `app/api/templates/[id]/clone/route.ts`.
+- [x] Added `cloneTemplateSchema` to `lib/validation/template.ts`.
+- [x] Creates user-owned template with `originalTemplateId` link, `isSystemTemplate: false`.
+
+### Step 3.6: Pack Details Endpoint (NEW)
+
+- [x] Created `app/api/templates/packs/[id]/route.ts`.
+- [x] Returns single pack with full template list for Pack Detail View.
 
 ---
 
