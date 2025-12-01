@@ -1,0 +1,52 @@
+{
+    "routes": [
+        {
+            "path": "/dashboard",
+            "file": "app/(protected)/dashboard/page.tsx",
+            "type": "static"
+        },
+        {
+            "path": "/auth/signin",
+            "file": "app/auth/signin/page.tsx",
+            "type": "static"
+        },
+        {
+            "path": "/assets/[id]",
+            "file": "app/(protected)/assets/[id]/page.tsx",
+            "type": "dynamic"
+        },
+        {
+            "path": "/tasks",
+            "file": "app/(protected)/tasks/page.tsx",
+            "type": "static"
+        }
+    ],
+    "valid_links": [
+        {
+            "code": "<Link href='/dashboard'>Home</Link>",
+            "reason": "Matches static route"
+        },
+        {
+            "code": "<Link href={`/assets/${asset.id}`}>View Asset</Link>",
+            "reason": "Matches dynamic route pattern"
+        },
+        {
+            "code": "<Link href='/settings' className={cn(pathname === '/settings' && 'text-primary')}>",
+            "reason": "Correct active state logic"
+        }
+    ],
+    "invalid_links": [
+        {
+            "code": "<Link href='/dash'>",
+            "reason": "Route does not exist (Typo)"
+        },
+        {
+            "code": "<Link href='/assets/edit'>",
+            "reason": "Route does not exist (Missing page)"
+        },
+        {
+            "code": "<a href='/dashboard'>",
+            "reason": "Using <a> instead of <Link> causes full reload"
+        }
+    ]
+}

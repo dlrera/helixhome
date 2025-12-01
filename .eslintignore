@@ -8,3 +8,5 @@ build
 # Temporarily ignore test files to unblock deployment
 tests/**/*.ts
 tests/**/*.spec.ts
+# Claude Code skills (template files with placeholders)
+.claude/
