@@ -29,11 +29,13 @@ import {
   Calendar,
   ArrowLeft,
   Loader2,
+  PlayCircle,
 } from 'lucide-react'
 import { AssetCategory, Difficulty } from '@prisma/client'
 import { formatDuration, formatFrequency } from '@/lib/utils/template-helpers'
 import type { TemplatePackDetails, PackTemplate } from '@/types/templates'
 import TemplateDetailsDrawer from './template-details-drawer'
+import ApplyPackModal from './apply-pack-modal'
 
 // Category icons mapping
 const categoryIcons: Record<
@@ -82,6 +84,7 @@ export default function TemplatePackDetailsSheet({
   const [loadingTemplateId, setLoadingTemplateId] = useState<string | null>(
     null
   )
+  const [showApplyAllModal, setShowApplyAllModal] = useState(false)
 
   // Fetch pack details with templates
   const {
@@ -190,6 +193,17 @@ export default function TemplatePackDetailsSheet({
                     ))}
                   </div>
                 )}
+
+                {/* Apply All Button */}
+                {pack.templates.length > 0 && (
+                  <Button
+                    className="w-full mt-4 bg-[#216093] hover:bg-[#1a4d75]"
+                    onClick={() => setShowApplyAllModal(true)}
+                  >
+                    <PlayCircle className="h-4 w-4 mr-2" />
+                    Apply All {pack.templateCount} Templates
+                  </Button>
+                )}
               </SheetHeader>
 
               <Separator className="my-4" />
@@ -232,6 +246,17 @@ export default function TemplatePackDetailsSheet({
           onOpenChange={(isOpen) => {
             if (!isOpen) setSelectedTemplateId(null)
           }}
+        />
+      )}
+
+      {/* Apply All Modal */}
+      {pack && (
+        <ApplyPackModal
+          packId={pack.id}
+          packName={pack.name}
+          templateCount={pack.templateCount}
+          open={showApplyAllModal}
+          onOpenChange={setShowApplyAllModal}
         />
       )}
     </>
