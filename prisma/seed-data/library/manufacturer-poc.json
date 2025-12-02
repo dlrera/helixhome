@@ -1,0 +1,101 @@
+[
+  {
+    "id": "trane-hvac-care",
+    "name": "Trane HVAC Care",
+    "description": "Specialized maintenance for Trane heating and cooling systems.",
+    "category": "HVAC",
+    "tags": ["Brand Specific", "Trane", "Premium"],
+    "applicableClimateZones": [],
+    "minHomeAge": null,
+    "maxHomeAge": null,
+    "templates": [
+      {
+        "name": "Clean CleanEffects™ Filter",
+        "description": "Clean the reusable collection cells in your Trane air cleaner.",
+        "category": "HVAC",
+        "defaultFrequency": "SEMIANNUAL",
+        "estimatedDurationMinutes": 45,
+        "difficulty": "MODERATE",
+        "tags": ["Filter", "Trane"],
+        "season": null,
+        "instructions": [
+          "Turn off HVAC system power.",
+          "Remove the collection cells from the unit.",
+          "Vacuum heavy dust with a soft brush attachment.",
+          "Rinse cells with a garden hose (low pressure) or in a tub.",
+          "Let dry completely (wait at least 24 hours) before reinstalling."
+        ],
+        "requiredTools": ["Vacuum", "Hose"],
+        "safetyPrecautions": ["Ensure cells are bone dry to prevent arcing."]
+      },
+      {
+        "name": "Check Trane Error Codes",
+        "description": "Proactive check of system status via thermostat.",
+        "category": "HVAC",
+        "defaultFrequency": "SEMIANNUAL",
+        "estimatedDurationMinutes": 10,
+        "difficulty": "EASY",
+        "tags": ["Diagnostic", "Trane"],
+        "season": null,
+        "instructions": [
+          "On your Trane thermostat, go to Menu > Service.",
+          "Look for 'Alerts' or 'History'.",
+          "Note any recent error codes (e.g., Err 126).",
+          "Consult manual or dealer if persistent errors exist."
+        ],
+        "requiredTools": [],
+        "safetyPrecautions": []
+      }
+    ]
+  },
+  {
+    "id": "sub-zero-refrigeration",
+    "name": "Sub-Zero Refrigeration",
+    "description": "Factory recommended maintenance for Sub-Zero built-ins.",
+    "category": "APPLIANCE",
+    "tags": ["Brand Specific", "Sub-Zero", "Luxury"],
+    "applicableClimateZones": [],
+    "minHomeAge": null,
+    "maxHomeAge": null,
+    "templates": [
+      {
+        "name": "Vacuum Condenser (Sub-Zero)",
+        "description": "Critical cleaning to prevent compressor failure in built-in units.",
+        "category": "APPLIANCE",
+        "defaultFrequency": "SEMIANNUAL",
+        "estimatedDurationMinutes": 30,
+        "difficulty": "EASY",
+        "tags": ["Cleaning", "Sub-Zero"],
+        "season": null,
+        "instructions": [
+          "Open the top grille (lift up).",
+          "Use a soft brush vacuum attachment.",
+          "Vacuum dust from the condenser fins (move in direction of fins).",
+          "Vacuum the grille screen.",
+          "Close the grille (listen for click)."
+        ],
+        "requiredTools": ["Vacuum", "Soft Brush"],
+        "safetyPrecautions": ["Fins are sharp. Do not bend them."]
+      },
+      {
+        "name": "Replace Air Purification Cartridge",
+        "description": "Replace the antimicrobial air filter.",
+        "category": "APPLIANCE",
+        "defaultFrequency": "ANNUAL",
+        "estimatedDurationMinutes": 5,
+        "difficulty": "EASY",
+        "tags": ["Filter", "Sub-Zero"],
+        "season": null,
+        "instructions": [
+          "Locate the air purification cartridge on the back wall of the fridge.",
+          "Grasp the cover and rotate counter-clockwise to remove.",
+          "Pop out the old cartridge and insert the new one.",
+          "Reinstall cover.",
+          "Reset the 'Air Filter' indicator on the control panel."
+        ],
+        "requiredTools": ["New Cartridge"],
+        "safetyPrecautions": []
+      }
+    ]
+  }
+]

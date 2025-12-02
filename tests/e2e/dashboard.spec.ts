@@ -4,8 +4,8 @@ test.describe('Dashboard Analytics', () => {
   test.beforeEach(async ({ page }) => {
     // Login before each test
     await page.goto('/auth/signin')
-    await page.fill('input[name="email"]', 'admin@example.com')
-    await page.fill('input[name="password"]', 'homeportal')
+    await page.fill('#email', 'admin@example.com')
+    await page.fill('#password', 'homeportal')
     await page.click('button[type="submit"]')
     await page.waitForURL('/dashboard')
   })
@@ -114,8 +114,8 @@ test.describe('Dashboard Analytics', () => {
 test.describe('Dashboard Navigation', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/auth/signin')
-    await page.fill('input[name="email"]', 'admin@example.com')
-    await page.fill('input[name="password"]', 'homeportal')
+    await page.fill('#email', 'admin@example.com')
+    await page.fill('#password', 'homeportal')
     await page.click('button[type="submit"]')
     await page.waitForURL('/dashboard')
   })
@@ -170,8 +170,8 @@ test.describe('Dashboard Navigation', () => {
 test.describe('Cost Report Features', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/auth/signin')
-    await page.fill('input[name="email"]', 'admin@example.com')
-    await page.fill('input[name="password"]', 'homeportal')
+    await page.fill('#email', 'admin@example.com')
+    await page.fill('#password', 'homeportal')
     await page.click('button[type="submit"]')
     await page.waitForURL('/dashboard')
     await page.goto('/dashboard/costs')
@@ -247,8 +247,8 @@ test.describe('Cost Report Features', () => {
 test.describe('Dashboard Settings', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/auth/signin')
-    await page.fill('input[name="email"]', 'admin@example.com')
-    await page.fill('input[name="password"]', 'homeportal')
+    await page.fill('#email', 'admin@example.com')
+    await page.fill('#password', 'homeportal')
     await page.click('button[type="submit"]')
     await page.waitForURL('/dashboard')
     await page.goto('/dashboard/settings')
@@ -337,8 +337,8 @@ test.describe('Mobile Responsiveness - Dashboard', () => {
     await page.setViewportSize({ width: 375, height: 667 })
 
     await page.goto('/auth/signin')
-    await page.fill('input[name="email"]', 'admin@example.com')
-    await page.fill('input[name="password"]', 'homeportal')
+    await page.fill('#email', 'admin@example.com')
+    await page.fill('#password', 'homeportal')
     await page.click('button[type="submit"]')
     await page.waitForURL('/dashboard')
   })

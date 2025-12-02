@@ -208,7 +208,7 @@
 - [ ] Form validation toasts
   - [ ] Consider: Show validation errors as toast
   - [ ] Or keep inline error messages
-  - [ ] Decision: _______________
+  - [ ] Decision: ******\_\_\_******
 
 ### 3.3 Test Toast Behavior
 
@@ -411,17 +411,18 @@
   - [ ] Import necessary utilities
 
 - [ ] Test dashboard widget error
+
   ```typescript
   test('Shows error boundary on widget failure', async ({ page }) => {
     // Mock API error
-    await page.route('**/api/dashboard/analytics', route =>
+    await page.route('**/api/dashboard/analytics', (route) =>
       route.fulfill({ status: 500, body: 'Error' })
-    );
-    await page.goto('/dashboard');
+    )
+    await page.goto('/dashboard')
     // Check error boundary appears
-    await expect(page.getByText('Something went wrong')).toBeVisible();
-    await expect(page.getByRole('button', { name: 'Try again' })).toBeVisible();
-  });
+    await expect(page.getByText('Something went wrong')).toBeVisible()
+    await expect(page.getByRole('button', { name: 'Try again' })).toBeVisible()
+  })
   ```
 
 - [ ] Test "Try again" button
@@ -437,13 +438,14 @@
 ### 6.2 Add Empty State Tests
 
 - [ ] Test assets empty state
+
   ```typescript
   test('Shows empty state when no assets', async ({ page }) => {
     // Use fresh user or mock empty response
-    await page.goto('/assets');
-    await expect(page.getByText('No assets yet')).toBeVisible();
-    await expect(page.getByRole('button', { name: 'Add Asset' })).toBeVisible();
-  });
+    await page.goto('/assets')
+    await expect(page.getByText('No assets yet')).toBeVisible()
+    await expect(page.getByRole('button', { name: 'Add Asset' })).toBeVisible()
+  })
   ```
 
 - [ ] Test tasks empty state
@@ -459,16 +461,17 @@
 ### 6.3 Add Toast Notification Tests
 
 - [ ] Test success toast on asset creation
+
   ```typescript
   test('Shows success toast on asset creation', async ({ page }) => {
-    await page.goto('/assets/create');
-    await page.fill('[name="name"]', 'Test Asset');
-    await page.selectOption('[name="category"]', 'APPLIANCE');
-    await page.click('button[type="submit"]');
+    await page.goto('/assets/create')
+    await page.fill('[name="name"]', 'Test Asset')
+    await page.selectOption('[name="category"]', 'APPLIANCE')
+    await page.click('button[type="submit"]')
     await expect(page.getByText('Asset created successfully!')).toBeVisible({
       timeout: 5000,
-    });
-  });
+    })
+  })
   ```
 
 - [ ] Test success toast on task completion
@@ -489,14 +492,15 @@
 ### 6.4 Add Breadcrumb Tests
 
 - [ ] Test breadcrumb on asset detail
+
   ```typescript
   test('Breadcrumb navigation on asset detail', async ({ page }) => {
-    await page.goto('/assets/1');
-    const breadcrumb = page.getByRole('navigation', { name: 'Breadcrumb' });
-    await expect(breadcrumb).toBeVisible();
-    await expect(breadcrumb.getByText('Dashboard')).toBeVisible();
-    await expect(breadcrumb.getByText('Assets')).toBeVisible();
-  });
+    await page.goto('/assets/1')
+    const breadcrumb = page.getByRole('navigation', { name: 'Breadcrumb' })
+    await expect(breadcrumb).toBeVisible()
+    await expect(breadcrumb.getByText('Dashboard')).toBeVisible()
+    await expect(breadcrumb.getByText('Assets')).toBeVisible()
+  })
   ```
 
 - [ ] Test breadcrumb navigation
@@ -512,32 +516,33 @@
 ### 6.5 Add Full User Flow Tests
 
 - [ ] Test complete onboarding flow
+
   ```typescript
   test('Complete user onboarding', async ({ page }) => {
     // 1. Login
-    await page.goto('/login');
-    await page.fill('[name="email"]', 'admin@example.com');
-    await page.fill('[name="password"]', 'admin123');
-    await page.click('button[type="submit"]');
+    await page.goto('/login')
+    await page.fill('[name="email"]', 'admin@example.com')
+    await page.fill('[name="password"]', 'admin123')
+    await page.click('button[type="submit"]')
 
     // 2. Create first asset
-    await page.goto('/assets/create');
-    await page.fill('[name="name"]', 'HVAC System');
-    await page.selectOption('[name="category"]', 'HVAC');
-    await page.click('button[type="submit"]');
-    await expect(page.getByText('Asset created successfully!')).toBeVisible();
+    await page.goto('/assets/create')
+    await page.fill('[name="name"]', 'HVAC System')
+    await page.selectOption('[name="category"]', 'HVAC')
+    await page.click('button[type="submit"]')
+    await expect(page.getByText('Asset created successfully!')).toBeVisible()
 
     // 3. Apply template
-    await page.goto('/templates');
-    await page.getByText('HVAC Maintenance').click();
-    await page.getByRole('button', { name: 'Apply Template' }).click();
-    await page.getByRole('button', { name: 'Confirm' }).click();
-    await expect(page.getByText('Template applied!')).toBeVisible();
+    await page.goto('/templates')
+    await page.getByText('HVAC Maintenance').click()
+    await page.getByRole('button', { name: 'Apply Template' }).click()
+    await page.getByRole('button', { name: 'Confirm' }).click()
+    await expect(page.getByText('Template applied!')).toBeVisible()
 
     // 4. Verify task created
-    await page.goto('/tasks');
-    await expect(page.getByText('Change HVAC filter')).toBeVisible();
-  });
+    await page.goto('/tasks')
+    await expect(page.getByText('Change HVAC filter')).toBeVisible()
+  })
   ```
 
 - [ ] Test maintenance workflow
@@ -559,7 +564,7 @@
   - [ ] Note total tests run
   - [ ] Note pass count
   - [ ] Note fail count
-  - [ ] Calculate pass rate: ____%
+  - [ ] Calculate pass rate: \_\_\_\_%
 
 - [ ] Review failures
   - [ ] List all failing tests
@@ -574,9 +579,9 @@
 
 - [ ] Verify target met
   - [ ] Target: 250+ tests
-  - [ ] Actual: ____ tests
+  - [ ] Actual: \_\_\_\_ tests
   - [ ] Target: 85%+ pass rate
-  - [ ] Actual: ____% pass rate
+  - [ ] Actual: \_\_\_\_% pass rate
   - [ ] If not met, add more tests or fix failures
 
 ## Phase 7: Visual Regression Testing
@@ -587,7 +592,7 @@
   - [ ] Option A: Playwright screenshots (free, built-in)
   - [ ] Option B: Percy (cloud-based, $$$)
   - [ ] Option C: Chromatic (Storybook integration, $$$)
-  - [ ] Decision: _______________
+  - [ ] Decision: ******\_\_\_******
 
 ### 7.2 Setup Playwright Screenshots (if chosen)
 
@@ -601,15 +606,16 @@
   - [ ] Set animation handling
 
 - [ ] Add screenshot tests for key pages
+
   ```typescript
   test('Dashboard visual regression', async ({ page }) => {
-    await page.goto('/dashboard');
-    await page.waitForLoadState('networkidle');
+    await page.goto('/dashboard')
+    await page.waitForLoadState('networkidle')
     await expect(page).toHaveScreenshot('dashboard.png', {
       fullPage: true,
       maxDiffPixels: 100,
-    });
-  });
+    })
+  })
   ```
 
 - [ ] Add screenshots for all major pages
@@ -1079,29 +1085,29 @@ _Document any issues found during final polish:_
 ### Time Tracking
 
 - **Estimated Time**: 36 hours (3-4 days)
-- **Actual Time**: ___ hours
-- **Day 1 (Error Handling & Navigation)**: ___ hours
-- **Day 2 (UX Polish)**: ___ hours
-- **Day 3 (Testing Expansion)**: ___ hours
-- **Day 4 (Visual Regression & Finalization)**: ___ hours
+- **Actual Time**: \_\_\_ hours
+- **Day 1 (Error Handling & Navigation)**: \_\_\_ hours
+- **Day 2 (UX Polish)**: \_\_\_ hours
+- **Day 3 (Testing Expansion)**: \_\_\_ hours
+- **Day 4 (Visual Regression & Finalization)**: \_\_\_ hours
 
 ### Success Metrics Achieved
 
-- [ ] E2E tests: ___ total (target: 250+)
-- [ ] Pass rate: ___% (target: 85%+)
-- [ ] Loading States: ___/10 (target: 8.0+)
-- [ ] Interactive Components: ___/10 (target: 8.5+)
-- [ ] Forms & Validation: ___/10 (target: 9.0+)
-- [ ] Visual Design: ___/10 (target: 9.0+)
-- [ ] Overall audit score: ___/10 (target: 8.5+)
+- [ ] E2E tests: \_\_\_ total (target: 250+)
+- [ ] Pass rate: \_\_\_% (target: 85%+)
+- [ ] Loading States: \_\_\_/10 (target: 8.0+)
+- [ ] Interactive Components: \_\_\_/10 (target: 8.5+)
+- [ ] Forms & Validation: \_\_\_/10 (target: 9.0+)
+- [ ] Visual Design: \_\_\_/10 (target: 9.0+)
+- [ ] Overall audit score: \_\_\_/10 (target: 8.5+)
 
 ### Production Launch
 
-- [ ] Launch date: _______________
-- [ ] Deployed to: _______________
-- [ ] URL: _______________
-- [ ] Initial users: _______________
-- [ ] Monitoring dashboard: _______________
+- [ ] Launch date: ******\_\_\_******
+- [ ] Deployed to: ******\_\_\_******
+- [ ] URL: ******\_\_\_******
+- [ ] Initial users: ******\_\_\_******
+- [ ] Monitoring dashboard: ******\_\_\_******
 
 ---
 

@@ -1,0 +1,119 @@
+[
+  {
+    "id": "kitchen-appliances",
+    "name": "Kitchen Appliances",
+    "description": "Keep your kitchen running efficiently.",
+    "category": "APPLIANCE",
+    "tags": ["Kitchen", "Efficiency"],
+    "applicableClimateZones": [],
+    "minHomeAge": null,
+    "maxHomeAge": null,
+    "templates": [
+      {
+        "name": "Clean Refrigerator Coils",
+        "description": "Remove dust to improve cooling efficiency and prevent overheating.",
+        "category": "APPLIANCE",
+        "defaultFrequency": "ANNUAL",
+        "estimatedDurationMinutes": 30,
+        "difficulty": "EASY",
+        "tags": ["Efficiency", "Cleaning"],
+        "season": null,
+        "instructions": [
+          "Unplug the refrigerator.",
+          "Locate coils (usually behind the kick plate or on the back).",
+          "Use a coil cleaning brush and vacuum to remove dust and pet hair.",
+          "Clean the floor underneath if accessible.",
+          "Plug back in."
+        ],
+        "requiredTools": ["Coil Brush", "Vacuum"],
+        "safetyPrecautions": ["Unplug unit before cleaning."]
+      },
+      {
+        "name": "Clean Dishwasher Filter",
+        "description": "Prevent odors and improve cleaning performance.",
+        "category": "APPLIANCE",
+        "defaultFrequency": "MONTHLY",
+        "estimatedDurationMinutes": 15,
+        "difficulty": "EASY",
+        "tags": ["Cleaning", "Hygiene"],
+        "season": null,
+        "instructions": [
+          "Remove the bottom rack.",
+          "Twist and remove the filter assembly.",
+          "Rinse under hot water and scrub mesh with a soft brush.",
+          "Check the drain area for food debris.",
+          "Reinstall filter securely."
+        ],
+        "requiredTools": ["Soft Brush", "Dish Soap"],
+        "safetyPrecautions": []
+      },
+      {
+        "name": "Calibrate Oven Temperature",
+        "description": "Ensure your oven cooks at the correct temperature.",
+        "category": "APPLIANCE",
+        "defaultFrequency": "ANNUAL",
+        "estimatedDurationMinutes": 60,
+        "difficulty": "MODERATE",
+        "tags": ["Cooking"],
+        "season": "Fall",
+        "instructions": [
+          "Place an oven thermometer in the center rack.",
+          "Preheat oven to 350°F (175°C).",
+          "Wait 20 minutes after preheat beeps.",
+          "Check thermometer reading. If off by >15°F, consult manual to adjust offset."
+        ],
+        "requiredTools": ["Oven Thermometer"],
+        "safetyPrecautions": ["Oven is hot."]
+      }
+    ]
+  },
+  {
+    "id": "laundry-care",
+    "name": "Laundry Care",
+    "description": "Prevent fires and floods in the laundry room.",
+    "category": "APPLIANCE",
+    "tags": ["Safety", "Laundry"],
+    "applicableClimateZones": [],
+    "minHomeAge": null,
+    "maxHomeAge": null,
+    "templates": [
+      {
+        "name": "Clean Dryer Vent",
+        "description": "Remove lint buildup to prevent fire hazards.",
+        "category": "APPLIANCE",
+        "defaultFrequency": "ANNUAL",
+        "estimatedDurationMinutes": 45,
+        "difficulty": "MODERATE",
+        "tags": ["Safety", "Fire Prevention"],
+        "season": null,
+        "instructions": [
+          "Disconnect dryer from power and vent duct.",
+          "Vacuum lint from the back of the dryer.",
+          "Use a vent cleaning brush kit to clean the duct to the outside.",
+          "Check exterior hood for blockages.",
+          "Reconnect and run on air fluff to clear loose lint."
+        ],
+        "requiredTools": ["Vent Brush Kit", "Vacuum", "Screwdriver"],
+        "safetyPrecautions": ["Unplug dryer first."]
+      },
+      {
+        "name": "Inspect Washer Hoses",
+        "description": "Check for bulges or cracks to prevent flooding.",
+        "category": "APPLIANCE",
+        "defaultFrequency": "ANNUAL",
+        "estimatedDurationMinutes": 10,
+        "difficulty": "EASY",
+        "tags": ["Flood Prevention"],
+        "season": null,
+        "instructions": [
+          "Look behind the washer at supply hoses.",
+          "Check for bubbles, cracks, or corrosion on fittings.",
+          "Ensure connections are tight.",
+          "Replace rubber hoses every 5 years (consider steel braided)."
+        ],
+        "requiredTools": ["Flashlight"],
+        "safetyPrecautions": []
+      }
+    ]
+  }
+]

@@ -1,0 +1,154 @@
+[
+  {
+    "id": "flooring-care",
+    "name": "Flooring Care",
+    "description": "Extend the life of your carpets, hardwood, and tile.",
+    "category": "OTHER",
+    "tags": ["Interior", "Cleaning"],
+    "applicableClimateZones": [],
+    "minHomeAge": null,
+    "maxHomeAge": null,
+    "templates": [
+      {
+        "name": "Deep Clean Carpets",
+        "description": "Remove deep-set dirt and allergens.",
+        "category": "OTHER",
+        "defaultFrequency": "ANNUAL",
+        "estimatedDurationMinutes": 180,
+        "difficulty": "MODERATE",
+        "tags": ["Cleaning"],
+        "season": null,
+        "instructions": [
+          "Vacuum thoroughly first.",
+          "Pre-treat stains.",
+          "Use a carpet cleaner (rented or owned) with hot water extraction.",
+          "Do not over-wet the carpet.",
+          "Use fans to speed up drying."
+        ],
+        "requiredTools": ["Carpet Cleaner", "Fans"],
+        "safetyPrecautions": []
+      },
+      {
+        "name": "Polish Hardwood Floors",
+        "description": "Restore shine and protect the finish.",
+        "category": "OTHER",
+        "defaultFrequency": "ANNUAL",
+        "estimatedDurationMinutes": 90,
+        "difficulty": "MODERATE",
+        "tags": ["Maintenance"],
+        "season": null,
+        "instructions": [
+          "Clear the room of furniture.",
+          "Clean the floor thoroughly to remove all dust.",
+          "Apply floor polish in an S-pattern.",
+          "Spread evenly with a microfiber mop.",
+          "Wait 24 hours before replacing heavy furniture."
+        ],
+        "requiredTools": ["Microfiber Mop", "Floor Polish"],
+        "safetyPrecautions": []
+      },
+      {
+        "name": "Seal Tile Grout",
+        "description": "Prevent staining and water absorption in grout lines.",
+        "category": "OTHER",
+        "defaultFrequency": "CUSTOM",
+        "estimatedDurationMinutes": 120,
+        "difficulty": "EASY",
+        "tags": ["Maintenance", "Bathroom", "Kitchen"],
+        "season": null,
+        "instructions": [
+          "Clean grout lines thoroughly and let dry.",
+          "Apply sealer using a brush or applicator bottle.",
+          "Wipe excess sealer off tiles immediately.",
+          "Let cure for 24-48 hours."
+        ],
+        "requiredTools": ["Grout Sealer", "Small Brush", "Rags"],
+        "safetyPrecautions": ["Ensure ventilation."]
+      }
+    ]
+  },
+  {
+    "id": "walls-and-paint",
+    "name": "Walls & Paint",
+    "description": "Keep your home's interior looking fresh.",
+    "category": "OTHER",
+    "tags": ["Interior", "Maintenance"],
+    "applicableClimateZones": [],
+    "minHomeAge": null,
+    "maxHomeAge": null,
+    "templates": [
+      {
+        "name": "Touch-up Paint Inspection",
+        "description": "Fix scuffs and chips on walls.",
+        "category": "OTHER",
+        "defaultFrequency": "ANNUAL",
+        "estimatedDurationMinutes": 60,
+        "difficulty": "EASY",
+        "tags": ["Painting"],
+        "season": null,
+        "instructions": [
+          "Walk through high-traffic areas.",
+          "Clean scuffs with a magic eraser first.",
+          "Dab matching paint onto chips or scratches.",
+          "Feather the edges to blend."
+        ],
+        "requiredTools": ["Paint", "Small Brush"],
+        "safetyPrecautions": []
+      },
+      {
+        "name": "Clean Baseboards & Trim",
+        "description": "Remove dust and grime from woodwork.",
+        "category": "OTHER",
+        "defaultFrequency": "SEMIANNUAL",
+        "estimatedDurationMinutes": 60,
+        "difficulty": "EASY",
+        "tags": ["Cleaning"],
+        "season": null,
+        "instructions": [
+          "Vacuum with a brush attachment to remove loose dust.",
+          "Wipe down with a damp cloth and mild soap.",
+          "Dry with a clean towel.",
+          "Use a dryer sheet to repel future dust."
+        ],
+        "requiredTools": ["Vacuum", "Rags", "Soap"],
+        "safetyPrecautions": []
+      },
+      {
+        "name": "Lubricate Window Tracks",
+        "description": "Ensure windows open and close smoothly.",
+        "category": "STRUCTURAL",
+        "defaultFrequency": "ANNUAL",
+        "estimatedDurationMinutes": 30,
+        "difficulty": "EASY",
+        "tags": ["Maintenance"],
+        "season": "Spring",
+        "instructions": [
+          "Vacuum dirt from tracks.",
+          "Spray silicone lubricant into the tracks (avoid oil-based).",
+          "Open and close the window several times.",
+          "Wipe up excess spray."
+        ],
+        "requiredTools": ["Silicone Spray", "Vacuum"],
+        "safetyPrecautions": []
+      },
+      {
+        "name": "Test Carbon Monoxide Detectors",
+        "description": "Verify CO alarms are functioning.",
+        "category": "ELECTRICAL",
+        "defaultFrequency": "SEMIANNUAL",
+        "estimatedDurationMinutes": 10,
+        "difficulty": "EASY",
+        "tags": ["Safety"],
+        "season": null,
+        "instructions": [
+          "Press and hold the test button.",
+          "Listen for 4 beeps.",
+          "Check the expiration date on the back.",
+          "Replace batteries if needed."
+        ],
+        "requiredTools": [],
+        "safetyPrecautions": []
+      }
+    ]
+  }
+]

@@ -13,6 +13,7 @@
     "format:check": "prettier --check .",
     "typecheck": "tsc --noEmit",
     "db:seed": "tsx prisma/seed.ts",
+    "db:seed:json": "tsx prisma/seed-data/content-loader.ts",
     "test": "playwright test",
     "test:ui": "playwright test --ui",
     "prepare": "husky",

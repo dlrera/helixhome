@@ -6,7 +6,11 @@ import {
   ActivityType,
 } from '@prisma/client'
 import bcrypt from 'bcryptjs'
-import { seedMaintenanceTemplates } from './seeds/maintenance-templates'
+import { loadContentFromJSON } from './seed-data/content-loader.js'
+
+// [DEPRECATED] TypeScript template imports - kept for rollback if needed
+// import { seedMaintenanceTemplates } from './seeds/maintenance-templates'
+// import { SYSTEM_PACKS } from './seed-data/template-packs'
 
 const prisma = new PrismaClient()
 
@@ -46,7 +50,7 @@ async function main() {
 
   console.log('✅ Users created')
 
-  // Create home for admin
+  // Create home for admin (with climate and age data for recommendations)
   const home = await prisma.home.create({
     data: {
       userId: adminUser.id,
@@ -57,13 +61,22 @@ async function main() {
         state: 'IL',
         zip: '62701',
       }),
+      climateZone: 'Cold', // For recommendation engine testing
+      yearBuilt: 1995, // ~30 year old home for age-based recommendations
     },
   })
 
   console.log('✅ Home created')
 
-  // Seed maintenance templates
-  await seedMaintenanceTemplates()
+  // Seed maintenance templates and packs from JSON files
+  await loadContentFromJSON(prisma)
+
+  // [DEPRECATED] TypeScript template seeding - kept for rollback if needed
+  // await seedMaintenanceTemplates()
+  // console.log('📦 Seeding template packs...')
+  // let totalPackTemplates = 0
+  // for (const pack of SYSTEM_PACKS) { ... }
+  // console.log(`📦 Seeded ${SYSTEM_PACKS.length} template packs with ${totalPackTemplates} total templates`)
 
   // Create sample assets
   const furnace = await prisma.asset.create({
@@ -244,9 +257,9 @@ async function main() {
   console.log(
     '   Users: admin@example.com / homeportal, test@example.com / test123'
   )
-  console.log('   Home: Main Residence')
+  console.log('   Home: Main Residence (Cold climate, built 1995)')
   console.log('   Assets: 3 (Furnace, Water Heater, Refrigerator)')
-  console.log('   Templates: 20 maintenance templates')
+  console.log('   Templates: Loaded from JSON (see output above)')
   console.log('   Tasks: 4 tasks (3 pending, 1 completed with cost data)')
   console.log('   Activity Logs: 7 sample activities')
   console.log('   Budget: $500/month set for admin user')

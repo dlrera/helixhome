@@ -1,0 +1,96 @@
+{
+  "id": "pack-humid-climate",
+  "name": "Humid Climate Care",
+  "description": "Combat moisture, mold, and humidity issues specific to humid climates.",
+  "category": null,
+  "tags": ["Climate-Specific", "Moisture Control", "Humidity"],
+  "applicableClimateZones": ["Humid"],
+  "minHomeAge": null,
+  "maxHomeAge": null,
+  "templates": [
+    {
+      "name": "Dehumidifier Maintenance",
+      "description": "Maintain dehumidifier for effective moisture control and air quality.",
+      "category": "HVAC",
+      "defaultFrequency": "MONTHLY",
+      "estimatedDurationMinutes": 15,
+      "difficulty": "EASY",
+      "tags": ["HVAC", "Moisture Control", "Humid Climate"],
+      "season": null,
+      "instructions": [
+        "Empty and clean water collection bucket",
+        "Wash bucket with mild soap to prevent mold",
+        "Remove and clean filter (vacuum or rinse)",
+        "Check and clean coils if accessible",
+        "Verify drainage hose is clear (if using)",
+        "Check humidity settings (40-50% ideal)"
+      ],
+      "requiredTools": [
+        "Vacuum or water for filter",
+        "Mild soap",
+        "Clean cloth"
+      ],
+      "safetyPrecautions": [
+        "Unplug before cleaning",
+        "Let coils dry before restarting"
+      ]
+    },
+    {
+      "name": "Mold Inspection",
+      "description": "Check common mold-prone areas to catch problems early.",
+      "category": "STRUCTURAL",
+      "defaultFrequency": "QUARTERLY",
+      "estimatedDurationMinutes": 30,
+      "difficulty": "EASY",
+      "tags": ["Structural", "Mold Prevention", "Humid Climate"],
+      "season": null,
+      "instructions": [
+        "Check bathroom ceilings and corners",
+        "Inspect under sinks for leaks and mold",
+        "Check basement/crawlspace walls",
+        "Inspect window sills for condensation damage",
+        "Look behind furniture against exterior walls",
+        "Check HVAC closet and air handler",
+        "Smell for musty odors"
+      ],
+      "requiredTools": [
+        "Flashlight",
+        "Camera for documentation",
+        "Moisture meter (optional)"
+      ],
+      "safetyPrecautions": [
+        "Wear N95 mask if mold is visible",
+        "Do not disturb large mold areas - call professional"
+      ]
+    },
+    {
+      "name": "Exterior Caulk Inspection",
+      "description": "Check and repair exterior caulking to prevent moisture intrusion.",
+      "category": "OUTDOOR",
+      "defaultFrequency": "ANNUAL",
+      "estimatedDurationMinutes": 60,
+      "difficulty": "EASY",
+      "tags": ["Outdoor", "Moisture Protection", "Humid Climate"],
+      "season": null,
+      "instructions": [
+        "Inspect caulk around windows and doors",
+        "Check where siding meets trim",
+        "Examine penetrations (pipes, wires, vents)",
+        "Look for cracked, missing, or peeling caulk",
+        "Remove old caulk with scraper or tool",
+        "Apply new exterior-grade silicone caulk",
+        "Smooth with wet finger or tool"
+      ],
+      "requiredTools": [
+        "Caulk gun",
+        "Exterior silicone caulk",
+        "Caulk removal tool",
+        "Clean rags"
+      ],
+      "safetyPrecautions": [
+        "Use ladder safely",
+        "Apply in dry weather above 40°F"
+      ]
+    }
+  ]
+}

@@ -21,9 +21,9 @@ import {
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Badge } from '@/components/ui/badge'
-import { Calendar, Clock, AlertCircle, Loader2 } from 'lucide-react'
+import { Clock, AlertCircle, Loader2 } from 'lucide-react'
 import { Frequency } from '@prisma/client'
-import { formatDuration, formatFrequency } from '@/lib/utils/template-helpers'
+import { formatDuration } from '@/lib/utils/template-helpers'
 import { useToast } from '@/hooks/use-toast'
 
 interface ApplyTemplateModalProps {
@@ -35,11 +35,13 @@ interface ApplyTemplateModalProps {
     estimatedDurationMinutes: number
     difficulty: string
   }
-  assetId: string
+  assetId: string // 'whole-home' for whole-home tasks
   assetName: string
   open: boolean
   onOpenChange: (open: boolean) => void
 }
+
+const isWholeHome = (assetId: string) => assetId === 'whole-home'
 
 export default function ApplyTemplateModal({
   template,
@@ -50,7 +52,9 @@ export default function ApplyTemplateModal({
 }: ApplyTemplateModalProps) {
   const router = useRouter()
   const { toast } = useToast()
-  const [frequency, setFrequency] = useState<Frequency>(template.defaultFrequency)
+  const [frequency, setFrequency] = useState<Frequency>(
+    template.defaultFrequency
+  )
   const [customDays, setCustomDays] = useState<string>('')
   const [isLoading, setIsLoading] = useState(false)
 
@@ -68,13 +72,26 @@ export default function ApplyTemplateModal({
   }, [open, isLoading, onOpenChange])
 
   const handleApply = async () => {
-    console.log('Applying template:', template.id, 'to asset:', assetId)
+    const wholeHome = isWholeHome(assetId)
+    console.log(
+      'Applying template:',
+      template.id,
+      'to asset:',
+      wholeHome ? 'whole-home' : assetId
+    )
     setIsLoading(true)
     try {
-      const body: any = {
+      const body: {
+        templateId: string
+        assetId: string | null
+        frequency: Frequency
+        isWholeHome: boolean
+        customFrequencyDays?: number
+      } = {
         templateId: template.id,
-        assetId: assetId,
+        assetId: wholeHome ? null : assetId,
         frequency: frequency,
+        isWholeHome: wholeHome,
       }
 
       if (frequency === 'CUSTOM' && customDays) {
@@ -100,8 +117,12 @@ export default function ApplyTemplateModal({
             title: '⚠️ Template Already Applied',
             description: (
               <div className="space-y-1">
-                <p>This maintenance template is already active for {assetName}.</p>
-                <p className="text-sm">You can manage it from the asset's Schedules tab.</p>
+                <p>
+                  This maintenance template is already active for {assetName}.
+                </p>
+                <p className="text-sm">
+                  You can manage it from the asset&apos;s Schedules tab.
+                </p>
               </div>
             ),
             variant: 'destructive',
@@ -113,7 +134,9 @@ export default function ApplyTemplateModal({
             description: (
               <div className="space-y-1">
                 <p>The asset or template could not be found.</p>
-                <p className="text-sm">Please refresh the page and try again.</p>
+                <p className="text-sm">
+                  Please refresh the page and try again.
+                </p>
               </div>
             ),
             variant: 'destructive',
@@ -121,20 +144,25 @@ export default function ApplyTemplateModal({
         } else if (response.status === 401) {
           toast({
             title: '🔒 Session Expired',
-            description: 'Your session has expired. Please sign in again to continue.',
+            description:
+              'Your session has expired. Please sign in again to continue.',
             variant: 'destructive',
           })
           router.push('/auth/signin')
         } else if (response.status === 400) {
           toast({
             title: '❌ Invalid Request',
-            description: data.error || 'The request contains invalid data. Please check your inputs and try again.',
+            description:
+              data.error ||
+              'The request contains invalid data. Please check your inputs and try again.',
             variant: 'destructive',
           })
         } else {
           toast({
             title: '❌ Application Failed',
-            description: data.error || 'Unable to apply the template. Please try again or contact support if the issue persists.',
+            description:
+              data.error ||
+              'Unable to apply the template. Please try again or contact support if the issue persists.',
             variant: 'destructive',
           })
         }
@@ -146,8 +174,12 @@ export default function ApplyTemplateModal({
         title: '✅ Template Applied Successfully!',
         description: (
           <div className="space-y-1">
-            <p>{template.name} has been scheduled for {assetName}.</p>
-            <p className="text-sm text-gray-600">The first maintenance task has been created.</p>
+            <p>
+              {template.name} has been scheduled for {assetName}.
+            </p>
+            <p className="text-sm text-gray-600">
+              The first maintenance task has been created.
+            </p>
           </div>
         ),
         className: 'border-green-500 bg-green-50',
@@ -157,14 +189,16 @@ export default function ApplyTemplateModal({
       router.refresh()
       // Also refresh the page to show the new schedule
       setTimeout(() => window.location.reload(), 500)
-    } catch (error: any) {
+    } catch (error) {
       console.error('Error applying template:', error)
       toast({
         title: '🔌 Connection Error',
         description: (
           <div className="space-y-1">
             <p>Unable to connect to the server.</p>
-            <p className="text-sm">Please check your internet connection and try again.</p>
+            <p className="text-sm">
+              Please check your internet connection and try again.
+            </p>
           </div>
         ),
         variant: 'destructive',
@@ -187,7 +221,7 @@ export default function ApplyTemplateModal({
         <DialogHeader>
           <DialogTitle>Apply Maintenance Template</DialogTitle>
           <DialogDescription>
-            Apply "{template.name}" to {assetName}
+            Apply &quot;{template.name}&quot; to {assetName}
           </DialogDescription>
         </DialogHeader>
 
@@ -254,7 +288,9 @@ export default function ApplyTemplateModal({
           <div className="flex items-start gap-2 p-3 bg-blue-50 rounded-lg">
             <AlertCircle className="h-4 w-4 text-blue-600 mt-0.5" />
             <p className="text-sm text-blue-900">
-              The first task will be created immediately with a due date based on your selected frequency.
+              {isWholeHome(assetId)
+                ? 'A one-time task will be created. Re-apply this template when you need to schedule it again.'
+                : 'The first task will be created immediately with a due date based on your selected frequency.'}
             </p>
           </div>
         </div>

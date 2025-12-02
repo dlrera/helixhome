@@ -1,0 +1,177 @@
+[
+  {
+    "id": "lawn-and-garden-care",
+    "name": "Lawn & Garden Care",
+    "description": "Keep your yard healthy and green throughout the seasons.",
+    "category": "OUTDOOR",
+    "tags": ["Landscaping", "Seasonal"],
+    "applicableClimateZones": [],
+    "minHomeAge": null,
+    "maxHomeAge": null,
+    "templates": [
+      {
+        "name": "Lawn Aeration",
+        "description": "Allow air, water, and nutrients to penetrate grass roots.",
+        "category": "OUTDOOR",
+        "defaultFrequency": "ANNUAL",
+        "estimatedDurationMinutes": 120,
+        "difficulty": "MODERATE",
+        "tags": ["Landscaping", "Spring"],
+        "season": "Spring",
+        "instructions": [
+          "Water the lawn the day before to soften soil.",
+          "Use a core aerator (rented or hired) to pull plugs of soil.",
+          "Go over the lawn in a crisscross pattern.",
+          "Leave soil plugs to decompose naturally."
+        ],
+        "requiredTools": ["Core Aerator"],
+        "safetyPrecautions": [
+          "Wear sturdy shoes.",
+          "Watch for sprinkler heads."
+        ]
+      },
+      {
+        "name": "Sprinkler System Start-up",
+        "description": "Prepare irrigation system for the growing season.",
+        "category": "OUTDOOR",
+        "defaultFrequency": "ANNUAL",
+        "estimatedDurationMinutes": 60,
+        "difficulty": "MODERATE",
+        "tags": ["Irrigation", "Spring"],
+        "season": "Spring",
+        "instructions": [
+          "Close drain valves.",
+          "Slowly open the main water valve to fill the system.",
+          "Run each zone manually to check for leaks or broken heads.",
+          "Adjust spray patterns to avoid watering driveways/sidewalks.",
+          "Set the timer for spring watering schedule."
+        ],
+        "requiredTools": ["Flathead Screwdriver"],
+        "safetyPrecautions": []
+      },
+      {
+        "name": "Sprinkler System Blow-out",
+        "description": "Remove water to prevent freezing pipes in winter.",
+        "category": "OUTDOOR",
+        "defaultFrequency": "ANNUAL",
+        "estimatedDurationMinutes": 60,
+        "difficulty": "HARD",
+        "tags": ["Irrigation", "Winterization"],
+        "season": "Fall",
+        "instructions": [
+          "Shut off main water supply to irrigation.",
+          "Connect air compressor to the blowout port.",
+          "Cycle through each zone until mist sprays out.",
+          "Open drain valves.",
+          "Turn off controller."
+        ],
+        "requiredTools": ["Air Compressor"],
+        "safetyPrecautions": ["Wear eye protection.", "Do not exceed 50 PSI."]
+      },
+      {
+        "name": "Fertilize Lawn",
+        "description": "Feed your grass for lush growth.",
+        "category": "OUTDOOR",
+        "defaultFrequency": "QUARTERLY",
+        "estimatedDurationMinutes": 45,
+        "difficulty": "EASY",
+        "tags": ["Landscaping"],
+        "season": null,
+        "instructions": [
+          "Select appropriate fertilizer for the season.",
+          "Fill spreader.",
+          "Walk at a steady pace in parallel lines.",
+          "Water lightly after application if required by product."
+        ],
+        "requiredTools": ["Spreader"],
+        "safetyPrecautions": ["Wear gloves.", "Keep pets off lawn until dry."]
+      }
+    ]
+  },
+  {
+    "id": "deck-and-patio-maintenance",
+    "name": "Deck & Patio Maintenance",
+    "description": "Preserve your outdoor living spaces.",
+    "category": "OUTDOOR",
+    "tags": ["Exterior", "Wood Care"],
+    "applicableClimateZones": [],
+    "minHomeAge": null,
+    "maxHomeAge": null,
+    "templates": [
+      {
+        "name": "Pressure Wash Deck/Patio",
+        "description": "Remove dirt, mold, and grime.",
+        "category": "OUTDOOR",
+        "defaultFrequency": "ANNUAL",
+        "estimatedDurationMinutes": 120,
+        "difficulty": "MODERATE",
+        "tags": ["Cleaning"],
+        "season": "Spring",
+        "instructions": [
+          "Clear all furniture and plants.",
+          "Sweep loose debris.",
+          "Use a wide spray tip (40 degree) to avoid damaging wood.",
+          "Keep nozzle moving constantly.",
+          "Let dry for 24-48 hours."
+        ],
+        "requiredTools": ["Pressure Washer"],
+        "safetyPrecautions": ["Wear eye protection and closed-toe shoes."]
+      },
+      {
+        "name": "Seal/Stain Wood Deck",
+        "description": "Protect wood from rot and UV damage.",
+        "category": "OUTDOOR",
+        "defaultFrequency": "CUSTOM",
+        "estimatedDurationMinutes": 240,
+        "difficulty": "MODERATE",
+        "tags": ["Maintenance", "Painting"],
+        "season": "Summer",
+        "instructions": [
+          "Ensure deck is clean and completely dry.",
+          "Replace any rotted boards.",
+          "Apply stain/sealer with a brush or roller.",
+          "Work in small sections to maintain a wet edge.",
+          "Wait 24 hours before walking on it."
+        ],
+        "requiredTools": ["Paint Roller", "Brush", "Stain"],
+        "safetyPrecautions": ["Ensure good ventilation."]
+      },
+      {
+        "name": "Inspect Deck Hardware",
+        "description": "Check for loose railings or structural issues.",
+        "category": "OUTDOOR",
+        "defaultFrequency": "ANNUAL",
+        "estimatedDurationMinutes": 30,
+        "difficulty": "EASY",
+        "tags": ["Safety"],
+        "season": "Spring",
+        "instructions": [
+          "Wiggle railings to check stability.",
+          "Tighten loose bolts or screws.",
+          "Check ledger board attachment to the house.",
+          "Look for rusted fasteners."
+        ],
+        "requiredTools": ["Wrench", "Screwdriver"],
+        "safetyPrecautions": []
+      },
+      {
+        "name": "Clean Patio Furniture",
+        "description": "Prepare furniture for the season.",
+        "category": "OUTDOOR",
+        "defaultFrequency": "SEMIANNUAL",
+        "estimatedDurationMinutes": 60,
+        "difficulty": "EASY",
+        "tags": ["Cleaning"],
+        "season": "Spring",
+        "instructions": [
+          "Mix mild soap and warm water.",
+          "Scrub frames and cushions.",
+          "Rinse thoroughly with a hose.",
+          "Let dry in the sun."
+        ],
+        "requiredTools": ["Bucket", "Sponge", "Hose"],
+        "safetyPrecautions": []
+      }
+    ]
+  }
+]

@@ -1,0 +1,95 @@
+{
+  "id": "pack-cold-climate",
+  "name": "Cold Climate Essentials",
+  "description": "Essential maintenance for homes in cold climates. Prepare for harsh winters and protect against freeze damage.",
+  "category": null,
+  "tags": ["Climate-Specific", "Winter", "Cold Weather"],
+  "applicableClimateZones": ["Cold"],
+  "minHomeAge": null,
+  "maxHomeAge": null,
+  "templates": [
+    {
+      "name": "Heating System Pre-Season Check",
+      "description": "Prepare your heating system before winter for reliable, efficient operation.",
+      "category": "HVAC",
+      "defaultFrequency": "ANNUAL",
+      "estimatedDurationMinutes": 30,
+      "difficulty": "MODERATE",
+      "tags": ["HVAC", "Winter Prep", "Cold Climate"],
+      "season": "Fall",
+      "instructions": [
+        "Replace furnace filter",
+        "Test thermostat operation",
+        "Listen for unusual noises on startup",
+        "Check all vents are open and unblocked",
+        "Verify pilot light or ignition (if applicable)",
+        "Clean area around furnace",
+        "Check carbon monoxide detector batteries",
+        "Schedule professional tune-up if not done recently"
+      ],
+      "requiredTools": ["New furnace filter", "Vacuum", "Flashlight"],
+      "safetyPrecautions": [
+        "If you smell gas, leave immediately and call utility",
+        "Keep flammables away from furnace",
+        "Professional service recommended annually"
+      ]
+    },
+    {
+      "name": "Ice Dam Prevention",
+      "description": "Prevent ice dams by ensuring proper attic insulation and ventilation.",
+      "category": "STRUCTURAL",
+      "defaultFrequency": "ANNUAL",
+      "estimatedDurationMinutes": 45,
+      "difficulty": "MODERATE",
+      "tags": ["Structural", "Winter Prep", "Cold Climate"],
+      "season": "Fall",
+      "instructions": [
+        "Check attic insulation depth (12-14 inches recommended)",
+        "Seal air leaks around light fixtures and plumbing stacks",
+        "Verify soffit vents are not blocked by insulation",
+        "Ensure ridge vents or attic fans are functioning",
+        "Add insulation if needed",
+        "Install roof heating cables on problem areas (optional)"
+      ],
+      "requiredTools": [
+        "Flashlight",
+        "Tape measure",
+        "Caulk gun and foam sealant",
+        "Dust mask"
+      ],
+      "safetyPrecautions": [
+        "Wear mask and long sleeves in attic",
+        "Use boards across joists for footing",
+        "Work with buddy when in attic"
+      ]
+    },
+    {
+      "name": "Pipe Freeze Prevention",
+      "description": "Protect vulnerable pipes from freezing and bursting in cold weather.",
+      "category": "PLUMBING",
+      "defaultFrequency": "ANNUAL",
+      "estimatedDurationMinutes": 60,
+      "difficulty": "EASY",
+      "tags": ["Plumbing", "Winter Prep", "Cold Climate"],
+      "season": "Fall",
+      "instructions": [
+        "Identify pipes in unheated areas (basement, crawlspace, garage)",
+        "Install foam pipe insulation on vulnerable pipes",
+        "Use heat tape on extremely vulnerable sections",
+        "Seal gaps where cold air enters",
+        "Know location of main water shutoff",
+        "During extreme cold: open cabinet doors, drip faucets"
+      ],
+      "requiredTools": [
+        "Foam pipe insulation",
+        "Heat tape (for extreme cases)",
+        "Utility knife",
+        "Duct tape"
+      ],
+      "safetyPrecautions": [
+        "Follow heat tape instructions carefully",
+        "If pipes freeze, never use open flame to thaw"
+      ]
+    }
+  ]
+}

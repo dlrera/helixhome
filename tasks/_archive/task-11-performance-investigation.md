@@ -22,6 +22,7 @@ The UI/UX audit reveals a **catastrophic performance failure** with the dashboar
 **Current State**: 9.3 seconds total load time
 **Target**: <3 seconds (Task 7a goal: <2 seconds)
 **Evidence**:
+
 ```
 Dashboard load time: 9334ms
 Expected: <3000ms
@@ -30,6 +31,7 @@ Failure: Exceeded target by 6,334ms (311% over)
 ```
 
 **Root Causes (Hypotheses)**:
+
 1. Authentication flow adds 10+ second delay
 2. Multiple sequential API calls during initialization
 3. Dashboard widgets loading synchronously
@@ -50,12 +52,14 @@ Failure: Exceeded target by 6,334ms (311% over)
 ### Phase 1: Investigation & Profiling (Critical First Step)
 
 **Hypothesis to Test**:
+
 1. Are Task 7a optimizations actually in the codebase?
 2. Is testing being done in dev mode vs production build?
 3. Where in the load sequence is the 9.3s delay?
 4. Is it authentication (pre-dashboard) or dashboard rendering?
 
 **Profiling Tools**:
+
 - Chrome DevTools Performance tab
 - Next.js built-in performance metrics (`next.config.js` instrumentation)
 - Lighthouse audits (dev vs production)
@@ -63,6 +67,7 @@ Failure: Exceeded target by 6,334ms (311% over)
 - Custom performance markers
 
 **Key Measurements**:
+
 - Time to First Byte (TTFB)
 - First Contentful Paint (FCP)
 - Largest Contentful Paint (LCP)
@@ -78,6 +83,7 @@ Failure: Exceeded target by 6,334ms (311% over)
 **Current Issue**: 10+ second delay during authentication
 
 **Areas to Investigate**:
+
 1. **NextAuth.js session validation**:
    - How long does `getServerSession()` take?
    - Is database session lookup slow?
@@ -93,11 +99,12 @@ Failure: Exceeded target by 6,334ms (311% over)
    - Is there external API call for verification?
 
 **Optimization Strategies**:
+
 ```typescript
 // Add performance markers
-console.time('auth-check');
-const session = await getServerSession(authOptions);
-console.timeEnd('auth-check');
+console.time('auth-check')
+const session = await getServerSession(authOptions)
+console.timeEnd('auth-check')
 
 // Optimize session check
 export const authOptions: NextAuthOptions = {
@@ -107,14 +114,14 @@ export const authOptions: NextAuthOptions = {
   },
   callbacks: {
     async jwt({ token, user }) {
-      console.time('jwt-callback');
+      console.time('jwt-callback')
       // Minimize work here
-      if (user) token.id = user.id;
-      console.timeEnd('jwt-callback');
-      return token;
+      if (user) token.id = user.id
+      console.timeEnd('jwt-callback')
+      return token
     },
   },
-};
+}
 ```
 
 ### Phase 3: API Performance Optimization
@@ -122,6 +129,7 @@ export const authOptions: NextAuthOptions = {
 **Verify Task 7a Optimizations Are Implemented**:
 
 Check these files exist and are correct:
+
 - [ ] `/lib/utils/cache.ts` - Server-side caching with TTL
 - [ ] `/lib/hooks/use-dashboard.ts` - Client cache config
 - [ ] Database indexes migration applied
@@ -129,6 +137,7 @@ Check these files exist and are correct:
 - [ ] `next.config.js` optimizations
 
 **API Endpoints to Profile**:
+
 1. `/api/dashboard/analytics` (claimed: <300ms, measure actual)
 2. `/api/dashboard/cost-summary` (claimed: <200ms, measure actual)
 3. `/api/dashboard/calendar` (claimed: <300ms, measure actual)
@@ -137,31 +146,33 @@ Check these files exist and are correct:
 6. `/api/dashboard/budget` (measure)
 
 **Profiling Method**:
+
 ```typescript
 // Add to each API route
 export async function GET(req: Request) {
-  const start = Date.now();
-  console.log('[API] Starting request:', req.url);
+  const start = Date.now()
+  console.log('[API] Starting request:', req.url)
 
   try {
-    const result = await fetchData();
-    const duration = Date.now() - start;
-    console.log(`[API] Completed in ${duration}ms:`, req.url);
+    const result = await fetchData()
+    const duration = Date.now() - start
+    console.log(`[API] Completed in ${duration}ms:`, req.url)
 
     if (duration > 300) {
-      console.warn(`[API] SLOW REQUEST (${duration}ms):`, req.url);
+      console.warn(`[API] SLOW REQUEST (${duration}ms):`, req.url)
     }
 
-    return Response.json(result);
+    return Response.json(result)
   } catch (error) {
-    const duration = Date.now() - start;
-    console.error(`[API] Failed after ${duration}ms:`, req.url, error);
-    throw error;
+    const duration = Date.now() - start
+    console.error(`[API] Failed after ${duration}ms:`, req.url, error)
+    throw error
   }
 }
 ```
 
 **Query Optimization Check**:
+
 ```bash
 # Enable Prisma query logging
 # In schema.prisma or DATABASE_URL
@@ -180,10 +191,11 @@ const prisma = new PrismaClient({
 **Strategy**: Show something immediately, load content progressively
 
 **Implementation Pattern**:
+
 ```tsx
 // Dashboard page with React Suspense
-import { Suspense } from 'react';
-import { DashboardSkeleton } from '@/components/dashboard/skeletons';
+import { Suspense } from 'react'
+import { DashboardSkeleton } from '@/components/dashboard/skeletons'
 
 export default async function DashboardPage() {
   return (
@@ -206,11 +218,12 @@ export default async function DashboardPage() {
         <DashboardWidgets />
       </Suspense>
     </div>
-  );
+  )
 }
 ```
 
 **Server Component Optimization**:
+
 ```typescript
 // Parallel data fetching
 async function DashboardStats() {
@@ -229,6 +242,7 @@ async function DashboardStats() {
 **Verify Task 7a Code Splitting**:
 
 Check if these are implemented:
+
 ```typescript
 // Should exist: Lazy-loaded charts
 const AnalyticsCharts = dynamic(
@@ -244,6 +258,7 @@ const ApplyTemplateModal = dynamic(
 ```
 
 **Bundle Analysis**:
+
 ```bash
 # Run bundle analyzer
 npm run analyze
@@ -254,6 +269,7 @@ npm run analyze
 ```
 
 **Expected Improvements from Task 7a**:
+
 - Dashboard modules: <500 (from 2,728)
 - Recharts dynamically imported
 - Template modals lazy loaded
@@ -264,6 +280,7 @@ npm run analyze
 **Critical Question**: Is the 9.3s measurement from dev mode?
 
 **Test Both Modes**:
+
 ```bash
 # Development mode (slower, has hot reload)
 pnpm dev
@@ -280,6 +297,7 @@ pnpm start
 ```
 
 **Expected Production Improvements**:
+
 - Minified JavaScript
 - Tree-shaken dependencies
 - Optimized images
@@ -293,6 +311,7 @@ pnpm start
 **Step 1: Verify Task 7a Implementation**
 
 Read and verify these files:
+
 - [ ] `prisma/migrations/*/add_performance_indexes` - Indexes exist?
 - [ ] `lib/utils/cache.ts` - Caching implemented?
 - [ ] `lib/hooks/use-dashboard.ts` - TanStack Query config correct?
@@ -302,6 +321,7 @@ Read and verify these files:
 **Step 2: Establish Accurate Baseline**
 
 Run these measurements:
+
 ```bash
 # 1. Run production build
 pnpm build
@@ -331,26 +351,27 @@ pnpm start
 **Step 3: Profile Authentication Flow**
 
 Add logging to authentication:
+
 ```typescript
 // middleware.ts or auth route
 export async function middleware(req: NextRequest) {
-  console.time('auth-middleware');
-  const token = await getToken({ req });
-  console.timeEnd('auth-middleware');
+  console.time('auth-middleware')
+  const token = await getToken({ req })
+  console.timeEnd('auth-middleware')
 
   if (!token && req.nextUrl.pathname.startsWith('/dashboard')) {
-    console.log('[Auth] Redirecting to /login');
-    return NextResponse.redirect(new URL('/login', req.url));
+    console.log('[Auth] Redirecting to /login')
+    return NextResponse.redirect(new URL('/login', req.url))
   }
 
-  return NextResponse.next();
+  return NextResponse.next()
 }
 
 // In dashboard page
 export default async function DashboardPage() {
-  console.time('dashboard-session-check');
-  const session = await getServerSession(authOptions);
-  console.timeEnd('dashboard-session-check');
+  console.time('dashboard-session-check')
+  const session = await getServerSession(authOptions)
+  console.timeEnd('dashboard-session-check')
 
   // Rest of page
 }
@@ -359,31 +380,33 @@ export default async function DashboardPage() {
 **Step 4: Profile API Endpoints**
 
 Add timing to all dashboard APIs:
+
 ```typescript
 // Create utility
 // lib/utils/api-logger.ts
 export function withTiming(handler: Function, endpoint: string) {
   return async (...args: any[]) => {
-    const start = Date.now();
-    console.log(`[API] ${endpoint} - START`);
+    const start = Date.now()
+    console.log(`[API] ${endpoint} - START`)
 
     try {
-      const result = await handler(...args);
-      const duration = Date.now() - start;
-      console.log(`[API] ${endpoint} - COMPLETE (${duration}ms)`);
-      return result;
+      const result = await handler(...args)
+      const duration = Date.now() - start
+      console.log(`[API] ${endpoint} - COMPLETE (${duration}ms)`)
+      return result
     } catch (error) {
-      const duration = Date.now() - start;
-      console.error(`[API] ${endpoint} - ERROR (${duration}ms)`, error);
-      throw error;
+      const duration = Date.now() - start
+      console.error(`[API] ${endpoint} - ERROR (${duration}ms)`, error)
+      throw error
     }
-  };
+  }
 }
 ```
 
 **Step 5: Identify Root Cause**
 
 Based on profiling, determine:
+
 - [ ] Is it authentication? (>5s before dashboard)
 - [ ] Is it API calls? (>3s total API time)
 - [ ] Is it client rendering? (>2s hydration)
@@ -393,6 +416,7 @@ Based on profiling, determine:
 ### Optimization Strategies by Root Cause
 
 **If Authentication is Slow (>2s)**:
+
 1. Profile `getServerSession()` call
 2. Check if database session lookup is slow
 3. Verify JWT strategy is being used (not database)
@@ -400,6 +424,7 @@ Based on profiling, determine:
 5. Add session caching
 
 **If API Calls are Slow (>500ms each)**:
+
 1. Verify Task 7a database indexes are applied
 2. Check server-side cache is working
 3. Optimize Prisma queries (use `select`, avoid over-fetching)
@@ -407,6 +432,7 @@ Based on profiling, determine:
 5. Consider parallel fetching
 
 **If Client Rendering is Slow (>2s)**:
+
 1. Verify code splitting is working
 2. Check bundle size (should be <500KB gzipped)
 3. Implement progressive hydration
@@ -414,6 +440,7 @@ Based on profiling, determine:
 5. Defer non-critical JavaScript
 
 **If Database is Slow (>200ms)**:
+
 1. Run query analysis: `EXPLAIN QUERY PLAN`
 2. Verify indexes are being used
 3. Check for N+1 queries
@@ -423,6 +450,7 @@ Based on profiling, determine:
 ### Progressive Loading Pattern
 
 **Dashboard Loading Sequence**:
+
 ```
 0ms:    Show page shell (header, layout) ← Instant
 100ms:  Show stats cards skeleton
@@ -434,6 +462,7 @@ Based on profiling, determine:
 ```
 
 **Implementation**:
+
 ```tsx
 // app/dashboard/page.tsx
 export default function DashboardPage() {
@@ -463,7 +492,7 @@ export default function DashboardPage() {
         </Suspense>
       </div>
     </div>
-  );
+  )
 }
 ```
 
@@ -472,6 +501,7 @@ export default function DashboardPage() {
 ### Performance Testing
 
 **Lighthouse Audits**:
+
 - [ ] Run in production mode
 - [ ] Performance score >90 (currently likely <50)
 - [ ] LCP <2.5s (currently >9s)
@@ -480,6 +510,7 @@ export default function DashboardPage() {
 - [ ] TTI <3.8s (currently >9s)
 
 **WebPageTest**:
+
 - [ ] Test on "Cable" connection
 - [ ] Test on "3G - Slow" connection
 - [ ] Measure First Contentful Paint
@@ -487,6 +518,7 @@ export default function DashboardPage() {
 - [ ] Check waterfall chart
 
 **Real User Monitoring**:
+
 - [ ] Add Vercel Analytics (free tier)
 - [ ] Track actual user load times
 - [ ] Monitor 75th percentile performance
@@ -494,6 +526,7 @@ export default function DashboardPage() {
 ### Load Testing
 
 **Scenario Testing**:
+
 ```bash
 # Test with various data sizes
 - Empty home (0 assets, 0 tasks)
@@ -503,6 +536,7 @@ export default function DashboardPage() {
 ```
 
 **Concurrent User Testing**:
+
 - Test multiple users loading dashboard simultaneously
 - Verify caching works correctly
 - Ensure no database connection exhaustion
@@ -510,24 +544,26 @@ export default function DashboardPage() {
 ### E2E Test Fixes
 
 **Update Test Timeouts**:
+
 ```typescript
 // tests/e2e/setup.ts
-test.setTimeout(20000); // Increase from 10s to 20s temporarily
+test.setTimeout(20000) // Increase from 10s to 20s temporarily
 
 // After optimization, reduce back to 10s
-test.setTimeout(10000);
+test.setTimeout(10000)
 ```
 
 **Add Performance Tests**:
+
 ```typescript
 test('Dashboard loads within 3 seconds', async ({ page }) => {
-  const start = Date.now();
-  await page.goto('/dashboard');
-  await page.waitForLoadState('networkidle');
-  const duration = Date.now() - start;
+  const start = Date.now()
+  await page.goto('/dashboard')
+  await page.waitForLoadState('networkidle')
+  const duration = Date.now() - start
 
-  expect(duration).toBeLessThan(3000);
-});
+  expect(duration).toBeLessThan(3000)
+})
 ```
 
 ## Success Metrics
@@ -535,6 +571,7 @@ test('Dashboard loads within 3 seconds', async ({ page }) => {
 ### Quantifiable Targets
 
 **Load Times**:
+
 - Dashboard load: 9.3s → <3s (goal: <2s)
 - Authentication flow: Current unknown → <1s
 - API response average: ~1.2s → <300ms
@@ -544,16 +581,19 @@ test('Dashboard loads within 3 seconds', async ({ page }) => {
 - Time to Interactive: >9s → <3.8s
 
 **Performance Scores**:
+
 - Lighthouse Performance: Measure → >90
 - WebPageTest Speed Index: Measure → <3.0s
 - Performance category score: 2.5/10 → 8.0+/10
 
 **Bundle Metrics**:
+
 - Dashboard modules: Verify ~500 (Task 7a claimed)
 - Total JavaScript: Measure → <500KB gzipped
 - Recharts lazy loaded: Verify implemented
 
 **Database Metrics**:
+
 - Query count per request: Measure → Minimize
 - Slowest query: Measure → <200ms
 - Cache hit rate: Implement → >80%
@@ -570,12 +610,14 @@ test('Dashboard loads within 3 seconds', async ({ page }) => {
 ## Security Considerations
 
 **Performance Monitoring**:
+
 - Don't log sensitive session data
 - Sanitize error messages in production
 - Rate limit profiling endpoints
 - Secure performance metrics collection
 
 **Caching Security**:
+
 - Ensure user-scoped cache keys
 - Validate cache doesn't leak data between users
 - Implement proper cache invalidation
@@ -604,18 +646,18 @@ See accompanying file: `task-11-checklist.md`
 
 ## Estimated Time
 
-| Component | Hours |
-|-----------|-------|
-| Investigation & profiling | 8h |
-| Task 7a verification | 4h |
-| Authentication optimization | 6h |
-| API optimization | 8h |
-| Progressive loading implementation | 6h |
-| Production build testing | 4h |
-| E2E test fixes | 4h |
-| Documentation & verification | 4h |
-| Buffer for unexpected issues | 6h |
-| **Total** | **50h (5-7 days)** |
+| Component                          | Hours              |
+| ---------------------------------- | ------------------ |
+| Investigation & profiling          | 8h                 |
+| Task 7a verification               | 4h                 |
+| Authentication optimization        | 6h                 |
+| API optimization                   | 8h                 |
+| Progressive loading implementation | 6h                 |
+| Production build testing           | 4h                 |
+| E2E test fixes                     | 4h                 |
+| Documentation & verification       | 4h                 |
+| Buffer for unexpected issues       | 6h                 |
+| **Total**                          | **50h (5-7 days)** |
 
 ## Implementation Plan
 
@@ -703,16 +745,13 @@ See accompanying file: `task-11-checklist.md`
 ### Potential Root Causes
 
 **Most Likely**:
+
 1. Testing done in dev mode (slower than production)
 2. Task 7a optimizations not fully implemented
 3. Authentication flow has unidentified bottleneck
 4. API calls still sequential, not parallel
 
-**Less Likely**:
-5. Database indexes not applied
-6. Caching not working
-7. Bundle size still huge
-8. Network latency issues
+**Less Likely**: 5. Database indexes not applied 6. Caching not working 7. Bundle size still huge 8. Network latency issues
 
 ### Investigation Questions
 
@@ -726,6 +765,7 @@ See accompanying file: `task-11-checklist.md`
 ### Related Issues
 
 This task addresses:
+
 - **Performance (2.5/10)**: "Dashboard load time 9.3s"
 - **CRITICAL #1**: Dashboard Load Time
 - **CRITICAL #4**: Authentication Timeout Issues

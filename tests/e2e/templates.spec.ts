@@ -9,8 +9,8 @@ test.describe('Maintenance Templates Workflow', () => {
   test.beforeEach(async ({ page }) => {
     // Login before each test
     await page.goto('/auth/signin')
-    await page.fill('input[name="email"]', 'admin@example.com')
-    await page.fill('input[name="password"]', 'homeportal')
+    await page.fill('#email', 'admin@example.com')
+    await page.fill('#password', 'homeportal')
     await page.click('button[type="submit"]')
     await expect(page).toHaveURL('/dashboard')
   })

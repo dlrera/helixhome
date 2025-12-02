@@ -1,0 +1,65 @@
+{
+  "version": "1.0.0",
+  "packs": [
+    {
+      "file": "standalone-templates.json",
+      "priority": 0
+    },
+    {
+      "file": "seasonal-essentials.json",
+      "priority": 1
+    },
+    {
+      "file": "safety-first.json",
+      "priority": 2
+    },
+    {
+      "file": "appliance-care.json",
+      "priority": 3
+    },
+    {
+      "file": "older-home-care.json",
+      "priority": 4
+    },
+    {
+      "file": "cold-climate.json",
+      "priority": 5
+    },
+    {
+      "file": "humid-climate.json",
+      "priority": 6
+    },
+    {
+      "file": "structural-exterior.json",
+      "priority": 7
+    },
+    {
+      "file": "plumbing-electrical.json",
+      "priority": 8
+    },
+    {
+      "file": "appliances-interior.json",
+      "priority": 9
+    },
+    {
+      "file": "manufacturer-poc.json",
+      "priority": 10
+    },
+    {
+      "file": "outdoor-living.json",
+      "priority": 11
+    },
+    {
+      "file": "interior-finishes.json",
+      "priority": 12
+    },
+    {
+      "file": "garage-utility.json",
+      "priority": 13
+    },
+    {
+      "file": "pest-control.json",
+      "priority": 14
+    }
+  ]
+}

@@ -1,0 +1,584 @@
+{
+  "id": "standalone",
+  "name": "Standalone Templates",
+  "description": "Individual maintenance templates not part of a pack. Core maintenance tasks for every homeowner.",
+  "isPseudoPack": true,
+  "tags": [],
+  "applicableClimateZones": [],
+  "templates": [
+    {
+      "name": "Change HVAC Filter",
+      "description": "Replace or clean HVAC system air filters to maintain air quality and system efficiency",
+      "category": "HVAC",
+      "defaultFrequency": "MONTHLY",
+      "estimatedDurationMinutes": 10,
+      "difficulty": "EASY",
+      "tags": [],
+      "season": null,
+      "instructions": [
+        "Turn off the HVAC system",
+        "Locate the filter access panel",
+        "Remove the old filter, noting the airflow direction",
+        "Insert the new filter with arrows pointing toward the unit",
+        "Close the access panel",
+        "Turn the system back on",
+        "Record the filter size for future reference"
+      ],
+      "requiredTools": [
+        "New filter",
+        "Vacuum (optional)",
+        "Marker to date filter"
+      ],
+      "safetyPrecautions": [
+        "Turn off system before changing filter",
+        "Wear dust mask if sensitive to dust"
+      ]
+    },
+    {
+      "name": "Service HVAC System",
+      "description": "Annual professional inspection and maintenance of heating and cooling system",
+      "category": "HVAC",
+      "defaultFrequency": "ANNUAL",
+      "estimatedDurationMinutes": 60,
+      "difficulty": "PROFESSIONAL",
+      "tags": [],
+      "season": null,
+      "instructions": [
+        "Schedule appointment with licensed HVAC technician",
+        "Clear area around indoor and outdoor units",
+        "Ensure easy access to all components",
+        "Have system documentation ready",
+        "Be present during inspection to ask questions",
+        "Request service report and recommendations"
+      ],
+      "requiredTools": ["Phone to schedule service", "System documentation"],
+      "safetyPrecautions": [
+        "Use only licensed professionals",
+        "Never attempt complex repairs yourself"
+      ]
+    },
+    {
+      "name": "Clean AC Condenser Coils",
+      "description": "Clean outdoor AC unit coils to maintain cooling efficiency",
+      "category": "HVAC",
+      "defaultFrequency": "ANNUAL",
+      "estimatedDurationMinutes": 30,
+      "difficulty": "MODERATE",
+      "tags": [],
+      "season": null,
+      "instructions": [
+        "Turn off power to the unit at the breaker",
+        "Remove debris from around the unit",
+        "Remove the top grille or fan assembly if necessary",
+        "Spray coils with coil cleaner or mild detergent solution",
+        "Rinse thoroughly with garden hose (not high pressure)",
+        "Straighten any bent fins with fin comb",
+        "Reassemble unit and restore power"
+      ],
+      "requiredTools": [
+        "Garden hose",
+        "Coil cleaner",
+        "Fin comb",
+        "Screwdriver",
+        "Gloves"
+      ],
+      "safetyPrecautions": [
+        "Always turn off power at breaker",
+        "Never use high pressure water",
+        "Wear protective gloves"
+      ]
+    },
+    {
+      "name": "Flush Water Heater",
+      "description": "Drain sediment from water heater tank to maintain efficiency and extend life",
+      "category": "PLUMBING",
+      "defaultFrequency": "ANNUAL",
+      "estimatedDurationMinutes": 45,
+      "difficulty": "MODERATE",
+      "tags": [],
+      "season": null,
+      "instructions": [
+        "Turn off power (electric) or gas supply",
+        "Turn off cold water supply valve",
+        "Attach garden hose to drain valve",
+        "Open hot water tap nearby to allow air in",
+        "Open drain valve and let tank empty",
+        "Turn on cold water briefly to flush sediment",
+        "Close drain valve, remove hose, refill tank",
+        "Restore power/gas only after tank is full"
+      ],
+      "requiredTools": ["Garden hose", "Bucket", "Gloves", "Safety glasses"],
+      "safetyPrecautions": [
+        "Water will be very hot",
+        "Turn off power/gas first",
+        "Never drain completely if very old"
+      ]
+    },
+    {
+      "name": "Check Washing Machine Hoses",
+      "description": "Inspect washing machine water supply hoses for wear, bulges, or leaks",
+      "category": "PLUMBING",
+      "defaultFrequency": "ANNUAL",
+      "estimatedDurationMinutes": 15,
+      "difficulty": "EASY",
+      "tags": [],
+      "season": null,
+      "instructions": [
+        "Pull washer away from wall for access",
+        "Inspect both hot and cold supply hoses",
+        "Look for cracks, bulges, or wear at connections",
+        "Check for moisture or mineral deposits (indicates slow leak)",
+        "Feel along entire length for soft spots",
+        "Tighten connections if loose",
+        "Replace hoses if over 5 years old or showing wear"
+      ],
+      "requiredTools": ["Flashlight", "Pliers (if tightening needed)", "Towel"],
+      "safetyPrecautions": [
+        "Turn off water supply before removing hoses",
+        "Have towels ready for drips"
+      ]
+    },
+    {
+      "name": "Run Water in Unused Drains",
+      "description": "Run water in rarely-used drains to maintain trap seals and prevent sewer gas",
+      "category": "PLUMBING",
+      "defaultFrequency": "MONTHLY",
+      "estimatedDurationMinutes": 5,
+      "difficulty": "EASY",
+      "tags": [],
+      "season": null,
+      "instructions": [
+        "Identify all rarely-used drains (guest bath, floor drains, etc.)",
+        "Run water for 30 seconds in each sink",
+        "Flush unused toilets",
+        "Pour a gallon of water in floor drains",
+        "Run rarely-used showers for a minute",
+        "Add a tablespoon of mineral oil to slow evaporation (optional)"
+      ],
+      "requiredTools": ["Bucket for floor drains", "Mineral oil (optional)"],
+      "safetyPrecautions": [
+        "Check for leaks when running water",
+        "Ensure drains are flowing properly"
+      ]
+    },
+    {
+      "name": "Test Sump Pump",
+      "description": "Test sump pump operation to ensure it will work when needed",
+      "category": "PLUMBING",
+      "defaultFrequency": "QUARTERLY",
+      "estimatedDurationMinutes": 15,
+      "difficulty": "EASY",
+      "tags": [],
+      "season": null,
+      "instructions": [
+        "Remove sump pump cover",
+        "Check for debris in pit",
+        "Pour water slowly until float triggers pump",
+        "Verify pump activates and water drains",
+        "Check discharge pipe outside for flow",
+        "Listen for unusual noises",
+        "Test backup power source if present"
+      ],
+      "requiredTools": ["Bucket of water", "Flashlight", "Gloves"],
+      "safetyPrecautions": [
+        "Keep electrical cords away from water",
+        "Never put hands near pump intake"
+      ]
+    },
+    {
+      "name": "Clean Refrigerator Coils",
+      "description": "Clean dust and debris from refrigerator coils to maintain cooling efficiency",
+      "category": "APPLIANCE",
+      "defaultFrequency": "SEMIANNUAL",
+      "estimatedDurationMinutes": 30,
+      "difficulty": "MODERATE",
+      "tags": [],
+      "season": null,
+      "instructions": [
+        "Unplug refrigerator or turn off circuit breaker",
+        "Locate coils (back or bottom of unit)",
+        "Remove base grille if coils are underneath",
+        "Use coil brush or vacuum to remove dust",
+        "Clean fan blades if accessible",
+        "Vacuum floor area under/behind fridge",
+        "Replace grille and restore power"
+      ],
+      "requiredTools": [
+        "Coil cleaning brush",
+        "Vacuum with hose attachment",
+        "Flashlight",
+        "Screwdriver"
+      ],
+      "safetyPrecautions": [
+        "Always unplug before cleaning",
+        "Be gentle with coil fins",
+        "Have someone help move heavy unit"
+      ]
+    },
+    {
+      "name": "Clean Range Hood Filter",
+      "description": "Clean or replace range hood grease filter to maintain ventilation",
+      "category": "APPLIANCE",
+      "defaultFrequency": "MONTHLY",
+      "estimatedDurationMinutes": 20,
+      "difficulty": "EASY",
+      "tags": [],
+      "season": null,
+      "instructions": [
+        "Turn off range hood",
+        "Remove filter(s) from hood",
+        "For metal filters: soak in hot soapy water with degreaser",
+        "Scrub with soft brush if needed",
+        "For charcoal filters: replace (cannot be cleaned)",
+        "Wipe hood interior with degreaser",
+        "Rinse and dry metal filter thoroughly",
+        "Reinstall filter"
+      ],
+      "requiredTools": [
+        "Degreasing dish soap",
+        "Hot water",
+        "Soft brush",
+        "Cleaning cloths"
+      ],
+      "safetyPrecautions": [
+        "Let filter cool before removing",
+        "Use gloves with hot water and degreaser"
+      ]
+    },
+    {
+      "name": "Clean Garbage Disposal",
+      "description": "Clean and deodorize garbage disposal to prevent odors and maintain operation",
+      "category": "APPLIANCE",
+      "defaultFrequency": "MONTHLY",
+      "estimatedDurationMinutes": 10,
+      "difficulty": "EASY",
+      "tags": [],
+      "season": null,
+      "instructions": [
+        "Turn off disposal and unplug if possible",
+        "Check for visible debris with flashlight (never put hand in)",
+        "Pour 1/2 cup baking soda down disposal",
+        "Add 1 cup white vinegar and let foam",
+        "Wait 5-10 minutes",
+        "Flush with hot water while running disposal",
+        "Grind ice cubes and citrus peels for freshness"
+      ],
+      "requiredTools": [
+        "Baking soda",
+        "White vinegar",
+        "Ice cubes",
+        "Citrus peels",
+        "Flashlight"
+      ],
+      "safetyPrecautions": [
+        "Never put hand in disposal",
+        "Always run water when operating",
+        "Turn off power when cleaning"
+      ]
+    },
+    {
+      "name": "Clean Dryer Vent",
+      "description": "Clean lint from dryer vent system to prevent fires and improve efficiency",
+      "category": "APPLIANCE",
+      "defaultFrequency": "QUARTERLY",
+      "estimatedDurationMinutes": 30,
+      "difficulty": "MODERATE",
+      "tags": [],
+      "season": null,
+      "instructions": [
+        "Unplug dryer and pull away from wall",
+        "Disconnect vent hose from dryer",
+        "Use vent brush to clean hose thoroughly",
+        "Go outside and clean exterior vent",
+        "Vacuum area behind dryer",
+        "Reconnect vent hose securely",
+        "Run empty cycle to test airflow"
+      ],
+      "requiredTools": [
+        "Dryer vent brush kit",
+        "Vacuum",
+        "Screwdriver",
+        "Flashlight"
+      ],
+      "safetyPrecautions": [
+        "Unplug dryer first",
+        "Check for gas leaks if gas dryer",
+        "Ensure proper reconnection"
+      ]
+    },
+    {
+      "name": "Test Smoke Detectors",
+      "description": "Test all smoke detectors and replace batteries as needed",
+      "category": "ELECTRICAL",
+      "defaultFrequency": "MONTHLY",
+      "estimatedDurationMinutes": 15,
+      "difficulty": "EASY",
+      "tags": [],
+      "season": null,
+      "instructions": [
+        "Alert family members before testing",
+        "Press test button on each detector",
+        "Verify alarm sounds clearly",
+        "Replace batteries in any weak-sounding units",
+        "Test interconnected alarms (all should sound)",
+        "Vacuum or dust detector vents",
+        "Record test date and any batteries replaced"
+      ],
+      "requiredTools": [
+        "Step ladder",
+        "9V batteries",
+        "Vacuum with brush attachment",
+        "Test log"
+      ],
+      "safetyPrecautions": [
+        "Use stable ladder",
+        "Have someone spot you",
+        "Replace detector if over 10 years old"
+      ]
+    },
+    {
+      "name": "Test GFCI Outlets",
+      "description": "Test ground fault circuit interrupter outlets for proper operation",
+      "category": "ELECTRICAL",
+      "defaultFrequency": "MONTHLY",
+      "estimatedDurationMinutes": 10,
+      "difficulty": "EASY",
+      "tags": [],
+      "season": null,
+      "instructions": [
+        "Locate all GFCI outlets (kitchen, bathroom, garage, outdoor)",
+        "Plug in a lamp or device to verify power",
+        "Press TEST button - device should turn off",
+        "Press RESET button - device should turn on",
+        "If test fails, replace outlet immediately",
+        "Test GFCI breakers in panel the same way",
+        "Record any failures for electrician"
+      ],
+      "requiredTools": [
+        "Lamp or phone charger for testing",
+        "Label maker to mark outlets"
+      ],
+      "safetyPrecautions": [
+        "Never test with wet hands",
+        "Replace failed GFCIs immediately",
+        "Use licensed electrician for replacements"
+      ]
+    },
+    {
+      "name": "Inspect Fire Extinguisher",
+      "description": "Check fire extinguisher pressure and accessibility",
+      "category": "ELECTRICAL",
+      "defaultFrequency": "ANNUAL",
+      "estimatedDurationMinutes": 5,
+      "difficulty": "EASY",
+      "tags": [],
+      "season": null,
+      "instructions": [
+        "Check pressure gauge - needle should be in green zone",
+        "Verify pin and tamper seal are intact",
+        "Check for visible damage or corrosion",
+        "Ensure mounting bracket is secure",
+        "Verify extinguisher is easily accessible",
+        "Read instructions to stay familiar",
+        "Note expiration or service date"
+      ],
+      "requiredTools": ["None required", "Replacement extinguisher if expired"],
+      "safetyPrecautions": [
+        "Replace if pressure low",
+        "Service every 6 years",
+        "Replace every 12 years"
+      ]
+    },
+    {
+      "name": "Clean Gutters",
+      "description": "Remove leaves and debris from gutters and downspouts",
+      "category": "OUTDOOR",
+      "defaultFrequency": "SEMIANNUAL",
+      "estimatedDurationMinutes": 120,
+      "difficulty": "MODERATE",
+      "tags": [],
+      "season": null,
+      "instructions": [
+        "Set up ladder safely on level ground",
+        "Wear gloves and use gutter scoop or trowel",
+        "Remove debris working toward downspout",
+        "Check for proper gutter slope (1/4\" per 10 feet)",
+        "Flush gutters with hose",
+        "Check downspouts for clogs",
+        "Check for leaks or damage",
+        "Install gutter guards if desired"
+      ],
+      "requiredTools": [
+        "Extension ladder",
+        "Gutter scoop",
+        "Garden hose",
+        "Gloves",
+        "Bucket",
+        "Safety glasses"
+      ],
+      "safetyPrecautions": [
+        "Never work alone",
+        "Use ladder stabilizer",
+        "Avoid power lines",
+        "Don't work in wet conditions"
+      ]
+    },
+    {
+      "name": "Check Roof and Attic",
+      "description": "Visual inspection of roof condition and attic for issues",
+      "category": "OUTDOOR",
+      "defaultFrequency": "SEMIANNUAL",
+      "estimatedDurationMinutes": 60,
+      "difficulty": "MODERATE",
+      "tags": [],
+      "season": null,
+      "instructions": [
+        "From ground, check for missing/damaged shingles",
+        "Look for sagging areas or damaged flashing",
+        "Check gutters for shingle granules (indicates wear)",
+        "In attic, look for water stains or wet spots",
+        "Check for adequate insulation",
+        "Ensure vents are clear and unblocked",
+        "Look for signs of pests or animals",
+        "Document any issues with photos"
+      ],
+      "requiredTools": [
+        "Binoculars",
+        "Flashlight",
+        "Camera",
+        "Notepad",
+        "Dust mask for attic"
+      ],
+      "safetyPrecautions": [
+        "Don't walk on roof",
+        "Wear mask in attic",
+        "Watch for nails and insulation"
+      ]
+    },
+    {
+      "name": "Winterize Outdoor Faucets",
+      "description": "Prepare outdoor water faucets for freezing temperatures",
+      "category": "OUTDOOR",
+      "defaultFrequency": "ANNUAL",
+      "estimatedDurationMinutes": 30,
+      "difficulty": "EASY",
+      "tags": [],
+      "season": null,
+      "instructions": [
+        "Locate indoor shutoff valves for outdoor faucets",
+        "Turn off water supply to outdoor faucets",
+        "Go outside and open faucets to drain water",
+        "Leave outdoor faucets open",
+        "Remove and store hoses indoors",
+        "Install faucet covers for extra protection",
+        "Check for any drips at shutoff valves"
+      ],
+      "requiredTools": [
+        "Faucet covers",
+        "Adjustable wrench",
+        "Bucket for drips",
+        "Towels"
+      ],
+      "safetyPrecautions": [
+        "Complete before first freeze",
+        "Know location of main shutoff",
+        "Fix any leaking valves"
+      ]
+    },
+    {
+      "name": "Clean Chimney",
+      "description": "Professional chimney cleaning and inspection for safe operation",
+      "category": "OUTDOOR",
+      "defaultFrequency": "ANNUAL",
+      "estimatedDurationMinutes": 120,
+      "difficulty": "PROFESSIONAL",
+      "tags": [],
+      "season": null,
+      "instructions": [
+        "Schedule certified chimney sweep",
+        "Clear area around fireplace",
+        "Remove grate and andirons",
+        "Cover nearby furniture",
+        "Provide access to roof if needed",
+        "Ask about inspection findings",
+        "Request written report",
+        "Schedule any needed repairs"
+      ],
+      "requiredTools": [
+        "Phone to schedule service",
+        "Drop cloths",
+        "Vacuum for cleanup"
+      ],
+      "safetyPrecautions": [
+        "Use only certified professionals",
+        "Never use fireplace if issues found",
+        "Install carbon monoxide detectors"
+      ]
+    },
+    {
+      "name": "Seal Deck/Fence",
+      "description": "Apply sealant or stain to protect wood deck and fence from weather",
+      "category": "OUTDOOR",
+      "defaultFrequency": "ANNUAL",
+      "estimatedDurationMinutes": 240,
+      "difficulty": "MODERATE",
+      "tags": [],
+      "season": null,
+      "instructions": [
+        "Check weather - need 2-3 dry days",
+        "Clean deck/fence with appropriate cleaner",
+        "Let dry completely (24-48 hours)",
+        "Sand rough spots if needed",
+        "Apply sealant/stain with brush or sprayer",
+        "Work in sections for even coverage",
+        "Apply second coat if recommended",
+        "Allow full cure time before use"
+      ],
+      "requiredTools": [
+        "Deck cleaner",
+        "Pressure washer or hose",
+        "Sealant/stain",
+        "Brushes or sprayer",
+        "Drop cloths",
+        "Sandpaper"
+      ],
+      "safetyPrecautions": [
+        "Wear protective equipment",
+        "Ensure good ventilation",
+        "Keep off deck during drying"
+      ]
+    },
+    {
+      "name": "Clean Window Wells",
+      "description": "Remove debris from window wells to prevent water damage and improve emergency egress",
+      "category": "OUTDOOR",
+      "defaultFrequency": "SEMIANNUAL",
+      "estimatedDurationMinutes": 45,
+      "difficulty": "EASY",
+      "tags": [],
+      "season": null,
+      "instructions": [
+        "Remove window well covers if present",
+        "Remove leaves, debris, and trash",
+        "Check drain at bottom if present",
+        "Clear drain with snake if clogged",
+        "Check window well liner for damage",
+        "Ensure proper gravel depth (6-8 inches)",
+        "Clean window from inside and out",
+        "Replace or clean covers"
+      ],
+      "requiredTools": [
+        "Gloves",
+        "Bucket",
+        "Shovel",
+        "Drain snake if needed",
+        "Gravel if needed"
+      ],
+      "safetyPrecautions": [
+        "Watch for spiders and pests",
+        "Ensure ladder is stable if needed",
+        "Check for proper emergency egress"
+      ]
+    }
+  ]
+}

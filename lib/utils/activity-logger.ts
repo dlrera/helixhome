@@ -1,18 +1,18 @@
-import { prisma } from '@/lib/prisma';
-import { ActivityType } from '@prisma/client';
+import { prisma } from '@/lib/prisma'
+import { ActivityType } from '@prisma/client'
 
 /**
  * Parameters for logging an activity
  */
 export interface LogActivityParams {
-  userId: string;
-  homeId: string;
-  activityType: ActivityType;
-  entityType: string; // "asset", "task", "template", "schedule", etc.
-  entityId: string;
-  entityName: string;
-  description: string;
-  metadata?: Record<string, any>;
+  userId: string
+  homeId: string
+  activityType: ActivityType
+  entityType: string // "asset", "task", "template", "schedule", etc.
+  entityId: string
+  entityName: string
+  description: string
+  metadata?: Record<string, unknown>
 }
 
 /**
@@ -51,13 +51,13 @@ export async function logActivity(params: LogActivityParams) {
         description: params.description,
         metadata: params.metadata ? JSON.stringify(params.metadata) : null,
       },
-    });
+    })
 
-    return activityLog;
+    return activityLog
   } catch (error) {
     // Log the error but don't throw - activity logging should not break the main operation
-    console.error('Failed to log activity:', error);
-    return null;
+    console.error('Failed to log activity:', error)
+    return null
   }
 }
 
@@ -66,11 +66,11 @@ export async function logActivity(params: LogActivityParams) {
  */
 
 export async function logAssetCreated(params: {
-  userId: string;
-  homeId: string;
-  assetId: string;
-  assetName: string;
-  category?: string;
+  userId: string
+  homeId: string
+  assetId: string
+  assetName: string
+  category?: string
 }) {
   return logActivity({
     userId: params.userId,
@@ -81,15 +81,15 @@ export async function logAssetCreated(params: {
     entityName: params.assetName,
     description: `Added ${params.assetName} to home`,
     metadata: params.category ? { category: params.category } : undefined,
-  });
+  })
 }
 
 export async function logAssetUpdated(params: {
-  userId: string;
-  homeId: string;
-  assetId: string;
-  assetName: string;
-  changes?: string[];
+  userId: string
+  homeId: string
+  assetId: string
+  assetName: string
+  changes?: string[]
 }) {
   return logActivity({
     userId: params.userId,
@@ -100,14 +100,14 @@ export async function logAssetUpdated(params: {
     entityName: params.assetName,
     description: `Updated ${params.assetName}`,
     metadata: params.changes ? { changes: params.changes } : undefined,
-  });
+  })
 }
 
 export async function logAssetDeleted(params: {
-  userId: string;
-  homeId: string;
-  assetId: string;
-  assetName: string;
+  userId: string
+  homeId: string
+  assetId: string
+  assetName: string
 }) {
   return logActivity({
     userId: params.userId,
@@ -117,15 +117,15 @@ export async function logAssetDeleted(params: {
     entityId: params.assetId,
     entityName: params.assetName,
     description: `Removed ${params.assetName} from home`,
-  });
+  })
 }
 
 export async function logTaskCreated(params: {
-  userId: string;
-  homeId: string;
-  taskId: string;
-  taskTitle: string;
-  priority?: string;
+  userId: string
+  homeId: string
+  taskId: string
+  taskTitle: string
+  priority?: string
 }) {
   return logActivity({
     userId: params.userId,
@@ -136,15 +136,15 @@ export async function logTaskCreated(params: {
     entityName: params.taskTitle,
     description: `Created task: ${params.taskTitle}`,
     metadata: params.priority ? { priority: params.priority } : undefined,
-  });
+  })
 }
 
 export async function logTaskCompleted(params: {
-  userId: string;
-  homeId: string;
-  taskId: string;
-  taskTitle: string;
-  cost?: number;
+  userId: string
+  homeId: string
+  taskId: string
+  taskTitle: string
+  cost?: number
 }) {
   return logActivity({
     userId: params.userId,
@@ -155,15 +155,15 @@ export async function logTaskCompleted(params: {
     entityName: params.taskTitle,
     description: `Completed task: ${params.taskTitle}`,
     metadata: params.cost ? { cost: params.cost } : undefined,
-  });
+  })
 }
 
 export async function logTaskOverdue(params: {
-  userId: string;
-  homeId: string;
-  taskId: string;
-  taskTitle: string;
-  dueDate: Date;
+  userId: string
+  homeId: string
+  taskId: string
+  taskTitle: string
+  dueDate: Date
 }) {
   return logActivity({
     userId: params.userId,
@@ -174,16 +174,16 @@ export async function logTaskOverdue(params: {
     entityName: params.taskTitle,
     description: `Task became overdue: ${params.taskTitle}`,
     metadata: { dueDate: params.dueDate.toISOString() },
-  });
+  })
 }
 
 export async function logTemplateApplied(params: {
-  userId: string;
-  homeId: string;
-  templateId: string;
-  templateName: string;
-  assetId: string;
-  assetName: string;
+  userId: string
+  homeId: string
+  templateId: string
+  templateName: string
+  assetId: string | null
+  assetName: string
 }) {
   return logActivity({
     userId: params.userId,
@@ -194,16 +194,16 @@ export async function logTemplateApplied(params: {
     entityName: params.templateName,
     description: `Applied ${params.templateName} to ${params.assetName}`,
     metadata: { assetId: params.assetId, assetName: params.assetName },
-  });
+  })
 }
 
 export async function logScheduleCreated(params: {
-  userId: string;
-  homeId: string;
-  scheduleId: string;
-  templateName: string;
-  assetName: string;
-  frequency: string;
+  userId: string
+  homeId: string
+  scheduleId: string
+  templateName: string
+  assetName: string
+  frequency: string
 }) {
   return logActivity({
     userId: params.userId,
@@ -214,16 +214,16 @@ export async function logScheduleCreated(params: {
     entityName: `${params.templateName} for ${params.assetName}`,
     description: `Created ${params.frequency} schedule: ${params.templateName} for ${params.assetName}`,
     metadata: { frequency: params.frequency },
-  });
+  })
 }
 
 export async function logScheduleUpdated(params: {
-  userId: string;
-  homeId: string;
-  scheduleId: string;
-  templateName: string;
-  assetName: string;
-  changes?: string[];
+  userId: string
+  homeId: string
+  scheduleId: string
+  templateName: string
+  assetName: string
+  changes?: string[]
 }) {
   return logActivity({
     userId: params.userId,
@@ -234,5 +234,5 @@ export async function logScheduleUpdated(params: {
     entityName: `${params.templateName} for ${params.assetName}`,
     description: `Updated schedule: ${params.templateName} for ${params.assetName}`,
     metadata: params.changes ? { changes: params.changes } : undefined,
-  });
+  })
 }

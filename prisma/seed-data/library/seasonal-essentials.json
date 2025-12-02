@@ -1,0 +1,128 @@
+{
+  "id": "pack-seasonal-essentials",
+  "name": "Seasonal Essentials",
+  "description": "Keep your home in top shape year-round with these essential seasonal maintenance tasks. Perfect for any climate.",
+  "category": null,
+  "tags": ["Seasonal", "General", "Preventive"],
+  "applicableClimateZones": ["Humid", "Cold", "Temperate", "Arid"],
+  "minHomeAge": null,
+  "maxHomeAge": null,
+  "templates": [
+    {
+      "name": "Gutter Cleaning",
+      "description": "Remove leaves and debris from gutters and downspouts to prevent water damage. Essential spring and fall maintenance.",
+      "category": "OUTDOOR",
+      "defaultFrequency": "SEMIANNUAL",
+      "estimatedDurationMinutes": 120,
+      "difficulty": "MODERATE",
+      "tags": ["Seasonal", "Water Protection", "Spring", "Fall"],
+      "season": "Spring",
+      "instructions": [
+        "Set up ladder safely on level ground",
+        "Wear gloves and use gutter scoop or trowel",
+        "Remove debris working toward downspout",
+        "Check for proper gutter slope (1/4\" per 10 feet)",
+        "Flush gutters with hose",
+        "Check downspouts for clogs",
+        "Check for leaks or damage"
+      ],
+      "requiredTools": [
+        "Extension ladder",
+        "Gutter scoop",
+        "Garden hose",
+        "Work gloves",
+        "Safety glasses"
+      ],
+      "safetyPrecautions": [
+        "Never work alone",
+        "Use ladder stabilizer",
+        "Avoid power lines",
+        "Don't work in wet conditions"
+      ]
+    },
+    {
+      "name": "Outdoor Faucet Winterization",
+      "description": "Prepare outdoor water faucets for freezing temperatures to prevent burst pipes.",
+      "category": "OUTDOOR",
+      "defaultFrequency": "ANNUAL",
+      "estimatedDurationMinutes": 30,
+      "difficulty": "EASY",
+      "tags": ["Seasonal", "Winter Prep", "Plumbing", "Fall"],
+      "season": "Fall",
+      "instructions": [
+        "Locate indoor shutoff valves for outdoor faucets",
+        "Turn off water supply to outdoor faucets",
+        "Go outside and open faucets to drain water",
+        "Leave outdoor faucets slightly open",
+        "Remove and store garden hoses indoors",
+        "Install insulated faucet covers"
+      ],
+      "requiredTools": [
+        "Insulated faucet covers",
+        "Adjustable wrench",
+        "Towels"
+      ],
+      "safetyPrecautions": [
+        "Complete before first freeze",
+        "Know location of main water shutoff",
+        "Check for drips after closing valves"
+      ]
+    },
+    {
+      "name": "AC Coil Cleaning",
+      "description": "Clean outdoor AC condenser coils for optimal cooling efficiency before summer.",
+      "category": "HVAC",
+      "defaultFrequency": "ANNUAL",
+      "estimatedDurationMinutes": 45,
+      "difficulty": "MODERATE",
+      "tags": ["Seasonal", "HVAC", "Efficiency", "Spring"],
+      "season": "Spring",
+      "instructions": [
+        "Turn off power to the unit at the breaker",
+        "Remove debris from around the unit (2ft clearance)",
+        "Remove top grille or fan assembly",
+        "Spray coils with coil cleaner solution",
+        "Let solution sit for 5-10 minutes",
+        "Rinse thoroughly with garden hose (not high pressure)",
+        "Straighten bent fins with fin comb",
+        "Reassemble and restore power"
+      ],
+      "requiredTools": [
+        "Garden hose",
+        "Coil cleaner spray",
+        "Fin comb",
+        "Screwdriver",
+        "Work gloves"
+      ],
+      "safetyPrecautions": [
+        "Always turn off power at breaker first",
+        "Never use high pressure water",
+        "Allow unit to dry before restoring power"
+      ]
+    },
+    {
+      "name": "Furnace Filter Change",
+      "description": "Replace furnace filter before heating season for optimal air quality and efficiency.",
+      "category": "HVAC",
+      "defaultFrequency": "QUARTERLY",
+      "estimatedDurationMinutes": 10,
+      "difficulty": "EASY",
+      "tags": ["Seasonal", "HVAC", "Air Quality", "Fall"],
+      "season": "Fall",
+      "instructions": [
+        "Turn off HVAC system",
+        "Locate filter compartment",
+        "Remove old filter, note size and airflow direction",
+        "Insert new filter with arrows pointing toward unit",
+        "Close compartment securely",
+        "Turn system back on",
+        "Write date on new filter"
+      ],
+      "requiredTools": ["New filter (correct size)", "Marker pen"],
+      "safetyPrecautions": [
+        "Turn off system before changing",
+        "Wear mask if sensitive to dust"
+      ]
+    }
+  ]
+}

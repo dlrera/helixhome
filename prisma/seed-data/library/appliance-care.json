@@ -1,0 +1,151 @@
+{
+  "id": "pack-appliance-care",
+  "name": "Appliance Care",
+  "description": "Extend the life of your major appliances and improve efficiency with these essential maintenance tasks.",
+  "category": "APPLIANCE",
+  "tags": ["Appliance", "Efficiency", "Cost Savings"],
+  "applicableClimateZones": ["Humid", "Cold", "Temperate", "Arid"],
+  "minHomeAge": null,
+  "maxHomeAge": null,
+  "templates": [
+    {
+      "name": "Refrigerator Coil Cleaning",
+      "description": "Clean condenser coils to improve cooling efficiency and reduce energy costs.",
+      "category": "APPLIANCE",
+      "defaultFrequency": "ANNUAL",
+      "estimatedDurationMinutes": 30,
+      "difficulty": "MODERATE",
+      "tags": ["Appliance", "Efficiency", "Annual"],
+      "season": null,
+      "instructions": [
+        "Unplug refrigerator",
+        "Locate coils (back or underneath)",
+        "Remove base grille if coils are underneath",
+        "Use coil brush to gently remove dust",
+        "Vacuum loose debris",
+        "Clean fan blades if accessible",
+        "Replace grille and plug back in"
+      ],
+      "requiredTools": [
+        "Coil cleaning brush",
+        "Vacuum with hose attachment",
+        "Flashlight",
+        "Screwdriver"
+      ],
+      "safetyPrecautions": [
+        "Always unplug before cleaning",
+        "Be gentle with delicate coil fins",
+        "Have help moving heavy refrigerators"
+      ]
+    },
+    {
+      "name": "Dishwasher Filter Cleaning",
+      "description": "Clean dishwasher filter and spray arms for better cleaning performance.",
+      "category": "APPLIANCE",
+      "defaultFrequency": "MONTHLY",
+      "estimatedDurationMinutes": 15,
+      "difficulty": "EASY",
+      "tags": ["Appliance", "Monthly", "Cleaning"],
+      "season": null,
+      "instructions": [
+        "Remove bottom rack",
+        "Locate and remove filter (usually twist-off)",
+        "Rinse filter under hot water",
+        "Scrub with soft brush to remove debris",
+        "Check spray arm holes for clogs",
+        "Clean spray arm holes with toothpick",
+        "Wipe door edges and gasket",
+        "Reinstall filter and rack"
+      ],
+      "requiredTools": ["Soft brush", "Toothpick", "Clean cloth"],
+      "safetyPrecautions": [
+        "Run garbage disposal first to clear drain line",
+        "Check for broken glass before reaching in"
+      ]
+    },
+    {
+      "name": "Washing Machine Descaling",
+      "description": "Remove mineral buildup and mold from washing machine for fresh, clean laundry.",
+      "category": "APPLIANCE",
+      "defaultFrequency": "QUARTERLY",
+      "estimatedDurationMinutes": 90,
+      "difficulty": "EASY",
+      "tags": ["Appliance", "Quarterly", "Cleaning"],
+      "season": null,
+      "instructions": [
+        "Run empty hot water cycle with 2 cups white vinegar",
+        "Pause mid-cycle and let sit for 1 hour",
+        "Complete cycle",
+        "Run second empty cycle with 1/2 cup baking soda",
+        "Wipe drum, door seal, and detergent dispenser",
+        "Leave door open to air dry",
+        "Clean exterior and control panel"
+      ],
+      "requiredTools": [
+        "White vinegar (2 cups)",
+        "Baking soda (1/2 cup)",
+        "Clean cloths",
+        "Old toothbrush for crevices"
+      ],
+      "safetyPrecautions": [
+        "Never mix vinegar and bleach",
+        "Keep door open after cleaning to prevent mold"
+      ]
+    },
+    {
+      "name": "Oven Deep Clean",
+      "description": "Thorough cleaning of oven interior for safe cooking and better heat distribution.",
+      "category": "APPLIANCE",
+      "defaultFrequency": "QUARTERLY",
+      "estimatedDurationMinutes": 60,
+      "difficulty": "EASY",
+      "tags": ["Appliance", "Quarterly", "Cleaning"],
+      "season": null,
+      "instructions": [
+        "Remove racks and soak in hot soapy water",
+        "If using self-clean: remove everything, run cycle",
+        "If manual: apply oven cleaner, wait per instructions",
+        "Wipe down interior walls and floor",
+        "Clean oven door glass (inside and out)",
+        "Scrub and dry racks",
+        "Replace racks and test heat"
+      ],
+      "requiredTools": [
+        "Oven cleaner (or baking soda paste)",
+        "Scrub brush",
+        "Clean cloths",
+        "Rubber gloves"
+      ],
+      "safetyPrecautions": [
+        "Ensure good ventilation when using cleaners",
+        "Remove pets during self-clean cycle",
+        "Let oven cool completely before cleaning"
+      ]
+    },
+    {
+      "name": "Range Hood Filter Cleaning",
+      "description": "Clean grease filters for proper kitchen ventilation and fire prevention.",
+      "category": "APPLIANCE",
+      "defaultFrequency": "MONTHLY",
+      "estimatedDurationMinutes": 20,
+      "difficulty": "EASY",
+      "tags": ["Appliance", "Monthly", "Cleaning"],
+      "season": null,
+      "instructions": [
+        "Turn off range hood",
+        "Remove metal filter(s)",
+        "Fill sink with hot water and degreasing dish soap",
+        "Soak filters for 10-15 minutes",
+        "Scrub gently with soft brush",
+        "Rinse thoroughly and let dry",
+        "Wipe hood interior and exterior",
+        "Reinstall dry filters"
+      ],
+      "requiredTools": ["Degreasing dish soap", "Soft brush", "Clean cloths"],
+      "safetyPrecautions": [
+        "Let filters cool if recently used",
+        "Replace charcoal filters (cannot be cleaned)"
+      ]
+    }
+  ]
+}

@@ -4,7 +4,8 @@ import { Frequency } from '@prisma/client'
 export const applyTemplateSchema = z
   .object({
     templateId: z.string().cuid(),
-    assetId: z.string().cuid(),
+    assetId: z.string().cuid().nullable(), // null for whole-home tasks
+    isWholeHome: z.boolean().optional(), // flag for whole-home tasks
     frequency: z.nativeEnum(Frequency).optional(),
     customFrequencyDays: z.number().int().positive().max(365).optional(),
     startDate: z.string().datetime().optional(),

@@ -20,6 +20,7 @@ The UI/UX audit reveals critical failures in mobile responsiveness scoring 3.5/1
 **Severity**: CRITICAL - Breaks mobile experience
 **Pages Affected**: Dashboard, Assets list, Tasks list
 **Evidence**:
+
 ```
 Test: 3.1 Dashboard responsive at mobile (375px)
 Expected: hasHorizontalScroll = false
@@ -31,6 +32,7 @@ Actual: hasHorizontalScroll = true
 ```
 
 **Root Causes**:
+
 1. Fixed-width elements exceeding viewport
 2. Tables or grids without proper responsive wrapping
 3. Padding/margin causing overflow
@@ -40,12 +42,14 @@ Actual: hasHorizontalScroll = true
 
 **Severity**: HIGH - Breaks mobile usability
 **Evidence**:
+
 ```
 Test: 3.11 Touch targets 44x44px minimum
 30% of buttons below minimum size
 ```
 
 **Root Causes**:
+
 1. Icon-only buttons with minimal padding
 2. Default button sizes too small
 3. Compact table actions
@@ -62,9 +66,11 @@ Test: 3.11 Touch targets 44x44px minimum
 ### 1. Horizontal Scrolling Fix
 
 **Global CSS Changes**:
+
 ```css
 /* globals.css or app/globals.css */
-html, body {
+html,
+body {
   overflow-x: hidden;
   max-width: 100vw;
 }
@@ -77,30 +83,30 @@ html, body {
 **Component-Level Fixes**:
 
 **Dashboard Widgets**:
+
 - Wrap all content in `max-w-full` containers
 - Use `overflow-x-auto` for tables
 - Make Recharts use `ResponsiveContainer width="100%"`
 - Remove fixed widths (`w-[500px]` → `w-full max-w-[500px]`)
 
 **Data Tables**:
+
 ```tsx
 <div className="overflow-x-auto">
-  <table className="min-w-full">
-    {/* table content */}
-  </table>
+  <table className="min-w-full">{/* table content */}</table>
 </div>
 ```
 
 **Charts**:
+
 ```tsx
 <ResponsiveContainer width="100%" height={300}>
-  <BarChart data={data}>
-    {/* chart content */}
-  </BarChart>
+  <BarChart data={data}>{/* chart content */}</BarChart>
 </ResponsiveContainer>
 ```
 
 **Cards and Grids**:
+
 - Use `grid-cols-1 sm:grid-cols-2 lg:grid-cols-3`
 - Ensure card content wraps properly
 - Remove min-widths on grid items
@@ -108,26 +114,28 @@ html, body {
 ### 2. Touch Target Size Fixes
 
 **Button Component Update** (`components/ui/button.tsx`):
+
 ```tsx
 const buttonVariants = cva(
-  "inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
+  'inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50',
   {
     variants: {
       size: {
-        default: "h-11 px-4 py-2", // 44px height
-        sm: "h-10 rounded-md px-3", // 40px minimum
-        lg: "h-12 rounded-md px-8", // 48px
-        icon: "h-11 w-11", // 44x44px minimum
+        default: 'h-11 px-4 py-2', // 44px height
+        sm: 'h-10 rounded-md px-3', // 40px minimum
+        lg: 'h-12 rounded-md px-8', // 48px
+        icon: 'h-11 w-11', // 44x44px minimum
       },
     },
     defaultVariants: {
-      size: "default",
+      size: 'default',
     },
   }
-);
+)
 ```
 
 **Icon Button Pattern**:
+
 ```tsx
 <Button size="icon" variant="ghost" className="min-w-[44px] min-h-[44px]">
   <Icon className="h-4 w-4" />
@@ -135,6 +143,7 @@ const buttonVariants = cva(
 ```
 
 **Table Action Buttons**:
+
 ```tsx
 <Button size="sm" className="min-h-[44px]">
   Edit
@@ -144,12 +153,14 @@ const buttonVariants = cva(
 ### 3. Mobile Navigation Redesign
 
 **Option A: Hamburger Menu with Drawer**:
+
 - Top bar with hamburger icon (44x44px)
 - Slide-out drawer from left
 - Full navigation menu
 - Close button (44x44px)
 
 **Option B: Bottom Navigation Bar**:
+
 - Fixed bottom navigation with 4-5 main items
 - Icons with labels
 - Active state highlighting
@@ -160,11 +171,13 @@ const buttonVariants = cva(
 ### 4. Mobile Form Optimization
 
 **Input Sizing**:
+
 ```tsx
 <Input className="h-11 text-base" /> {/* 44px height, 16px text */}
 ```
 
 **Proper Input Types**:
+
 ```tsx
 <Input type="tel" inputMode="numeric" /> {/* Phone numbers */}
 <Input type="email" inputMode="email" /> {/* Email */}
@@ -173,6 +186,7 @@ const buttonVariants = cva(
 ```
 
 **Label and Helper Text**:
+
 ```tsx
 <Label className="text-sm mb-2 block">Field Name</Label>
 <Input />
@@ -184,6 +198,7 @@ const buttonVariants = cva(
 ### Phase 1: Horizontal Scrolling Audit & Fix
 
 **Step 1: Identify Fixed-Width Elements**:
+
 ```bash
 # Search for fixed widths
 grep -r "width:" app/ components/ | grep -E "[0-9]{3,}px"
@@ -194,24 +209,28 @@ grep -r "w-\[" app/ components/ | grep -v "max-w"
 **Step 2: Fix Common Patterns**:
 
 **Bad**:
+
 ```tsx
 <div className="w-[600px]">...</div>
 <div style={{ width: '500px' }}>...</div>
 ```
 
 **Good**:
+
 ```tsx
 <div className="w-full max-w-[600px]">...</div>
 <div className="w-full lg:w-[500px]">...</div>
 ```
 
 **Step 3: Fix Dashboard Widgets**:
+
 - Analytics charts → `ResponsiveContainer width="100%"`
 - Cost summary → Wrap in `overflow-x-auto` for tables
 - Calendar widget → Make grid responsive
 - Activity timeline → Stack vertically on mobile
 
 **Step 4: Fix Assets and Tasks Pages**:
+
 - Data tables → Wrap in `overflow-x-auto`
 - Card grids → Use responsive columns
 - Action buttons → Stack on mobile
@@ -220,11 +239,13 @@ grep -r "w-\[" app/ components/ | grep -v "max-w"
 ### Phase 2: Touch Target Optimization
 
 **Step 1: Update Button Component**:
+
 - Modify `components/ui/button.tsx`
 - Update all size variants to meet 44px minimum
 - Test existing button usage doesn't break
 
 **Step 2: Find and Fix Small Buttons**:
+
 ```bash
 # Find potential small buttons
 grep -r "p-1" components/ app/
@@ -233,6 +254,7 @@ grep -r 'className=".*icon.*"' components/ app/
 ```
 
 **Step 3: Fix Common Locations**:
+
 - Modal close buttons
 - Table row actions
 - Dropdown triggers
@@ -240,6 +262,7 @@ grep -r 'className=".*icon.*"' components/ app/
 - Badge/chip close buttons
 
 **Step 4: Add Minimum Sizes**:
+
 ```tsx
 // Before
 <button className="p-1">
@@ -255,12 +278,14 @@ grep -r 'className=".*icon.*"' components/ app/
 ### Phase 3: Mobile Navigation Redesign
 
 **Current State Assessment**:
+
 - Review `components/layout/sidebar.tsx`
 - Check mobile drawer implementation
 - Test hamburger menu functionality
 - Verify navigation closes after selecting item
 
 **Improvements Needed**:
+
 1. **Hamburger Icon**: Ensure 44x44px touch target
 2. **Drawer Animation**: Smooth slide-in from left
 3. **Overlay**: Dim background when drawer open
@@ -268,6 +293,7 @@ grep -r 'className=".*icon.*"' components/ app/
 5. **Accessibility**: Keyboard navigation, focus trap
 
 **Implementation**:
+
 ```tsx
 // Mobile header with hamburger
 <header className="lg:hidden fixed top-0 left-0 right-0 h-16 bg-background border-b z-40">
@@ -292,18 +318,21 @@ grep -r 'className=".*icon.*"' components/ app/
 ### Phase 4: Mobile Form Optimization
 
 **Step 1: Update Form Components**:
+
 - Increase Input height to 44px
 - Increase Label font size for readability
 - Add proper spacing between form fields
 - Ensure error messages are visible
 
 **Step 2: Use Appropriate Input Types**:
+
 - Email inputs: `type="email" inputMode="email"`
 - Phone inputs: `type="tel" inputMode="numeric"`
 - Number inputs: `type="number" inputMode="decimal"`
 - Date inputs: Use native date picker on mobile
 
 **Step 3: Optimize Select/Dropdown**:
+
 - Increase dropdown item height to 44px
 - Ensure dropdown fits in viewport
 - Use native select on mobile when appropriate
@@ -311,6 +340,7 @@ grep -r 'className=".*icon.*"' components/ app/
 ### Phase 5: Device Testing
 
 **Test Devices**:
+
 1. **iPhone SE** (375x667px) - Smallest modern iPhone
 2. **iPhone 12/13** (390x844px) - Standard iPhone
 3. **Pixel 5** (393x851px) - Standard Android
@@ -318,11 +348,13 @@ grep -r 'className=".*icon.*"' components/ app/
 5. **iPad Pro** (1024x1366px) - Large tablet
 
 **Testing Method**:
+
 - Use Chrome DevTools device emulation
 - Test on actual physical devices if available
 - Use BrowserStack for cross-device testing
 
 **Test Scenarios**:
+
 - [ ] Load dashboard - no horizontal scroll
 - [ ] Navigate between pages
 - [ ] Open and use forms
@@ -335,21 +367,25 @@ grep -r 'className=".*icon.*"' components/ app/
 ### Components to Modify
 
 **Button Component** (`components/ui/button.tsx`):
+
 - Update size variants for 44px minimum
 - Add icon size variant
 - Test all existing usages
 
 **Input Component** (`components/ui/input.tsx`):
+
 - Increase default height to 44px
 - Add mobile-specific styling
 - Support inputMode attribute
 
 **Sheet/Drawer Component** (mobile navigation):
+
 - Verify touch target sizes
 - Smooth animations
 - Proper overlay behavior
 
 **Table Component** (if exists):
+
 - Add responsive wrapper option
 - Mobile-friendly row layout option
 - Touch-friendly row actions
@@ -357,6 +393,7 @@ grep -r 'className=".*icon.*"' components/ app/
 ### New Components to Create
 
 **MobileNav Component** (if needed):
+
 - Bottom navigation bar option
 - 4-5 main navigation items
 - Icons with labels
@@ -367,6 +404,7 @@ grep -r 'className=".*icon.*"' components/ app/
 ### Viewport Testing
 
 **Mobile Viewports**:
+
 - [ ] 320px (very small phones)
 - [ ] 375px (iPhone SE)
 - [ ] 390px (iPhone 12)
@@ -374,11 +412,13 @@ grep -r 'className=".*icon.*"' components/ app/
 - [ ] 414px (iPhone Plus)
 
 **Tablet Viewports**:
+
 - [ ] 768px (iPad)
 - [ ] 810px (iPad Pro)
 - [ ] 1024px (iPad Pro landscape)
 
 **Testing Criteria**:
+
 - No horizontal scrolling
 - All content visible
 - Touch targets adequate
@@ -388,17 +428,19 @@ grep -r 'className=".*icon.*"' components/ app/
 ### Touch Target Testing
 
 **Method**:
+
 ```typescript
 // E2E test
-const buttons = await page.locator('button').all();
+const buttons = await page.locator('button').all()
 for (const button of buttons) {
-  const box = await button.boundingBox();
-  expect(box.width).toBeGreaterThanOrEqual(44);
-  expect(box.height).toBeGreaterThanOrEqual(44);
+  const box = await button.boundingBox()
+  expect(box.width).toBeGreaterThanOrEqual(44)
+  expect(box.height).toBeGreaterThanOrEqual(44)
 }
 ```
 
 **Manual Testing**:
+
 - Use finger to tap all interactive elements
 - Verify no accidental taps
 - Ensure adequate spacing between targets
@@ -454,6 +496,7 @@ for (const button of buttons) {
 ## Security Considerations
 
 **Mobile-Specific Security**:
+
 - Ensure sensitive data not exposed in viewport meta tags
 - Touch target sizes don't accidentally trigger wrong actions
 - Mobile navigation requires same authentication
@@ -480,16 +523,16 @@ See accompanying file: `task-10-checklist.md`
 
 ## Estimated Time
 
-| Component | Hours |
-|-----------|-------|
-| Horizontal scrolling audit & fixes | 6h |
-| Touch target size optimization | 4h |
-| Mobile navigation improvements | 6h |
-| Mobile form optimization | 4h |
-| Device testing & verification | 6h |
-| E2E test updates | 3h |
-| Documentation & polish | 2h |
-| **Total** | **31h (3-4 days)** |
+| Component                          | Hours              |
+| ---------------------------------- | ------------------ |
+| Horizontal scrolling audit & fixes | 6h                 |
+| Touch target size optimization     | 4h                 |
+| Mobile navigation improvements     | 6h                 |
+| Mobile form optimization           | 4h                 |
+| Device testing & verification      | 6h                 |
+| E2E test updates                   | 3h                 |
+| Documentation & polish             | 2h                 |
+| **Total**                          | **31h (3-4 days)** |
 
 ## Implementation Plan
 
@@ -548,6 +591,7 @@ See accompanying file: `task-10-checklist.md`
 ### Related Issues
 
 This task addresses the following audit findings:
+
 - **Responsive Design (3.5/10)**: "Horizontal scrolling on mobile"
 - **Responsive Design (3.5/10)**: "Touch targets too small"
 - **Navigation & UX (5.0/10)**: "Mobile navigation transformation not verified"

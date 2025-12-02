@@ -73,7 +73,7 @@ export interface PackTemplate {
 }
 
 /**
- * Recommendation response from the API
+ * Individual template recommendation (legacy - for individual template recommendations)
  */
 export interface TemplateRecommendation {
   id: string
@@ -85,6 +85,30 @@ export interface TemplateRecommendation {
   difficulty: Difficulty
   score: number
   matchReasons: string[]
+}
+
+/**
+ * Pack recommendation response from the API
+ */
+export interface PackRecommendation {
+  reason: string
+  pack: {
+    id: string
+    name: string
+    description: string
+    category: string | null
+    tags: string[]
+    templateCount: number
+  }
+  templates: Array<{
+    id: string
+    name: string
+    description: string
+    category: string
+    defaultFrequency: string
+    estimatedDurationMinutes: number
+    difficulty: string
+  }>
 }
 
 /**

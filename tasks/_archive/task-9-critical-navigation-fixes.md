@@ -19,6 +19,7 @@ Address two critical blockers identified in the UI/UX audit that prevent proper 
 **Severity**: HIGH - Core navigation broken
 **Current State**: Clicking navigation links doesn't navigate to correct pages
 **Evidence**:
+
 ```
 Test: 4.2 Sidebar navigation is functional
 Expected URL to contain: "assets"
@@ -40,6 +41,7 @@ Actual URL: "http://localhost:3000/dashboard"
 **File to Review**: `components/layout/sidebar.tsx`
 
 **Common Issues to Check**:
+
 - Are Next.js `<Link>` components being used correctly?
 - Are there `onClick` handlers preventing default navigation?
 - Is `href` attribute properly set on links?
@@ -47,6 +49,7 @@ Actual URL: "http://localhost:3000/dashboard"
 - Is navigation state management interfering with routing?
 
 **Expected Behavior**:
+
 - Clicking "Assets" navigates to `/assets`
 - Clicking "Tasks" navigates to `/tasks`
 - Clicking "Templates" navigates to `/templates`
@@ -59,6 +62,7 @@ Actual URL: "http://localhost:3000/dashboard"
 **Location**: Root layout (`app/layout.tsx`) or main layout component
 
 **Implementation Pattern**:
+
 ```tsx
 <a
   href="#main-content"
@@ -73,6 +77,7 @@ Actual URL: "http://localhost:3000/dashboard"
 ```
 
 **Styling Requirements**:
+
 - Hidden by default (screen reader only)
 - Visible on keyboard focus
 - Positioned at top-left when focused
@@ -86,6 +91,7 @@ Actual URL: "http://localhost:3000/dashboard"
 ### Phase 1: Investigation & Root Cause Analysis
 
 **Sidebar Navigation Investigation**:
+
 1. Review `components/layout/sidebar.tsx` code
 2. Check if `<Link>` from `next/link` is being used
 3. Look for `onClick` handlers that might prevent navigation
@@ -95,6 +101,7 @@ Actual URL: "http://localhost:3000/dashboard"
 7. Review recent commits that might have broken navigation
 
 **Potential Fixes**:
+
 - Replace `<a onClick={...}>` with `<Link href="...">`
 - Remove `e.preventDefault()` from link handlers
 - Fix incorrect `href` values
@@ -128,12 +135,14 @@ Actual URL: "http://localhost:3000/dashboard"
 ### Components to Modify
 
 **Sidebar Component** (`components/layout/sidebar.tsx`):
+
 - Fix navigation link implementation
 - Ensure proper Next.js Link usage
 - Verify active route highlighting
 - Test mobile drawer navigation
 
 **Root Layout** (`app/layout.tsx`):
+
 - Add skip link at top of body
 - Add main content ID attribute
 - Ensure skip link appears before navigation
@@ -141,6 +150,7 @@ Actual URL: "http://localhost:3000/dashboard"
 ### Styling Considerations
 
 **Skip Link Styles**:
+
 - Use HelixIntel brand colors (#216093)
 - Maintain WCAG AA contrast requirements
 - Ensure visibility on focus
@@ -152,6 +162,7 @@ Actual URL: "http://localhost:3000/dashboard"
 ### Navigation Tests
 
 **Manual Testing**:
+
 - [ ] Click "Assets" link → navigates to `/assets`
 - [ ] Click "Tasks" link → navigates to `/tasks`
 - [ ] Click "Templates" link → navigates to `/templates`
@@ -162,6 +173,7 @@ Actual URL: "http://localhost:3000/dashboard"
 - [ ] Test in Chrome, Firefox, Safari
 
 **E2E Test Verification**:
+
 - [ ] Run `pnpm test tests/e2e/ui-ux-audit.spec.ts -- --grep "4.2"`
 - [ ] Verify "Sidebar navigation is functional" test passes
 - [ ] Run full navigation test suite
@@ -170,6 +182,7 @@ Actual URL: "http://localhost:3000/dashboard"
 ### Skip Link Tests
 
 **Keyboard Navigation**:
+
 - [ ] Load any page
 - [ ] Press Tab once → skip link should appear
 - [ ] Skip link is visible and styled correctly
@@ -178,6 +191,7 @@ Actual URL: "http://localhost:3000/dashboard"
 - [ ] Test on multiple pages (dashboard, assets, tasks)
 
 **Screen Reader Testing** (Optional but recommended):
+
 - [ ] Test with NVDA (Windows)
 - [ ] Test with VoiceOver (macOS)
 - [ ] Verify skip link is announced correctly
@@ -212,6 +226,7 @@ Actual URL: "http://localhost:3000/dashboard"
 ## Security Considerations
 
 **Navigation Security**:
+
 - Ensure all navigation links use Next.js routing (client-side)
 - No external links disguised as internal navigation
 - Verify authentication requirements on protected routes
@@ -236,14 +251,14 @@ This task uses existing dependencies and requires only code fixes.
 
 ## Estimated Time
 
-| Component | Hours |
-|-----------|-------|
-| Investigation & root cause analysis | 0.5h |
-| Sidebar navigation fix | 1h |
-| Skip link implementation | 0.5h |
-| Testing & verification | 0.5h |
-| Documentation updates | 0.25h |
-| **Total** | **2.75h** |
+| Component                           | Hours     |
+| ----------------------------------- | --------- |
+| Investigation & root cause analysis | 0.5h      |
+| Sidebar navigation fix              | 1h        |
+| Skip link implementation            | 0.5h      |
+| Testing & verification              | 0.5h      |
+| Documentation updates               | 0.25h     |
+| **Total**                           | **2.75h** |
 
 ## Implementation Plan
 
@@ -294,6 +309,7 @@ This task uses existing dependencies and requires only code fixes.
 ### Related Issues
 
 This task addresses the following audit findings:
+
 - **Navigation & UX (5.0/10)**: "Sidebar navigation broken"
 - **Accessibility (7.0/10)**: "Skip link missing"
 - **Critical Issue #3**: Sidebar Navigation Not Functional

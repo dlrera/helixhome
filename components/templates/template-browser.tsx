@@ -428,7 +428,7 @@ export default function TemplateBrowser({
   ]
 
   return (
-    <div className="space-y-6 relative">
+    <div className="space-y-4 relative">
       {/* Keyboard Shortcuts Dialog */}
       <KeyboardShortcutsDialog
         shortcuts={keyboardShortcuts}
@@ -452,12 +452,12 @@ export default function TemplateBrowser({
           type="single"
           value={browseMode}
           onValueChange={(v) => v && handleBrowseModeChange(v as BrowseMode)}
-          className="bg-muted p-1 rounded-lg"
+          className="bg-gray-200 p-1 rounded-lg border border-gray-300"
         >
           <ToggleGroupItem
             value="templates"
             aria-label="Browse templates"
-            className="min-w-[120px] min-h-[40px] data-[state=on]:bg-white data-[state=on]:shadow-sm"
+            className="min-w-[120px] min-h-[44px] rounded-md font-medium transition-all duration-200 data-[state=on]:bg-[#216093] data-[state=on]:text-white data-[state=on]:shadow-md data-[state=off]:text-gray-600 data-[state=off]:hover:text-gray-900 data-[state=off]:hover:bg-gray-100"
           >
             <Library className="h-4 w-4 mr-2" />
             Templates
@@ -465,7 +465,7 @@ export default function TemplateBrowser({
           <ToggleGroupItem
             value="packs"
             aria-label="Browse packs"
-            className="min-w-[120px] min-h-[40px] data-[state=on]:bg-white data-[state=on]:shadow-sm"
+            className="min-w-[120px] min-h-[44px] rounded-md font-medium transition-all duration-200 data-[state=on]:bg-[#216093] data-[state=on]:text-white data-[state=on]:shadow-md data-[state=off]:text-gray-600 data-[state=off]:hover:text-gray-900 data-[state=off]:hover:bg-gray-100"
           >
             <FileStack className="h-4 w-4 mr-2" />
             Packs
@@ -490,26 +490,30 @@ export default function TemplateBrowser({
             className="pl-10"
           />
         </div>
-        <ToggleGroup
-          type="single"
-          value={viewMode}
-          onValueChange={(v) => v && setViewMode(v as 'grid' | 'list')}
-        >
-          <ToggleGroupItem
-            value="grid"
-            aria-label="Grid view"
-            className="min-w-[44px] min-h-[44px]"
+        {/* Grid/List toggle - only shown for Templates mode */}
+        {browseMode === 'templates' && (
+          <ToggleGroup
+            type="single"
+            value={viewMode}
+            onValueChange={(v) => v && setViewMode(v as 'grid' | 'list')}
+            className="bg-gray-200 p-1 rounded-lg border border-gray-300"
           >
-            <LayoutGrid className="h-5 w-5" />
-          </ToggleGroupItem>
-          <ToggleGroupItem
-            value="list"
-            aria-label="List view"
-            className="min-w-[44px] min-h-[44px]"
-          >
-            <ListIcon className="h-5 w-5" />
-          </ToggleGroupItem>
-        </ToggleGroup>
+            <ToggleGroupItem
+              value="grid"
+              aria-label="Grid view"
+              className="min-w-[44px] min-h-[44px] rounded-md transition-all duration-200 data-[state=on]:bg-[#216093] data-[state=on]:text-white data-[state=on]:shadow-md data-[state=off]:text-gray-600 data-[state=off]:hover:text-gray-900 data-[state=off]:hover:bg-gray-100"
+            >
+              <LayoutGrid className="h-5 w-5" />
+            </ToggleGroupItem>
+            <ToggleGroupItem
+              value="list"
+              aria-label="List view"
+              className="min-w-[44px] min-h-[44px] rounded-md transition-all duration-200 data-[state=on]:bg-[#216093] data-[state=on]:text-white data-[state=on]:shadow-md data-[state=off]:text-gray-600 data-[state=off]:hover:text-gray-900 data-[state=off]:hover:bg-gray-100"
+            >
+              <ListIcon className="h-5 w-5" />
+            </ToggleGroupItem>
+          </ToggleGroup>
+        )}
       </div>
 
       {/* Category Tabs */}
@@ -541,7 +545,7 @@ export default function TemplateBrowser({
           </TabsTrigger>
         </TabsList>
 
-        <TabsContent value={selectedCategory} className="mt-6">
+        <TabsContent value={selectedCategory} className="mt-2">
           {/* Templates Browse Mode */}
           {browseMode === 'templates' && (
             <>
@@ -775,7 +779,7 @@ export default function TemplateBrowser({
                       })}
                     </div>
                   ) : (
-                    <div className="space-y-3 animate-in fade-in duration-300">
+                    <div className="mt-8 pt-2 space-y-3 animate-in fade-in duration-300">
                       {paginatedTemplates.map((template, index) => {
                         const Icon = categoryIcons[template.category]
 
@@ -788,7 +792,7 @@ export default function TemplateBrowser({
                               animationFillMode: 'backwards',
                             }}
                           >
-                            <CardContent className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-4 gap-3">
+                            <CardContent className="flex flex-col sm:flex-row sm:items-center sm:justify-between px-5 py-6 gap-3">
                               <div className="flex items-center gap-4 flex-1 min-w-0">
                                 <div className="flex-shrink-0">
                                   <div className="p-2 bg-[#216093]/10 rounded-lg">

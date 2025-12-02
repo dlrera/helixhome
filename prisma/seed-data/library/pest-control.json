@@ -1,0 +1,143 @@
+[
+  {
+    "id": "pest-prevention",
+    "name": "Pest Prevention",
+    "description": "Keep unwanted guests out of your home.",
+    "category": "OTHER",
+    "tags": ["Pest Control", "Maintenance"],
+    "applicableClimateZones": [],
+    "minHomeAge": null,
+    "maxHomeAge": null,
+    "templates": [
+      {
+        "name": "Termite Inspection",
+        "description": "Check for signs of wood-destroying insects.",
+        "category": "STRUCTURAL",
+        "defaultFrequency": "ANNUAL",
+        "estimatedDurationMinutes": 45,
+        "difficulty": "MODERATE",
+        "tags": ["Inspection", "Pest Control"],
+        "season": "Spring",
+        "instructions": [
+          "Inspect foundation for mud tubes.",
+          "Check wood touching the ground.",
+          "Look for discarded wings on windowsills.",
+          "Tap wood with a screwdriver to check for hollowness."
+        ],
+        "requiredTools": ["Flashlight", "Screwdriver"],
+        "safetyPrecautions": []
+      },
+      {
+        "name": "Check Exterior Vents for Screens",
+        "description": "Ensure animals cannot enter attic or crawlspace.",
+        "category": "STRUCTURAL",
+        "defaultFrequency": "ANNUAL",
+        "estimatedDurationMinutes": 15,
+        "difficulty": "EASY",
+        "tags": ["Inspection"],
+        "season": "Fall",
+        "instructions": [
+          "Inspect all roof, soffit, and dryer vents.",
+          "Ensure mesh screens are intact.",
+          "Repair holes with hardware cloth.",
+          "Remove bird nests if present (check laws first)."
+        ],
+        "requiredTools": ["Ladder"],
+        "safetyPrecautions": []
+      },
+      {
+        "name": "Seal Exterior Cracks/Gaps",
+        "description": "Block entry points for mice and insects.",
+        "category": "STRUCTURAL",
+        "defaultFrequency": "SEMIANNUAL",
+        "estimatedDurationMinutes": 60,
+        "difficulty": "EASY",
+        "tags": ["Maintenance"],
+        "season": "Fall",
+        "instructions": [
+          "Inspect where pipes and wires enter the house.",
+          "Fill gaps with steel wool and expanding foam.",
+          "Caulk cracks in foundation or siding.",
+          "Check weatherstripping on doors."
+        ],
+        "requiredTools": ["Caulk", "Expanding Foam", "Steel Wool"],
+        "safetyPrecautions": []
+      },
+      {
+        "name": "Inspect Attic for Rodents",
+        "description": "Check for droppings or insulation damage.",
+        "category": "STRUCTURAL",
+        "defaultFrequency": "SEMIANNUAL",
+        "estimatedDurationMinutes": 20,
+        "difficulty": "MODERATE",
+        "tags": ["Inspection"],
+        "season": "Winter",
+        "instructions": [
+          "Enter attic with a bright light.",
+          "Look for droppings, nests, or tunnels in insulation.",
+          "Check for chewed wires.",
+          "Smell for urine odors."
+        ],
+        "requiredTools": ["Flashlight", "Mask"],
+        "safetyPrecautions": [
+          "Wear a dust mask/respirator.",
+          "Watch your step on joists."
+        ]
+      },
+      {
+        "name": "Clean Trash Bins",
+        "description": "Remove food residue that attracts pests.",
+        "category": "OTHER",
+        "defaultFrequency": "QUARTERLY",
+        "estimatedDurationMinutes": 20,
+        "difficulty": "EASY",
+        "tags": ["Cleaning"],
+        "season": null,
+        "instructions": [
+          "Rinse bins with a hose.",
+          "Scrub with hot soapy water or bleach solution.",
+          "Rinse thoroughly and let dry upside down.",
+          "Sprinkle baking soda in the bottom to absorb odors."
+        ],
+        "requiredTools": ["Hose", "Brush", "Soap"],
+        "safetyPrecautions": []
+      },
+      {
+        "name": "Ant Prevention Treatment",
+        "description": "Create a barrier against ants.",
+        "category": "OTHER",
+        "defaultFrequency": "ANNUAL",
+        "estimatedDurationMinutes": 30,
+        "difficulty": "EASY",
+        "tags": ["Pest Control"],
+        "season": "Spring",
+        "instructions": [
+          "Spray perimeter of foundation with ant defense product.",
+          "Treat door thresholds and window sills.",
+          "Trim trees/bushes touching the house.",
+          "Remove standing water sources."
+        ],
+        "requiredTools": ["Sprayer"],
+        "safetyPrecautions": ["Keep pets/kids away until dry."]
+      },
+      {
+        "name": "Mosquito Control Check",
+        "description": "Eliminate breeding grounds.",
+        "category": "OUTDOOR",
+        "defaultFrequency": "MONTHLY",
+        "estimatedDurationMinutes": 15,
+        "difficulty": "EASY",
+        "tags": ["Pest Control"],
+        "season": "Summer",
+        "instructions": [
+          "Empty standing water from pots, bird baths, and toys.",
+          "Clean gutters to ensure flow.",
+          "Treat ponds with mosquito dunks.",
+          "Keep grass trimmed."
+        ],
+        "requiredTools": [],
+        "safetyPrecautions": []
+      }
+    ]
+  }
+]

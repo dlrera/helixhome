@@ -6,12 +6,12 @@ This task addresses all critical and major issues identified in the Product-Desc
 
 ## Issues Summary
 
-| ID | Feature | Severity | Description | Status |
-|----|---------|----------|-------------|--------|
-| 1 | Dashboard | Minor | "Quick Actions" buttons (Add Asset, Create Task) missing | Not Started |
-| 2 | Asset Management | **CRITICAL** | "Add Asset" form fails validation on submission | Not Started |
-| 3 | Asset Management | Major | "Location" field missing from "Add Asset" form | Not Started |
-| 4 | Task Management | **CRITICAL** | "Asset" selection field missing from "Create Task" form | Not Started |
+| ID  | Feature          | Severity     | Description                                              | Status      |
+| --- | ---------------- | ------------ | -------------------------------------------------------- | ----------- |
+| 1   | Dashboard        | Minor        | "Quick Actions" buttons (Add Asset, Create Task) missing | Not Started |
+| 2   | Asset Management | **CRITICAL** | "Add Asset" form fails validation on submission          | Not Started |
+| 3   | Asset Management | Major        | "Location" field missing from "Add Asset" form           | Not Started |
+| 4   | Task Management  | **CRITICAL** | "Asset" selection field missing from "Create Task" form  | Not Started |
 
 ## Execution Order
 
@@ -35,11 +35,18 @@ Users cannot create new assets. The form submission returns "Validation failed" 
 The validation schemas between client and server have potential mismatches:
 
 **Client Schema** (`components/assets/asset-form.tsx:23-33`):
+
 ```typescript
 const assetSchema = z.object({
-  homeId: z.string().min(1, 'Home is required'),  // Simple string validation
-  purchaseDate: z.string().optional().transform(val => val === '' ? undefined : val),
-  warrantyExpiryDate: z.string().optional().transform(val => val === '' ? undefined : val),
+  homeId: z.string().min(1, 'Home is required'), // Simple string validation
+  purchaseDate: z
+    .string()
+    .optional()
+    .transform((val) => (val === '' ? undefined : val)),
+  warrantyExpiryDate: z
+    .string()
+    .optional()
+    .transform((val) => (val === '' ? undefined : val)),
   photoUrl: z.string().optional(),
   manualUrl: z.string().optional(),
   // ...
@@ -47,18 +54,20 @@ const assetSchema = z.object({
 ```
 
 **Server Schema** (`lib/validation/asset.ts:4-15`):
+
 ```typescript
 export const createAssetSchema = z.object({
-  homeId: z.string().cuid(),  // CUID format validation (stricter)
-  purchaseDate: z.coerce.date().optional().nullable(),  // Expects Date
+  homeId: z.string().cuid(), // CUID format validation (stricter)
+  purchaseDate: z.coerce.date().optional().nullable(), // Expects Date
   warrantyExpiryDate: z.coerce.date().optional().nullable(),
-  photoUrl: z.string().url().optional().nullable(),  // URL format validation
+  photoUrl: z.string().url().optional().nullable(), // URL format validation
   manualUrl: z.string().url().optional().nullable(),
   // ...
 })
 ```
 
 **Identified Mismatches**:
+
 1. `homeId`: Client uses `min(1)`, server uses `cuid()` - should be compatible but needs verification
 2. `purchaseDate/warrantyExpiryDate`: Client sends strings, server expects coercible dates
 3. `photoUrl/manualUrl`: Client sends any string, server expects valid URL format
@@ -92,13 +101,35 @@ const assetSchema = z.object({
   homeId: z.string().min(1, 'Home is required'),
   name: z.string().min(1, 'Asset name is required'),
   category: z.nativeEnum(AssetCategory),
-  location: z.string().max(100).optional().transform(val => val === '' ? undefined : val),
-  modelNumber: z.string().optional().transform(val => val === '' ? undefined : val),
-  serialNumber: z.string().optional().transform(val => val === '' ? undefined : val),
-  purchaseDate: z.string().optional().transform(val => val === '' ? undefined : val),
-  warrantyExpiryDate: z.string().optional().transform(val => val === '' ? undefined : val),
-  photoUrl: z.string().optional().transform(val => val === '' ? undefined : val),
-  manualUrl: z.string().optional().transform(val => val === '' ? undefined : val),
+  location: z
+    .string()
+    .max(100)
+    .optional()
+    .transform((val) => (val === '' ? undefined : val)),
+  modelNumber: z
+    .string()
+    .optional()
+    .transform((val) => (val === '' ? undefined : val)),
+  serialNumber: z
+    .string()
+    .optional()
+    .transform((val) => (val === '' ? undefined : val)),
+  purchaseDate: z
+    .string()
+    .optional()
+    .transform((val) => (val === '' ? undefined : val)),
+  warrantyExpiryDate: z
+    .string()
+    .optional()
+    .transform((val) => (val === '' ? undefined : val)),
+  photoUrl: z
+    .string()
+    .optional()
+    .transform((val) => (val === '' ? undefined : val)),
+  manualUrl: z
+    .string()
+    .optional()
+    .transform((val) => (val === '' ? undefined : val)),
 })
 ```
 
@@ -114,16 +145,24 @@ export const createAssetSchema = z.object({
   location: z.string().max(100).optional().nullable(),
   modelNumber: z.string().max(100).optional().nullable(),
   serialNumber: z.string().max(100).optional().nullable(),
-  purchaseDate: z.string().optional().nullable().transform(val => {
-    if (!val) return null
-    const date = new Date(val)
-    return isNaN(date.getTime()) ? null : date
-  }),
-  warrantyExpiryDate: z.string().optional().nullable().transform(val => {
-    if (!val) return null
-    const date = new Date(val)
-    return isNaN(date.getTime()) ? null : date
-  }),
+  purchaseDate: z
+    .string()
+    .optional()
+    .nullable()
+    .transform((val) => {
+      if (!val) return null
+      const date = new Date(val)
+      return isNaN(date.getTime()) ? null : date
+    }),
+  warrantyExpiryDate: z
+    .string()
+    .optional()
+    .nullable()
+    .transform((val) => {
+      if (!val) return null
+      const date = new Date(val)
+      return isNaN(date.getTime()) ? null : date
+    }),
   photoUrl: z.string().optional().nullable(),
   manualUrl: z.string().optional().nullable(),
   metadata: z.string().optional().nullable(),
@@ -157,7 +196,7 @@ Ensure validation errors return field-specific information:
 
 ```typescript
 export function validationErrorResponse(error: ZodError) {
-  const fieldErrors = error.errors.map(e => ({
+  const fieldErrors = error.errors.map((e) => ({
     field: e.path.join('.'),
     message: e.message,
   }))
@@ -213,6 +252,7 @@ model Asset {
 ```
 
 Run migration:
+
 ```bash
 npx prisma migrate dev --name add_asset_location
 npx prisma generate
@@ -223,6 +263,7 @@ npx prisma generate
 **File**: `lib/validation/asset.ts`
 
 Add to both create and update schemas:
+
 ```typescript
 location: z.string().max(100).optional().nullable(),
 ```
@@ -234,8 +275,10 @@ location: z.string().max(100).optional().nullable(),
 Add location input field after Category selector:
 
 ```tsx
-{/* Location */}
-<div>
+{
+  /* Location */
+}
+;<div>
   <Label htmlFor="location">Location</Label>
   <Input
     id="location"
@@ -248,12 +291,15 @@ Add location input field after Category selector:
 #### Step 3.4: Update Asset Display Components
 
 **File**: `components/assets/asset-detail.tsx`
+
 - Add location to detail view
 
 **File**: `components/assets/asset-card.tsx`
+
 - Show location in card subtitle or metadata
 
 **File**: `components/assets/asset-list.tsx`
+
 - Consider adding location to search
 
 ### Files to Modify
@@ -296,8 +342,8 @@ const quickTaskSchema = z.object({
 
 // Props accept assetId
 interface QuickTaskFormProps {
-  homeId: string;
-  assetId?: string;  // Only used when pre-populated
+  homeId: string
+  assetId?: string // Only used when pre-populated
   // ...
 }
 
@@ -314,12 +360,12 @@ Add assets prop to interface:
 
 ```typescript
 interface QuickTaskFormProps {
-  homeId: string;
-  assetId?: string;
-  defaultDueDate?: Date;
-  assets?: { id: string; name: string; category: string }[];  // NEW
-  onSuccess?: () => void;
-  onCancel?: () => void;
+  homeId: string
+  assetId?: string
+  defaultDueDate?: Date
+  assets?: { id: string; name: string; category: string }[] // NEW
+  onSuccess?: () => void
+  onCancel?: () => void
 }
 ```
 
@@ -330,27 +376,29 @@ interface QuickTaskFormProps {
 Add Select component after Priority:
 
 ```tsx
-{assets && assets.length > 0 && (
-  <div className="space-y-2">
-    <Label htmlFor="assetId">Link to Asset</Label>
-    <Select
-      value={watch('assetId') || ''}
-      onValueChange={(value) => setValue('assetId', value || undefined)}
-    >
-      <SelectTrigger>
-        <SelectValue placeholder="Select an asset (optional)" />
-      </SelectTrigger>
-      <SelectContent>
-        <SelectItem value="">No asset</SelectItem>
-        {assets.map((asset) => (
-          <SelectItem key={asset.id} value={asset.id}>
-            {asset.name} ({asset.category})
-          </SelectItem>
-        ))}
-      </SelectContent>
-    </Select>
-  </div>
-)}
+{
+  assets && assets.length > 0 && (
+    <div className="space-y-2">
+      <Label htmlFor="assetId">Link to Asset</Label>
+      <Select
+        value={watch('assetId') || ''}
+        onValueChange={(value) => setValue('assetId', value || undefined)}
+      >
+        <SelectTrigger>
+          <SelectValue placeholder="Select an asset (optional)" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="">No asset</SelectItem>
+          {assets.map((asset) => (
+            <SelectItem key={asset.id} value={asset.id}>
+              {asset.name} ({asset.category})
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+    </div>
+  )
+}
 ```
 
 #### Step 4.3: Update Parent Components
@@ -450,13 +498,15 @@ Import and add QuickActions after stats cards:
 import { QuickActions } from '@/components/dashboard/quick-actions'
 
 // In JSX, after Quick Stats Cards grid:
-{/* Quick Actions */}
-<QuickActions />
+{
+  /* Quick Actions */
+}
+;<QuickActions />
 
-{/* Enhanced Dashboard Widgets */}
-<div className="grid gap-6 lg:grid-cols-2">
-  // ...existing widgets
-</div>
+{
+  /* Enhanced Dashboard Widgets */
+}
+;<div className="grid gap-6 lg:grid-cols-2">// ...existing widgets</div>
 ```
 
 #### Step 1.3: Handle Create Query Param (Optional Enhancement)
@@ -497,12 +547,12 @@ useEffect(() => {
 
 ## Risk Assessment
 
-| Risk | Likelihood | Impact | Mitigation |
-|------|------------|--------|------------|
-| Schema changes cause regressions | Medium | High | Comprehensive testing before/after |
-| Database migration affects existing data | Low | Medium | Migration is additive only (new column) |
-| Client/server validation mismatch | Medium | Medium | Align schemas carefully, add logging |
-| Breaking existing task creation | Low | High | Test all task creation paths |
+| Risk                                     | Likelihood | Impact | Mitigation                              |
+| ---------------------------------------- | ---------- | ------ | --------------------------------------- |
+| Schema changes cause regressions         | Medium     | High   | Comprehensive testing before/after      |
+| Database migration affects existing data | Low        | Medium | Migration is additive only (new column) |
+| Client/server validation mismatch        | Medium     | Medium | Align schemas carefully, add logging    |
+| Breaking existing task creation          | Low        | High   | Test all task creation paths            |
 
 ## Success Criteria
 

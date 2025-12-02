@@ -1,0 +1,186 @@
+[
+  {
+    "id": "roof-and-gutter-care",
+    "name": "Roof & Gutter Care",
+    "description": "Essential maintenance for your home's primary defense against the elements.",
+    "category": "STRUCTURAL",
+    "tags": ["Exterior", "Water Protection", "Seasonal"],
+    "applicableClimateZones": [],
+    "minHomeAge": null,
+    "maxHomeAge": null,
+    "templates": [
+      {
+        "name": "Clean Gutters and Downspouts",
+        "description": "Remove debris from gutters to prevent water damage and foundation issues.",
+        "category": "STRUCTURAL",
+        "defaultFrequency": "SEMIANNUAL",
+        "estimatedDurationMinutes": 120,
+        "difficulty": "MODERATE",
+        "tags": ["Exterior", "Water", "Fall", "Spring"],
+        "season": "Fall",
+        "instructions": [
+          "Set up a ladder on stable ground.",
+          "Wear gloves and scoop debris out of gutters.",
+          "Flush gutters with a garden hose to check flow.",
+          "Clear downspouts of any clogs using a snake or hose pressure.",
+          "Check for loose brackets or leaks while cleaning."
+        ],
+        "requiredTools": ["Ladder", "Gloves", "Garden Hose", "Bucket"],
+        "safetyPrecautions": [
+          "Ensure ladder stability.",
+          "Do not work on the roof in wet or windy conditions.",
+          "Use a spotter if possible."
+        ]
+      },
+      {
+        "name": "Inspect Roof Shingles",
+        "description": "Visual inspection of roof condition to catch leaks early.",
+        "category": "STRUCTURAL",
+        "defaultFrequency": "ANNUAL",
+        "estimatedDurationMinutes": 45,
+        "difficulty": "EASY",
+        "tags": ["Exterior", "Inspection"],
+        "season": "Spring",
+        "instructions": [
+          "Walk around the perimeter of your home and look up at the roof.",
+          "Use binoculars to inspect for missing, curled, or damaged shingles.",
+          "Check for moss or algae growth.",
+          "Inspect flashing around chimneys and vents for rust or separation.",
+          "Look for granules in the gutters (sign of aging shingles)."
+        ],
+        "requiredTools": ["Binoculars"],
+        "safetyPrecautions": ["Perform inspection from the ground if possible."]
+      },
+      {
+        "name": "Remove Roof Moss",
+        "description": "Gentle removal of moss to prevent shingle damage.",
+        "category": "STRUCTURAL",
+        "defaultFrequency": "ANNUAL",
+        "estimatedDurationMinutes": 90,
+        "difficulty": "MODERATE",
+        "tags": ["Exterior", "Maintenance"],
+        "season": "Summer",
+        "instructions": [
+          "Wet the moss with water.",
+          "Gently scrub moss with a long-handled soft-bristle brush (downward motion only).",
+          "Apply a moss killer or zinc strips if moss is persistent.",
+          "Do not use a pressure washer as it can damage shingles."
+        ],
+        "requiredTools": [
+          "Ladder",
+          "Soft Brush",
+          "Garden Hose",
+          "Moss Control Product"
+        ],
+        "safetyPrecautions": [
+          "Use fall protection if working on the roof.",
+          "Wear non-slip shoes."
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foundation-and-walls",
+    "name": "Foundation & Walls",
+    "description": "Protect the structural integrity of your home.",
+    "category": "STRUCTURAL",
+    "tags": ["Exterior", "Structure"],
+    "applicableClimateZones": [],
+    "minHomeAge": 5,
+    "maxHomeAge": null,
+    "templates": [
+      {
+        "name": "Inspect Foundation for Cracks",
+        "description": "Check for settlement cracks or water intrusion points.",
+        "category": "STRUCTURAL",
+        "defaultFrequency": "ANNUAL",
+        "estimatedDurationMinutes": 30,
+        "difficulty": "EASY",
+        "tags": ["Inspection", "Foundation"],
+        "season": "Spring",
+        "instructions": [
+          "Walk the perimeter of the foundation.",
+          "Look for vertical or diagonal cracks wider than 1/8 inch.",
+          "Check for crumbling concrete or water stains.",
+          "Ensure soil slopes away from the foundation."
+        ],
+        "requiredTools": ["Flashlight", "Tape Measure"],
+        "safetyPrecautions": []
+      },
+      {
+        "name": "Clean Exterior Siding",
+        "description": "Wash siding to prevent mold and improve curb appeal.",
+        "category": "STRUCTURAL",
+        "defaultFrequency": "ANNUAL",
+        "estimatedDurationMinutes": 180,
+        "difficulty": "MODERATE",
+        "tags": ["Exterior", "Cleaning"],
+        "season": "Summer",
+        "instructions": [
+          "Close all windows and doors.",
+          "Cover nearby plants with tarps.",
+          "Use a garden hose or low-pressure washer with siding cleaner.",
+          "Scrub stubborn spots with a soft brush.",
+          "Rinse thoroughly from top to bottom."
+        ],
+        "requiredTools": [
+          "Garden Hose",
+          "Siding Cleaner",
+          "Soft Brush",
+          "Bucket"
+        ],
+        "safetyPrecautions": [
+          "Avoid high pressure on vinyl or wood siding to prevent water intrusion."
+        ]
+      }
+    ]
+  },
+  {
+    "id": "windows-and-doors",
+    "name": "Windows & Doors",
+    "description": "Maintain efficiency and security of entry points.",
+    "category": "STRUCTURAL",
+    "tags": ["Efficiency", "Security"],
+    "applicableClimateZones": [],
+    "minHomeAge": null,
+    "maxHomeAge": null,
+    "templates": [
+      {
+        "name": "Inspect Window Seals",
+        "description": "Check for drafts and failed seals to improve energy efficiency.",
+        "category": "STRUCTURAL",
+        "defaultFrequency": "ANNUAL",
+        "estimatedDurationMinutes": 60,
+        "difficulty": "EASY",
+        "tags": ["Efficiency", "Winterization"],
+        "season": "Fall",
+        "instructions": [
+          "Check caulking around exterior window frames.",
+          "Look for fogging between glass panes (indicates failed seal).",
+          "Feel for drafts around the frame on a windy day.",
+          "Replace weatherstripping if brittle or missing."
+        ],
+        "requiredTools": ["Caulk Gun", "Silicone Caulk"],
+        "safetyPrecautions": []
+      },
+      {
+        "name": "Lubricate Door Hinges and Tracks",
+        "description": "Keep doors operating smoothly and quietly.",
+        "category": "STRUCTURAL",
+        "defaultFrequency": "ANNUAL",
+        "estimatedDurationMinutes": 30,
+        "difficulty": "EASY",
+        "tags": ["Maintenance"],
+        "season": null,
+        "instructions": [
+          "Wipe dirt from hinges and sliding door tracks.",
+          "Apply silicone spray or white lithium grease to hinges.",
+          "Open and close the door several times to distribute lubricant.",
+          "Wipe away excess oil."
+        ],
+        "requiredTools": ["Silicone Spray", "Rag"],
+        "safetyPrecautions": []
+      }
+    ]
+  }
+]

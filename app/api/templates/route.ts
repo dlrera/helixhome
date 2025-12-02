@@ -18,16 +18,26 @@ export async function GET(request: NextRequest) {
     const category = searchParams.get('category') as AssetCategory | null
     const difficulty = searchParams.get('difficulty') as Difficulty | null
     const search = searchParams.get('search')
+    const packId = searchParams.get('packId') // NEW: Filter by template pack
     const page = parseInt(searchParams.get('page') || '1')
     const limit = parseInt(searchParams.get('limit') || '20')
     const skip = (page - 1) * limit
 
     // Create cache key based on parameters
-    const cacheKey = `templates:${category || 'all'}:${difficulty || 'all'}:${search || 'none'}:${page}:${limit}`
+    const cacheKey = `templates:${category || 'all'}:${difficulty || 'all'}:${search || 'none'}:${packId || 'all'}:${page}:${limit}`
 
     // Build filter conditions
-    const where: any = {
-      isActive: true
+    const where: {
+      isActive: boolean
+      category?: AssetCategory
+      difficulty?: Difficulty
+      packId?: string
+      OR?: Array<{
+        name?: { contains: string }
+        description?: { contains: string }
+      }>
+    } = {
+      isActive: true,
     }
 
     if (category) {
@@ -38,10 +48,15 @@ export async function GET(request: NextRequest) {
       where.difficulty = difficulty
     }
 
+    // Filter by pack ID
+    if (packId) {
+      where.packId = packId
+    }
+
     if (search) {
       where.OR = [
         { name: { contains: search } },
-        { description: { contains: search } }
+        { description: { contains: search } },
       ]
     }
 
@@ -61,16 +76,22 @@ export async function GET(request: NextRequest) {
               defaultFrequency: true,
               estimatedDurationMinutes: true,
               difficulty: true,
-              isSystemTemplate: true
+              isSystemTemplate: true,
+              packId: true,
+              tags: true,
+              season: true,
+              pack: {
+                select: {
+                  id: true,
+                  name: true,
+                },
+              },
             },
-            orderBy: [
-              { category: 'asc' },
-              { name: 'asc' }
-            ],
+            orderBy: [{ category: 'asc' }, { name: 'asc' }],
             skip,
-            take: limit
+            take: limit,
           }),
-          prisma.maintenanceTemplate.count({ where })
+          prisma.maintenanceTemplate.count({ where }),
         ])
 
         return {
@@ -79,8 +100,8 @@ export async function GET(request: NextRequest) {
             page,
             limit,
             total,
-            totalPages: Math.ceil(total / limit)
-          }
+            totalPages: Math.ceil(total / limit),
+          },
         }
       },
       10 * 60 * 1000 // Cache for 10 minutes

@@ -1,0 +1,93 @@
+{
+  "id": "pack-older-home-care",
+  "name": "Older Home Care",
+  "description": "Specialized maintenance for homes 20+ years old. Address aging systems before they become problems.",
+  "category": null,
+  "tags": ["Older Home", "Preventive", "Age-Based"],
+  "applicableClimateZones": ["Humid", "Cold", "Temperate", "Arid"],
+  "minHomeAge": 20,
+  "maxHomeAge": null,
+  "templates": [
+    {
+      "name": "Electrical Panel Inspection",
+      "description": "Professional inspection of electrical panel for outdated wiring and safety hazards.",
+      "category": "ELECTRICAL",
+      "defaultFrequency": "ANNUAL",
+      "estimatedDurationMinutes": 60,
+      "difficulty": "PROFESSIONAL",
+      "tags": ["Electrical", "Safety", "Professional", "Older Home"],
+      "season": null,
+      "instructions": [
+        "Schedule licensed electrician",
+        "Clear area around electrical panel",
+        "Have home history/documentation ready",
+        "Ask about Federal Pacific or Zinsco panels (fire hazards)",
+        "Request written report of findings",
+        "Get quotes for any recommended upgrades"
+      ],
+      "requiredTools": ["Phone to schedule service", "Home documentation"],
+      "safetyPrecautions": [
+        "Never open panel yourself",
+        "Use only licensed electricians",
+        "Replace outdated panels immediately"
+      ]
+    },
+    {
+      "name": "Plumbing System Assessment",
+      "description": "Check for galvanized or polybutylene pipes that may need replacement.",
+      "category": "PLUMBING",
+      "defaultFrequency": "ANNUAL",
+      "estimatedDurationMinutes": 45,
+      "difficulty": "MODERATE",
+      "tags": ["Plumbing", "Inspection", "Older Home"],
+      "season": null,
+      "instructions": [
+        "Check visible pipes in basement/crawlspace",
+        "Look for galvanized steel (gray, threaded) - prone to corrosion",
+        "Look for polybutylene (gray plastic) - prone to failure",
+        "Check water pressure at multiple fixtures",
+        "Look for signs of leaks or water damage",
+        "Note any discolored water when first turned on",
+        "Consider camera inspection of drain lines"
+      ],
+      "requiredTools": [
+        "Flashlight",
+        "Magnet (to identify pipe material)",
+        "Notepad and camera"
+      ],
+      "safetyPrecautions": [
+        "Watch for asbestos insulation on old pipes",
+        "Consult plumber for major concerns"
+      ]
+    },
+    {
+      "name": "Foundation Inspection",
+      "description": "Check foundation for cracks, settling, and moisture issues.",
+      "category": "STRUCTURAL",
+      "defaultFrequency": "ANNUAL",
+      "estimatedDurationMinutes": 30,
+      "difficulty": "MODERATE",
+      "tags": ["Structural", "Inspection", "Older Home"],
+      "season": null,
+      "instructions": [
+        "Walk perimeter of home exterior",
+        "Look for cracks in foundation (horizontal cracks are more serious)",
+        "Check for separation between foundation and siding",
+        "Inspect basement/crawlspace walls",
+        "Look for water stains or efflorescence (white powder)",
+        "Check floors for sloping or bouncing",
+        "Document any cracks with photos and measurements"
+      ],
+      "requiredTools": [
+        "Flashlight",
+        "Tape measure",
+        "Camera",
+        "Crack monitor (optional)"
+      ],
+      "safetyPrecautions": [
+        "Consult structural engineer for large cracks",
+        "Address water drainage issues promptly"
+      ]
+    }
+  ]
+}

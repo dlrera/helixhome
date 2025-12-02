@@ -1,0 +1,145 @@
+{
+  "id": "pack-safety-first",
+  "name": "Safety First",
+  "description": "Critical safety checks every homeowner should perform regularly. Protect your family with these essential tests.",
+  "category": null,
+  "tags": ["Safety", "Critical", "Family Protection"],
+  "applicableClimateZones": ["Humid", "Cold", "Temperate", "Arid"],
+  "minHomeAge": null,
+  "maxHomeAge": null,
+  "templates": [
+    {
+      "name": "Smoke Detector Test",
+      "description": "Monthly test of all smoke detectors to ensure they are functioning properly.",
+      "category": "ELECTRICAL",
+      "defaultFrequency": "MONTHLY",
+      "estimatedDurationMinutes": 10,
+      "difficulty": "EASY",
+      "tags": ["Safety", "Fire Prevention", "Monthly"],
+      "season": null,
+      "instructions": [
+        "Alert household members before testing",
+        "Press and hold test button on each detector",
+        "Verify alarm sounds loudly and clearly",
+        "Check that interconnected alarms all sound",
+        "Vacuum dust from detector vents",
+        "Note any weak-sounding alarms for battery change"
+      ],
+      "requiredTools": ["Step ladder", "Vacuum with brush attachment"],
+      "safetyPrecautions": [
+        "Warn family members before testing",
+        "Use stable step ladder",
+        "Replace detectors older than 10 years"
+      ]
+    },
+    {
+      "name": "Smoke Detector Battery Change",
+      "description": "Annual battery replacement in all smoke detectors, even those with 10-year batteries.",
+      "category": "ELECTRICAL",
+      "defaultFrequency": "ANNUAL",
+      "estimatedDurationMinutes": 20,
+      "difficulty": "EASY",
+      "tags": ["Safety", "Fire Prevention", "Annual"],
+      "season": null,
+      "instructions": [
+        "Remove detector from mounting bracket",
+        "Open battery compartment",
+        "Remove old battery and dispose properly",
+        "Insert fresh 9V battery (check expiration)",
+        "Close compartment and remount detector",
+        "Press test button to verify operation",
+        "Record date of battery change"
+      ],
+      "requiredTools": [
+        "9V batteries (quality brand)",
+        "Step ladder",
+        "Marker for date"
+      ],
+      "safetyPrecautions": [
+        "Use only recommended battery type",
+        "Replace detector if damaged",
+        "Change batteries in spring or fall (daylight saving)"
+      ]
+    },
+    {
+      "name": "Fire Extinguisher Inspection",
+      "description": "Annual inspection of fire extinguisher pressure, accessibility, and condition.",
+      "category": "ELECTRICAL",
+      "defaultFrequency": "ANNUAL",
+      "estimatedDurationMinutes": 10,
+      "difficulty": "EASY",
+      "tags": ["Safety", "Fire Prevention", "Annual"],
+      "season": null,
+      "instructions": [
+        "Check pressure gauge - needle should be in green zone",
+        "Verify safety pin and tamper seal are intact",
+        "Inspect for visible damage, rust, or dents",
+        "Ensure mounting bracket is secure",
+        "Confirm easy access (not blocked)",
+        "Review operating instructions",
+        "Check expiration and service date"
+      ],
+      "requiredTools": ["None required"],
+      "safetyPrecautions": [
+        "Replace if pressure is low",
+        "Professional service every 6 years",
+        "Replace unit every 12 years"
+      ]
+    },
+    {
+      "name": "Dryer Vent Deep Cleaning",
+      "description": "Thorough cleaning of dryer vent system to prevent house fires. Leading cause of home fires.",
+      "category": "APPLIANCE",
+      "defaultFrequency": "ANNUAL",
+      "estimatedDurationMinutes": 45,
+      "difficulty": "MODERATE",
+      "tags": ["Safety", "Fire Prevention", "Annual"],
+      "season": null,
+      "instructions": [
+        "Unplug dryer from electrical outlet",
+        "Pull dryer away from wall",
+        "Disconnect flexible vent hose",
+        "Use dryer vent brush kit to clean entire duct",
+        "Go outside and clean exterior vent hood",
+        "Vacuum lint from behind and under dryer",
+        "Reconnect vent hose with proper clamps",
+        "Push dryer back and plug in",
+        "Run empty cycle to verify airflow"
+      ],
+      "requiredTools": [
+        "Dryer vent brush kit (rotating)",
+        "Vacuum with hose attachment",
+        "Screwdriver",
+        "Vent clamps"
+      ],
+      "safetyPrecautions": [
+        "Always unplug dryer first",
+        "If gas dryer, check for gas leaks",
+        "Ensure vent reconnects securely"
+      ]
+    },
+    {
+      "name": "Carbon Monoxide Detector Test",
+      "description": "Test CO detectors to protect against invisible, odorless carbon monoxide gas.",
+      "category": "ELECTRICAL",
+      "defaultFrequency": "MONTHLY",
+      "estimatedDurationMinutes": 5,
+      "difficulty": "EASY",
+      "tags": ["Safety", "CO Protection", "Monthly"],
+      "season": null,
+      "instructions": [
+        "Press and hold test button",
+        "Listen for alarm sequence",
+        "Check display (if digital) for proper operation",
+        "Verify detector location is appropriate",
+        "Replace batteries if alarm is weak"
+      ],
+      "requiredTools": ["None required"],
+      "safetyPrecautions": [
+        "Install on every level of home",
+        "Replace detector every 5-7 years",
+        "If alarm sounds for real, evacuate immediately"
+      ]
+    }
+  ]
+}

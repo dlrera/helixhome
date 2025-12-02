@@ -22,17 +22,20 @@ With critical issues resolved (Tasks 9-12), this final task polishes the user ex
 ### Loading States & Feedback (6.0/10 - Fair)
 
 **Strengths**:
+
 - ✅ Dashboard shows loading skeletons
 - ✅ Toast container exists (sonner)
 - ℹ️ Loading indicators present
 
 **Issues**:
+
 - ⚠️ Loading skeleton timing difficult to capture (too fast or too slow)
 - ⚠️ Empty states not tested (requires empty data)
 - ⚠️ Error states not verified (no error boundaries observed)
 - ⚠️ Toast notifications not triggered during tests
 
 **Recommendations from Audit**:
+
 1. Verify loading states with slow 3G throttling
 2. Test empty states with fresh user
 3. Implement error boundaries
@@ -41,6 +44,7 @@ With critical issues resolved (Tasks 9-12), this final task polishes the user ex
 ### Interactive Components (7.0/10 - Good)
 
 **Strengths**:
+
 - ✅ Modals properly implemented
 - ✅ Dropdowns detected
 - ✅ Tooltips likely present
@@ -49,6 +53,7 @@ With critical issues resolved (Tasks 9-12), this final task polishes the user ex
 - ✅ Drawer components work
 
 **Issues**:
+
 - ⚠️ Dropdown close-on-outside-click not verified
 - ⚠️ Tooltip hover delay not tested
 - ⚠️ Tab component existence unclear
@@ -56,6 +61,7 @@ With critical issues resolved (Tasks 9-12), this final task polishes the user ex
 ### Forms & Validation (7.0/10 - Good)
 
 **Strengths**:
+
 - ✅ Validation triggers on submission
 - ✅ Error messages displayed
 - ✅ Required fields marked
@@ -63,6 +69,7 @@ With critical issues resolved (Tasks 9-12), this final task polishes the user ex
 - ✅ Select/dropdown inputs functional
 
 **Issues**:
+
 - ⚠️ Error message clarity not verified
 - ⚠️ Success feedback not tested
 - ❌ File upload test had syntax error
@@ -70,12 +77,14 @@ With critical issues resolved (Tasks 9-12), this final task polishes the user ex
 ### Visual Design (7.5/10 - Good)
 
 **Strengths**:
+
 - ✅ Inter font applied
 - ✅ Heading hierarchy exists
 - ✅ Card components consistent
 - ✅ Brand identity present
 
 **Issues**:
+
 - ⚠️ Primary brand color (#216093) verification incomplete
 - ⚠️ Button variant consistency needs verification
 - ℹ️ Spacing consistency requires review
@@ -83,6 +92,7 @@ With critical issues resolved (Tasks 9-12), this final task polishes the user ex
 ### Navigation & UX (5.0/10 → 8.0+ after Tasks 9-13)
 
 **Remaining Issue**:
+
 - ⚠️ Breadcrumb navigation not implemented on detail pages
 
 ## Technical Requirements
@@ -92,64 +102,68 @@ With critical issues resolved (Tasks 9-12), this final task polishes the user ex
 **Purpose**: Prevent entire app crash when component errors occur
 
 **Pattern**:
+
 ```tsx
 // components/error-boundary.tsx
-'use client';
+'use client'
 
-import React from 'react';
-import { AlertTriangle } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import React from 'react'
+import { AlertTriangle } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 
 interface Props {
-  children: React.ReactNode;
-  fallback?: React.ReactNode;
+  children: React.ReactNode
+  fallback?: React.ReactNode
 }
 
 interface State {
-  hasError: boolean;
-  error?: Error;
+  hasError: boolean
+  error?: Error
 }
 
 export class ErrorBoundary extends React.Component<Props, State> {
   constructor(props: Props) {
-    super(props);
-    this.state = { hasError: false };
+    super(props)
+    this.state = { hasError: false }
   }
 
   static getDerivedStateFromError(error: Error): State {
-    return { hasError: true, error };
+    return { hasError: true, error }
   }
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
-    console.error('Error boundary caught:', error, errorInfo);
+    console.error('Error boundary caught:', error, errorInfo)
     // Optional: Send to error tracking service (Sentry)
   }
 
   render() {
     if (this.state.hasError) {
-      return this.props.fallback || (
-        <div className="flex min-h-[400px] flex-col items-center justify-center p-8">
-          <AlertTriangle className="h-12 w-12 text-destructive mb-4" />
-          <h2 className="text-xl font-semibold mb-2">Something went wrong</h2>
-          <p className="text-muted-foreground mb-4">
-            We encountered an error while displaying this content.
-          </p>
-          <Button
-            onClick={() => this.setState({ hasError: false })}
-            variant="outline"
-          >
-            Try again
-          </Button>
-        </div>
-      );
+      return (
+        this.props.fallback || (
+          <div className="flex min-h-[400px] flex-col items-center justify-center p-8">
+            <AlertTriangle className="h-12 w-12 text-destructive mb-4" />
+            <h2 className="text-xl font-semibold mb-2">Something went wrong</h2>
+            <p className="text-muted-foreground mb-4">
+              We encountered an error while displaying this content.
+            </p>
+            <Button
+              onClick={() => this.setState({ hasError: false })}
+              variant="outline"
+            >
+              Try again
+            </Button>
+          </div>
+        )
+      )
     }
 
-    return this.props.children;
+    return this.props.children
   }
 }
 ```
 
 **Usage**:
+
 ```tsx
 // Wrap dashboard widgets
 <ErrorBoundary>
@@ -163,6 +177,7 @@ export class ErrorBoundary extends React.Component<Props, State> {
 ```
 
 **Where to Add**:
+
 - Dashboard widgets (analytics, calendar, cost summary)
 - Data tables (assets, tasks)
 - Forms (asset create, task create)
@@ -173,18 +188,19 @@ export class ErrorBoundary extends React.Component<Props, State> {
 **Purpose**: Help users understand their location and navigate back
 
 **Implementation**:
+
 ```tsx
 // components/ui/breadcrumb.tsx
-import Link from 'next/link';
-import { ChevronRight } from 'lucide-react';
+import Link from 'next/link'
+import { ChevronRight } from 'lucide-react'
 
 interface BreadcrumbItem {
-  label: string;
-  href?: string;
+  label: string
+  href?: string
 }
 
 interface BreadcrumbProps {
-  items: BreadcrumbItem[];
+  items: BreadcrumbItem[]
 }
 
 export function Breadcrumb({ items }: BreadcrumbProps) {
@@ -210,11 +226,12 @@ export function Breadcrumb({ items }: BreadcrumbProps) {
         ))}
       </ol>
     </nav>
-  );
+  )
 }
 ```
 
 **Usage**:
+
 ```tsx
 // app/assets/[id]/page.tsx
 <Breadcrumb
@@ -236,6 +253,7 @@ export function Breadcrumb({ items }: BreadcrumbProps) {
 ```
 
 **Pages to Add**:
+
 - Asset detail page
 - Task detail page
 - Dashboard sub-pages (costs, settings)
@@ -244,9 +262,10 @@ export function Breadcrumb({ items }: BreadcrumbProps) {
 ### 3. Toast Notifications Testing
 
 **Verify sonner Implementation**:
+
 ```tsx
 // Should exist in layout
-import { Toaster } from 'sonner';
+import { Toaster } from 'sonner'
 
 export default function RootLayout() {
   return (
@@ -256,32 +275,34 @@ export default function RootLayout() {
         <Toaster />
       </body>
     </html>
-  );
+  )
 }
 ```
 
 **Test Scenarios**:
+
 ```typescript
-import { toast } from 'sonner';
+import { toast } from 'sonner'
 
 // Success
-toast.success('Asset created successfully!');
+toast.success('Asset created successfully!')
 
 // Error
-toast.error('Failed to save changes. Please try again.');
+toast.error('Failed to save changes. Please try again.')
 
 // Info
-toast.info('Changes will be saved automatically.');
+toast.info('Changes will be saved automatically.')
 
 // Loading
-const toastId = toast.loading('Saving changes...');
+const toastId = toast.loading('Saving changes...')
 // Later: toast.success('Saved!', { id: toastId });
 
 // Custom duration
-toast.success('Saved!', { duration: 5000 });
+toast.success('Saved!', { duration: 5000 })
 ```
 
 **Actions to Test**:
+
 - Asset created
 - Asset updated
 - Asset deleted
@@ -295,19 +316,20 @@ toast.success('Saved!', { duration: 5000 });
 ### 4. Empty States
 
 **Pattern**:
+
 ```tsx
 // components/ui/empty-state.tsx
-import { FileQuestion } from 'lucide-react';
-import { Button } from './button';
+import { FileQuestion } from 'lucide-react'
+import { Button } from './button'
 
 interface EmptyStateProps {
-  icon?: React.ComponentType<{ className?: string }>;
-  title: string;
-  description: string;
+  icon?: React.ComponentType<{ className?: string }>
+  title: string
+  description: string
   action?: {
-    label: string;
-    onClick: () => void;
-  };
+    label: string
+    onClick: () => void
+  }
 }
 
 export function EmptyState({
@@ -321,15 +343,14 @@ export function EmptyState({
       <Icon className="h-16 w-16 text-muted-foreground/50 mb-4" />
       <h3 className="text-lg font-semibold mb-2">{title}</h3>
       <p className="text-muted-foreground mb-6 max-w-md">{description}</p>
-      {action && (
-        <Button onClick={action.onClick}>{action.label}</Button>
-      )}
+      {action && <Button onClick={action.onClick}>{action.label}</Button>}
     </div>
-  );
+  )
 }
 ```
 
 **Usage**:
+
 ```tsx
 // No assets
 <EmptyState
@@ -355,6 +376,7 @@ export function EmptyState({
 ```
 
 **Pages to Add**:
+
 - Assets list (no assets)
 - Tasks list (no tasks)
 - Dashboard (no data)
@@ -364,15 +386,17 @@ export function EmptyState({
 ### 5. Loading States with Skeletons
 
 **Verify Existing Skeletons**:
+
 - Dashboard widgets
 - Data tables
 - Forms
 - Charts
 
 **Add Missing Skeletons**:
+
 ```tsx
 // components/ui/skeleton.tsx (should exist from shadcn)
-import { cn } from '@/lib/utils';
+import { cn } from '@/lib/utils'
 
 export function Skeleton({
   className,
@@ -383,7 +407,7 @@ export function Skeleton({
       className={cn('animate-pulse rounded-md bg-muted', className)}
       {...props}
     />
-  );
+  )
 }
 
 // Breadcrumb skeleton
@@ -396,11 +420,12 @@ export function BreadcrumbSkeleton() {
       <Skeleton className="h-4 w-4" />
       <Skeleton className="h-4 w-32" />
     </div>
-  );
+  )
 }
 ```
 
 **Test with Network Throttling**:
+
 - Chrome DevTools → Network tab → Throttling: Slow 3G
 - Verify skeletons appear
 - Check layout doesn't shift when content loads
@@ -420,6 +445,7 @@ export function BreadcrumbSkeleton() {
 **Step 2: Wrap Critical Components**
 
 Identify components to wrap:
+
 - Dashboard analytics charts
 - Cost summary tables
 - Calendar widget
@@ -457,8 +483,8 @@ function TestErrorComponent() {
 ```tsx
 // app/assets/[id]/page.tsx
 export default async function AssetDetailPage({ params }: Props) {
-  const { id } = await params;
-  const asset = await getAsset(id);
+  const { id } = await params
+  const asset = await getAsset(id)
 
   return (
     <div>
@@ -471,7 +497,7 @@ export default async function AssetDetailPage({ params }: Props) {
       />
       {/* Rest of page */}
     </div>
-  );
+  )
 }
 ```
 
@@ -494,17 +520,18 @@ Check `app/layout.tsx` has `<Toaster />` from sonner.
 // Example: Asset creation
 async function handleSubmit(data: AssetFormData) {
   try {
-    const result = await createAsset(data);
-    toast.success('Asset created successfully!');
-    router.push(`/assets/${result.id}`);
+    const result = await createAsset(data)
+    toast.success('Asset created successfully!')
+    router.push(`/assets/${result.id}`)
   } catch (error) {
-    toast.error('Failed to create asset. Please try again.');
-    console.error(error);
+    toast.error('Failed to create asset. Please try again.')
+    console.error(error)
   }
 }
 ```
 
 **Actions to Add Toasts**:
+
 - Asset CRUD operations
 - Task CRUD operations
 - Template application
@@ -555,6 +582,7 @@ Conditionally render empty state when no data:
 **Step 1: Verify Existing Skeletons**
 
 Check these exist and match content:
+
 - Dashboard widget skeletons
 - Table skeletons
 - Chart skeletons
@@ -563,6 +591,7 @@ Check these exist and match content:
 **Step 2: Add Missing Skeletons**
 
 Create skeletons for:
+
 - Breadcrumbs
 - Empty states (if lazy loaded)
 - Modals/drawers
@@ -583,78 +612,85 @@ Create skeletons for:
 **New Tests to Add**:
 
 **Error Scenarios**:
+
 ```typescript
 test('Shows error boundary on chart failure', async ({ page }) => {
   // Mock API to return error
-  await page.route('**/api/dashboard/analytics', route =>
+  await page.route('**/api/dashboard/analytics', (route) =>
     route.fulfill({ status: 500 })
-  );
-  await page.goto('/dashboard');
-  await expect(page.getByText('Something went wrong')).toBeVisible();
-  await expect(page.getByRole('button', { name: 'Try again' })).toBeVisible();
-});
+  )
+  await page.goto('/dashboard')
+  await expect(page.getByText('Something went wrong')).toBeVisible()
+  await expect(page.getByRole('button', { name: 'Try again' })).toBeVisible()
+})
 ```
 
 **Empty State Tests**:
+
 ```typescript
 test('Shows empty state when no assets', async ({ page }) => {
   // Use fresh database or mock empty response
-  await page.goto('/assets');
-  await expect(page.getByText('No assets yet')).toBeVisible();
-  await expect(page.getByRole('button', { name: 'Add Asset' })).toBeVisible();
-});
+  await page.goto('/assets')
+  await expect(page.getByText('No assets yet')).toBeVisible()
+  await expect(page.getByRole('button', { name: 'Add Asset' })).toBeVisible()
+})
 ```
 
 **Toast Notification Tests**:
+
 ```typescript
 test('Shows success toast on asset creation', async ({ page }) => {
-  await page.goto('/assets/create');
+  await page.goto('/assets/create')
   // Fill form
-  await page.fill('[name="name"]', 'Test Asset');
-  await page.click('button[type="submit"]');
+  await page.fill('[name="name"]', 'Test Asset')
+  await page.click('button[type="submit"]')
   // Check toast
-  await expect(page.getByText('Asset created successfully!')).toBeVisible();
-});
+  await expect(page.getByText('Asset created successfully!')).toBeVisible()
+})
 ```
 
 **Breadcrumb Tests**:
+
 ```typescript
 test('Breadcrumb navigation works on asset detail', async ({ page }) => {
-  await page.goto('/assets/123');
-  await expect(page.getByRole('navigation', { name: 'Breadcrumb' })).toBeVisible();
-  await page.click('a:has-text("Assets")');
-  await expect(page).toHaveURL('/assets');
-});
+  await page.goto('/assets/123')
+  await expect(
+    page.getByRole('navigation', { name: 'Breadcrumb' })
+  ).toBeVisible()
+  await page.click('a:has-text("Assets")')
+  await expect(page).toHaveURL('/assets')
+})
 ```
 
 **Full User Flow Tests**:
+
 ```typescript
 test('Complete maintenance workflow', async ({ page }) => {
   // 1. Login
-  await page.goto('/login');
-  await login(page);
+  await page.goto('/login')
+  await login(page)
 
   // 2. Create asset
-  await page.goto('/assets/create');
-  await createAsset(page, 'HVAC System');
+  await page.goto('/assets/create')
+  await createAsset(page, 'HVAC System')
 
   // 3. Apply template
-  await page.goto('/templates');
-  await page.click('text=HVAC Maintenance');
-  await page.click('button:has-text("Apply Template")');
-  await page.click('button:has-text("Confirm")');
+  await page.goto('/templates')
+  await page.click('text=HVAC Maintenance')
+  await page.click('button:has-text("Apply Template")')
+  await page.click('button:has-text("Confirm")')
 
   // 4. Complete task
-  await page.goto('/tasks');
-  await page.click('text=Change HVAC filter');
-  await page.click('button:has-text("Complete")');
-  await page.fill('[name="cost"]', '25.00');
-  await page.click('button:has-text("Save")');
+  await page.goto('/tasks')
+  await page.click('text=Change HVAC filter')
+  await page.click('button:has-text("Complete")')
+  await page.fill('[name="cost"]', '25.00')
+  await page.click('button:has-text("Save")')
 
   // 5. Verify dashboard updated
-  await page.goto('/dashboard');
-  await expect(page.getByText('1 completed this month')).toBeVisible();
-});
+  await page.goto('/dashboard')
+  await expect(page.getByText('1 completed this month')).toBeVisible()
+})
 ```
 
 ### Phase 7: Visual Regression Testing
@@ -663,24 +699,24 @@ test('Complete maintenance workflow', async ({ page }) => {
 
 ```typescript
 // tests/e2e/visual-regression.spec.ts
-import { test, expect } from '@playwright/test';
+import { test, expect } from '@playwright/test'
 
 test('Dashboard visual regression', async ({ page }) => {
-  await page.goto('/dashboard');
-  await page.waitForLoadState('networkidle');
+  await page.goto('/dashboard')
+  await page.waitForLoadState('networkidle')
 
   // Take screenshot
   await expect(page).toHaveScreenshot('dashboard.png', {
     fullPage: true,
     maxDiffPixels: 100,
-  });
-});
+  })
+})
 
 test('Assets page visual regression', async ({ page }) => {
-  await page.goto('/assets');
-  await page.waitForLoadState('networkidle');
-  await expect(page).toHaveScreenshot('assets.png');
-});
+  await page.goto('/assets')
+  await page.waitForLoadState('networkidle')
+  await expect(page).toHaveScreenshot('assets.png')
+})
 ```
 
 **Option B: Percy (Cloud-based)**
@@ -705,31 +741,37 @@ Only if using Storybook (likely not for this project).
 # HelixIntel Interactive Patterns
 
 ## Modals
+
 - Use for: Confirmations, forms, important messages
 - Behavior: Focus trap, Escape closes, overlay dismisses
 - Example: Asset deletion confirmation
 
 ## Drawers
+
 - Use for: Detail views, side panels
 - Behavior: Slide from right, Escape closes
 - Example: Task detail drawer
 
 ## Tooltips
+
 - Use for: Additional info, icon explanations
 - Behavior: 300ms delay, keyboard accessible
 - Example: Dashboard widget info icons
 
 ## Dropdowns
+
 - Use for: Menus, select options
 - Behavior: Arrow keys navigate, Enter selects, outside click closes
 - Example: User menu, filter dropdowns
 
 ## Toast Notifications
+
 - Use for: Success/error feedback
 - Behavior: Auto-dismiss (4s), dismissible, stacks
 - Example: "Asset created successfully!"
 
 ## Loading States
+
 - Use for: Data fetching, async operations
 - Behavior: Skeleton matches content layout
 - Example: Dashboard widget skeletons
@@ -740,12 +782,14 @@ Only if using Storybook (likely not for this project).
 ### Manual Testing Checklist
 
 **Error Boundaries**:
+
 - [ ] Dashboard widget error shows fallback
 - [ ] Chart error doesn't crash page
 - [ ] "Try again" button works
 - [ ] Console logs error details
 
 **Breadcrumbs**:
+
 - [ ] Breadcrumbs visible on asset detail
 - [ ] Breadcrumbs visible on task detail
 - [ ] Links navigate correctly
@@ -753,6 +797,7 @@ Only if using Storybook (likely not for this project).
 - [ ] Screen reader announces navigation
 
 **Toast Notifications**:
+
 - [ ] Success toast on asset create
 - [ ] Success toast on asset update
 - [ ] Success toast on asset delete
@@ -762,6 +807,7 @@ Only if using Storybook (likely not for this project).
 - [ ] Multiple toasts stack correctly
 
 **Empty States**:
+
 - [ ] Assets page shows empty state (no assets)
 - [ ] Tasks page shows empty state (no tasks)
 - [ ] Dashboard shows empty state (no data)
@@ -769,6 +815,7 @@ Only if using Storybook (likely not for this project).
 - [ ] CTA buttons work in empty states
 
 **Loading States**:
+
 - [ ] Skeletons appear on slow connection
 - [ ] Skeletons match content layout
 - [ ] No layout shift when content loads
@@ -777,6 +824,7 @@ Only if using Storybook (likely not for this project).
 ### E2E Testing
 
 **Expanded Test Coverage**:
+
 - [ ] Error boundary tests (new)
 - [ ] Empty state tests (new)
 - [ ] Toast notification tests (new)
@@ -785,12 +833,14 @@ Only if using Storybook (likely not for this project).
 - [ ] Visual regression tests (new)
 
 **Test Pass Rate**:
+
 - Current: 78/183 (43%)
 - Target: 213/250 (85%+)
 
 ### Visual Regression Testing
 
 **Baseline Screenshots**:
+
 - [ ] Dashboard (desktop, tablet, mobile)
 - [ ] Assets list
 - [ ] Asset detail
@@ -800,6 +850,7 @@ Only if using Storybook (likely not for this project).
 - [ ] Login page
 
 **Comparison**:
+
 - [ ] Run tests on each deploy
 - [ ] Flag visual changes
 - [ ] Review and approve or fix
@@ -809,11 +860,13 @@ Only if using Storybook (likely not for this project).
 ### Quantifiable Targets
 
 **Test Coverage**:
+
 - E2E tests: 183 → 250+ tests
 - Pass rate: 43% → 85%+
 - New test categories: 6 (errors, empty, toasts, breadcrumbs, flows, visual)
 
 **UX Scores**:
+
 - Loading States: 6.0/10 → 8.0+/10
 - Interactive Components: 7.0/10 → 8.5+/10
 - Forms & Validation: 7.0/10 → 9.0+/10
@@ -821,10 +874,12 @@ Only if using Storybook (likely not for this project).
 - Navigation & UX: 8.0/10 (after Tasks 9, 13)
 
 **Error Handling**:
+
 - Error boundaries: 0 → 10+ critical components wrapped
 - Graceful failures: 0% → 100% of widget errors handled
 
 **Navigation**:
+
 - Breadcrumbs: 0 → 2+ pages (asset detail, task detail)
 - User orientation: Improved with breadcrumbs
 
@@ -840,11 +895,13 @@ Only if using Storybook (likely not for this project).
 ## Security Considerations
 
 **Error Boundaries**:
+
 - Don't expose sensitive error details in production
 - Sanitize error messages shown to users
 - Log full errors securely (not to console in production)
 
 **Toast Notifications**:
+
 - Don't expose sensitive data in toasts
 - Ensure error messages are user-friendly, not technical
 
@@ -868,78 +925,66 @@ See accompanying file: `task-13-checklist.md`
 
 ## Estimated Time
 
-| Component | Hours |
-|-----------|-------|
-| Error boundaries implementation | 4h |
-| Breadcrumbs implementation | 3h |
-| Toast notifications testing | 3h |
-| Empty states implementation | 4h |
-| Loading states verification | 2h |
-| E2E test expansion | 8h |
-| Visual regression setup | 3h |
-| Interactive patterns documentation | 2h |
-| Manual color audit | 2h |
-| Production checklist | 2h |
-| Final verification & polish | 3h |
-| **Total** | **36h (3-4 days)** |
+| Component                          | Hours              |
+| ---------------------------------- | ------------------ |
+| Error boundaries implementation    | 4h                 |
+| Breadcrumbs implementation         | 3h                 |
+| Toast notifications testing        | 3h                 |
+| Empty states implementation        | 4h                 |
+| Loading states verification        | 2h                 |
+| E2E test expansion                 | 8h                 |
+| Visual regression setup            | 3h                 |
+| Interactive patterns documentation | 2h                 |
+| Manual color audit                 | 2h                 |
+| Production checklist               | 2h                 |
+| Final verification & polish        | 3h                 |
+| **Total**                          | **36h (3-4 days)** |
 
 ## Implementation Plan
 
 ### Day 1: Error Handling & Navigation (8h)
 
 **Morning** (4h):
+
 1. Create error boundary component
 2. Wrap critical components
 3. Test error scenarios
 4. Verify error handling works
 
-**Afternoon** (4h):
-5. Create breadcrumb component
-6. Add to detail pages
-7. Test navigation
-8. Verify accessibility
+**Afternoon** (4h): 5. Create breadcrumb component 6. Add to detail pages 7. Test navigation 8. Verify accessibility
 
 ### Day 2: UX Polish (8h)
 
 **Morning** (4h):
+
 1. Test toast notifications
 2. Add missing toast calls
 3. Create empty state component
 4. Add to all list pages
 
-**Afternoon** (4h):
-5. Verify loading states
-6. Test with network throttling
-7. Add missing skeletons
-8. Manual color audit
+**Afternoon** (4h): 5. Verify loading states 6. Test with network throttling 7. Add missing skeletons 8. Manual color audit
 
 ### Day 3: Testing Expansion (8h)
 
 **Morning** (4h):
+
 1. Add error boundary tests
 2. Add empty state tests
 3. Add toast tests
 4. Add breadcrumb tests
 
-**Afternoon** (4h):
-5. Add full user flow tests
-6. Run all tests
-7. Fix failures
-8. Verify 85%+ pass rate
+**Afternoon** (4h): 5. Add full user flow tests 6. Run all tests 7. Fix failures 8. Verify 85%+ pass rate
 
 ### Day 4: Visual Regression & Finalization (8h)
 
 **Morning** (4h):
+
 1. Set up visual regression testing
 2. Capture baseline screenshots
 3. Run visual tests
 4. Document patterns
 
-**Afternoon** (4h):
-5. Create production checklist
-6. Final manual testing
-7. Documentation updates
-8. Task completion verification
+**Afternoon** (4h): 5. Create production checklist 6. Final manual testing 7. Documentation updates 8. Task completion verification
 
 ### Buffer (4h)
 
@@ -959,16 +1004,19 @@ See accompanying file: `task-13-checklist.md`
 ### Common Patterns
 
 **Error Boundaries**:
+
 - Wrap at widget level, not entire pages
 - Provide recovery mechanism ("Try again")
 - Log errors for debugging
 
 **Empty States**:
+
 - Always include helpful message
 - Provide clear next action (CTA)
 - Use appropriate icon
 
 **Toast Notifications**:
+
 - Success: Green, checkmark icon
 - Error: Red, X icon
 - Info: Blue, info icon
@@ -977,6 +1025,7 @@ See accompanying file: `task-13-checklist.md`
 ### Related Issues
 
 This task addresses:
+
 - **Loading States (6.0/10)**: "Loading state timing, empty states, error states"
 - **Interactive Components (7.0/10)**: "Dropdown behavior, tooltip testing"
 - **Forms & Validation (7.0/10)**: "Error message quality, success feedback"

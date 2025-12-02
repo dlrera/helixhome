@@ -93,6 +93,16 @@ type BudgetSettingsData = {
   budgetStartDate: string | null
 }
 
+type InsightType = 'info' | 'warning' | 'success' | 'alert'
+
+export type MaintenanceInsight = {
+  type: InsightType
+  title: string
+  description: string
+  actionable?: boolean
+  metadata?: Record<string, unknown>
+}
+
 /**
  * Hook: useDashboardAnalytics
  * Fetch analytics data for dashboard charts
@@ -312,5 +322,28 @@ export function useUpdateBudget() {
     onError: (error: Error) => {
       toast.error(error.message || 'Failed to update budget settings')
     },
+  })
+}
+
+/**
+ * Hook: useMaintenanceInsights
+ * Fetch AI-generated maintenance insights and recommendations
+ *
+ * PERFORMANCE OPTIMIZATION: 5-minute stale time for insights that change with task activity
+ */
+export function useMaintenanceInsights() {
+  return useQuery<MaintenanceInsight[]>({
+    queryKey: ['dashboard', 'insights'],
+    queryFn: async () => {
+      const response = await fetch('/api/dashboard/insights')
+      if (!response.ok) {
+        throw new Error('Failed to fetch maintenance insights')
+      }
+      const data = await response.json()
+      return data
+    },
+    staleTime: 5 * 60 * 1000, // 5 minutes - insights change with task activity
+    gcTime: 10 * 60 * 1000, // 10 minutes - keep in cache for quick re-access
+    refetchOnWindowFocus: false,
   })
 }

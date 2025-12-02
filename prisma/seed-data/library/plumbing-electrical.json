@@ -1,0 +1,120 @@
+[
+  {
+    "id": "plumbing-essentials",
+    "name": "Plumbing Essentials",
+    "description": "Prevent leaks and maintain water flow.",
+    "category": "PLUMBING",
+    "tags": ["Water", "Maintenance"],
+    "applicableClimateZones": [],
+    "minHomeAge": null,
+    "maxHomeAge": null,
+    "templates": [
+      {
+        "name": "Flush Water Heater",
+        "description": "Remove sediment buildup to extend heater life and efficiency.",
+        "category": "PLUMBING",
+        "defaultFrequency": "ANNUAL",
+        "estimatedDurationMinutes": 60,
+        "difficulty": "MODERATE",
+        "tags": ["Efficiency", "Water Heater"],
+        "season": null,
+        "instructions": [
+          "Turn off power (electric) or set to pilot (gas).",
+          "Connect a garden hose to the drain valve.",
+          "Run the other end of the hose to a floor drain or outside.",
+          "Open the drain valve and let water run until clear.",
+          "Close valve, disconnect hose, and restore power/gas."
+        ],
+        "requiredTools": ["Garden Hose", "Flathead Screwdriver", "Bucket"],
+        "safetyPrecautions": ["Water will be scalding hot. Use caution."]
+      },
+      {
+        "name": "Check Under-Sink Plumbing",
+        "description": "Inspect for small leaks that cause cabinet damage.",
+        "category": "PLUMBING",
+        "defaultFrequency": "SEMIANNUAL",
+        "estimatedDurationMinutes": 15,
+        "difficulty": "EASY",
+        "tags": ["Inspection", "Leak Prevention"],
+        "season": null,
+        "instructions": [
+          "Clear items from under kitchen and bathroom sinks.",
+          "Run water and check P-traps and supply lines for drips.",
+          "Feel the bottom of the cabinet for moisture or warping.",
+          "Tighten any loose fittings by hand."
+        ],
+        "requiredTools": ["Flashlight"],
+        "safetyPrecautions": []
+      },
+      {
+        "name": "Test Sump Pump",
+        "description": "Ensure sump pump is ready for heavy rain.",
+        "category": "PLUMBING",
+        "defaultFrequency": "SEMIANNUAL",
+        "estimatedDurationMinutes": 15,
+        "difficulty": "EASY",
+        "tags": ["Flood Prevention", "Basement"],
+        "season": "Spring",
+        "instructions": [
+          "Pour a bucket of water into the sump pit.",
+          "Verify the float rises and the pump activates.",
+          "Listen for strange noises.",
+          "Check the discharge pipe outlet outside to ensure water flows freely."
+        ],
+        "requiredTools": ["Bucket of Water"],
+        "safetyPrecautions": ["Ensure pump is plugged into a GFCI outlet."]
+      }
+    ]
+  },
+  {
+    "id": "electrical-safety",
+    "name": "Electrical Safety",
+    "description": "Critical checks to prevent electrical fires and shocks.",
+    "category": "ELECTRICAL",
+    "tags": ["Safety", "Fire Prevention"],
+    "applicableClimateZones": [],
+    "minHomeAge": null,
+    "maxHomeAge": null,
+    "templates": [
+      {
+        "name": "Test GFCI Outlets",
+        "description": "Verify ground fault protection in wet areas.",
+        "category": "ELECTRICAL",
+        "defaultFrequency": "MONTHLY",
+        "estimatedDurationMinutes": 10,
+        "difficulty": "EASY",
+        "tags": ["Safety"],
+        "season": null,
+        "instructions": [
+          "Press the 'TEST' button on the outlet (power should cut off).",
+          "Plug in a lamp to confirm power is off.",
+          "Press the 'RESET' button to restore power.",
+          "If outlet fails to trip or reset, replace immediately."
+        ],
+        "requiredTools": ["Small Lamp or Tester"],
+        "safetyPrecautions": []
+      },
+      {
+        "name": "Inspect Breaker Panel",
+        "description": "Visual check for signs of overheating or corrosion.",
+        "category": "ELECTRICAL",
+        "defaultFrequency": "ANNUAL",
+        "estimatedDurationMinutes": 10,
+        "difficulty": "EASY",
+        "tags": ["Safety", "Inspection"],
+        "season": null,
+        "instructions": [
+          "Open the panel door.",
+          "Look for rust, scorch marks, or buzzing sounds.",
+          "Do not touch any wires or breakers.",
+          "Ensure the panel is accessible and not blocked by storage."
+        ],
+        "requiredTools": ["Flashlight"],
+        "safetyPrecautions": [
+          "Do not remove the panel cover.",
+          "Call an electrician if you see damage."
+        ]
+      }
+    ]
+  }
+]

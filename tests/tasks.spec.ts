@@ -4,8 +4,8 @@ test.describe('Task Management', () => {
   test.beforeEach(async ({ page }) => {
     // Login before each test
     await page.goto('/auth/signin')
-    await page.fill('input[name="email"]', 'admin@example.com')
-    await page.fill('input[name="password"]', 'homeportal')
+    await page.fill('#email', 'admin@example.com')
+    await page.fill('#password', 'homeportal')
     await page.click('button[type="submit"]')
     await page.waitForURL('/dashboard')
   })
@@ -189,8 +189,8 @@ test.describe('Task Management', () => {
 test.describe('Task Statistics on Dashboard', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/auth/signin')
-    await page.fill('input[name="email"]', 'admin@example.com')
-    await page.fill('input[name="password"]', 'homeportal')
+    await page.fill('#email', 'admin@example.com')
+    await page.fill('#password', 'homeportal')
     await page.click('button[type="submit"]')
     await page.waitForURL('/dashboard')
   })

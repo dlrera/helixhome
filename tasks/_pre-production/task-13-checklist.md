@@ -60,64 +60,64 @@
   - [ ] Go to Lighthouse tab
   - [ ] Select "Accessibility" category only
   - [ ] Click "Analyze page load"
-  - [ ] Note score: ___ /100
+  - [ ] Note score: \_\_\_ /100
   - [ ] Review all issues
   - [ ] Save report: `lighthouse-home.html`
 
 - [ ] Run Lighthouse on Login page
   - [ ] Navigate to `/login`
   - [ ] Run Lighthouse accessibility audit
-  - [ ] Note score: ___ /100
+  - [ ] Note score: \_\_\_ /100
   - [ ] Review issues
   - [ ] Save report: `lighthouse-login.html`
 
 - [ ] Run Lighthouse on Dashboard
   - [ ] Navigate to `/dashboard`
   - [ ] Run Lighthouse accessibility audit
-  - [ ] Note score: ___ /100
+  - [ ] Note score: \_\_\_ /100
   - [ ] Review issues
   - [ ] Save report: `lighthouse-dashboard.html`
 
 - [ ] Run Lighthouse on Dashboard/Costs
   - [ ] Navigate to `/dashboard/costs`
   - [ ] Run audit
-  - [ ] Note score: ___ /100
+  - [ ] Note score: \_\_\_ /100
   - [ ] Save report
 
 - [ ] Run Lighthouse on Dashboard/Settings
   - [ ] Navigate to `/dashboard/settings`
   - [ ] Run audit
-  - [ ] Note score: ___ /100
+  - [ ] Note score: \_\_\_ /100
   - [ ] Save report
 
 - [ ] Run Lighthouse on Assets page
   - [ ] Navigate to `/assets`
   - [ ] Run audit
-  - [ ] Note score: ___ /100
+  - [ ] Note score: \_\_\_ /100
   - [ ] Save report
 
 - [ ] Run Lighthouse on Asset Detail page
   - [ ] Navigate to `/assets/[id]`
   - [ ] Run audit
-  - [ ] Note score: ___ /100
+  - [ ] Note score: \_\_\_ /100
   - [ ] Save report
 
 - [ ] Run Lighthouse on Asset Create page
   - [ ] Navigate to `/assets/create`
   - [ ] Run audit
-  - [ ] Note score: ___ /100
+  - [ ] Note score: \_\_\_ /100
   - [ ] Save report
 
 - [ ] Run Lighthouse on Tasks page
   - [ ] Navigate to `/tasks`
   - [ ] Run audit
-  - [ ] Note score: ___ /100
+  - [ ] Note score: \_\_\_ /100
   - [ ] Save report
 
 - [ ] Run Lighthouse on Templates page
   - [ ] Navigate to `/templates`
   - [ ] Run audit
-  - [ ] Note score: ___ /100
+  - [ ] Note score: \_\_\_ /100
   - [ ] Save report
 
 - [ ] Compile Lighthouse results
@@ -132,10 +132,10 @@
   - [ ] Navigate to `/`
   - [ ] Click axe extension icon
   - [ ] Click "Scan ALL of my page"
-  - [ ] Review Critical issues: ___
-  - [ ] Review Serious issues: ___
-  - [ ] Review Moderate issues: ___
-  - [ ] Review Minor issues: ___
+  - [ ] Review Critical issues: \_\_\_
+  - [ ] Review Serious issues: \_\_\_
+  - [ ] Review Moderate issues: \_\_\_
+  - [ ] Review Minor issues: \_\_\_
   - [ ] Take screenshot of results
   - [ ] Export report as JSON
 
@@ -180,9 +180,9 @@
   - [ ] Document issues
 
 - [ ] Compile axe results
-  - [ ] Total Critical issues: ___
-  - [ ] Total Serious issues: ___
-  - [ ] Total Moderate issues: ___
+  - [ ] Total Critical issues: \_\_\_
+  - [ ] Total Serious issues: \_\_\_
+  - [ ] Total Moderate issues: \_\_\_
   - [ ] Create master issue list
   - [ ] Prioritize fixes
 
@@ -202,22 +202,22 @@
 - [ ] Test primary button colors
   - [ ] #216093 on #FFFFFF
   - [ ] Use WebAIM Contrast Checker
-  - [ ] Note contrast ratio: ___
+  - [ ] Note contrast ratio: \_\_\_
   - [ ] Verify: ≥ 3:1 (UI component) ✓ or ✗
 
 - [ ] Test primary button text
   - [ ] #FFFFFF on #216093
-  - [ ] Note contrast ratio: ___
+  - [ ] Note contrast ratio: \_\_\_
   - [ ] Verify: ≥ 4.5:1 (normal text) ✓ or ✗
 
 - [ ] Test body text
   - [ ] #000000 on #FFFFFF
-  - [ ] Note contrast ratio: ___
+  - [ ] Note contrast ratio: \_\_\_
   - [ ] Verify: ≥ 4.5:1 ✓ or ✗
 
 - [ ] Test secondary text
   - [ ] #001B48 on #FFFFFF
-  - [ ] Note contrast ratio: ___
+  - [ ] Note contrast ratio: \_\_\_
   - [ ] Verify: ≥ 4.5:1 ✓ or ✗
 
 - [ ] Test muted text colors
@@ -267,6 +267,7 @@
 ### 4.1 NVDA Testing (Windows) or VoiceOver (macOS)
 
 **Dashboard Page**:
+
 - [ ] Test dashboard with screen reader
   - [ ] Launch NVDA or VoiceOver
   - [ ] Navigate to `/dashboard`
@@ -281,6 +282,7 @@
   - [ ] Note any unclear or missing announcements
 
 **Assets Page**:
+
 - [ ] Test assets list with screen reader
   - [ ] Navigate to `/assets`
   - [ ] Listen to page title
@@ -291,6 +293,7 @@
   - [ ] Note any issues
 
 **Asset Create Form**:
+
 - [ ] Test asset creation form
   - [ ] Navigate to `/assets/create`
   - [ ] Tab through form
@@ -303,6 +306,7 @@
   - [ ] Note any issues
 
 **Tasks Page**:
+
 - [ ] Test tasks page with screen reader
   - [ ] Navigate to `/tasks`
   - [ ] Tab through tasks
@@ -312,6 +316,7 @@
   - [ ] Note any issues
 
 **Templates Page**:
+
 - [ ] Test templates with screen reader
   - [ ] Navigate to `/templates`
   - [ ] Tab through template cards
@@ -385,7 +390,7 @@
   - [ ] Press Tab to navigate
   - [ ] Verify focus order logical
   - [ ] Check focus indicators visible on every element
-  - [ ] Note focus order: ___________________
+  - [ ] Note focus order: ********\_\_\_********
   - [ ] Verify no keyboard traps
   - [ ] Test Shift+Tab backward navigation
   - [ ] Works correctly: ✓ or ✗
@@ -529,6 +534,7 @@
 
 - [ ] Fix each icon-only button
   - [ ] For each button without accessible name:
+
     ```tsx
     // Before
     <Button size="icon">
@@ -546,6 +552,7 @@
       <span className="sr-only">Close dialog</span>
     </Button>
     ```
+
   - [ ] Apply fix
   - [ ] Test with screen reader
   - [ ] Verify announced correctly
@@ -575,17 +582,17 @@
 ### 7.1 Fix Critical Issues from axe
 
 - [ ] Address each Critical issue
-  - [ ] Issue: ___________________
-  - [ ] Location: ___________________
-  - [ ] Fix applied: ___________________
+  - [ ] Issue: ********\_\_\_********
+  - [ ] Location: ********\_\_\_********
+  - [ ] Fix applied: ********\_\_\_********
   - [ ] Re-tested: ✓ or ✗
 
 ### 7.2 Fix Serious Issues from axe
 
 - [ ] Address each Serious issue
-  - [ ] Issue: ___________________
-  - [ ] Location: ___________________
-  - [ ] Fix applied: ___________________
+  - [ ] Issue: ********\_\_\_********
+  - [ ] Location: ********\_\_\_********
+  - [ ] Fix applied: ********\_\_\_********
   - [ ] Re-tested: ✓ or ✗
 
 ### 7.3 Fix Screen Reader Issues
@@ -612,16 +619,16 @@
 
 ### 8.1 Re-Run Lighthouse on All Pages
 
-- [ ] Dashboard: ___ /100 (target: 100)
-- [ ] Dashboard/Costs: ___ /100
-- [ ] Dashboard/Settings: ___ /100
-- [ ] Assets: ___ /100
-- [ ] Asset Detail: ___ /100
-- [ ] Asset Create: ___ /100
-- [ ] Tasks: ___ /100
-- [ ] Templates: ___ /100
-- [ ] Login: ___ /100
-- [ ] Home: ___ /100
+- [ ] Dashboard: \_\_\_ /100 (target: 100)
+- [ ] Dashboard/Costs: \_\_\_ /100
+- [ ] Dashboard/Settings: \_\_\_ /100
+- [ ] Assets: \_\_\_ /100
+- [ ] Asset Detail: \_\_\_ /100
+- [ ] Asset Create: \_\_\_ /100
+- [ ] Tasks: \_\_\_ /100
+- [ ] Templates: \_\_\_ /100
+- [ ] Login: \_\_\_ /100
+- [ ] Home: \_\_\_ /100
 
 - [ ] Verify all scores = 100
   - [ ] If any < 100, investigate remaining issues
@@ -630,12 +637,12 @@
 
 ### 8.2 Re-Run axe on All Pages
 
-- [ ] Dashboard: Critical ___, Serious ___, Moderate ___
-- [ ] Assets: Critical ___, Serious ___, Moderate ___
-- [ ] Tasks: Critical ___, Serious ___, Moderate ___
-- [ ] Templates: Critical ___, Serious ___, Moderate ___
-- [ ] Asset Create: Critical ___, Serious ___, Moderate ___
-- [ ] Login: Critical ___, Serious ___, Moderate ___
+- [ ] Dashboard: Critical **_, Serious _**, Moderate \_\_\_
+- [ ] Assets: Critical **_, Serious _**, Moderate \_\_\_
+- [ ] Tasks: Critical **_, Serious _**, Moderate \_\_\_
+- [ ] Templates: Critical **_, Serious _**, Moderate \_\_\_
+- [ ] Asset Create: Critical **_, Serious _**, Moderate \_\_\_
+- [ ] Login: Critical **_, Serious _**, Moderate \_\_\_
 
 - [ ] Verify Critical = 0 on all pages
 - [ ] Verify Serious = 0 on all pages
@@ -667,14 +674,15 @@
   - [ ] Import AxeBuilder
 
 - [ ] Add test for Dashboard
+
   ```typescript
   test('Dashboard has no a11y violations', async ({ page }) => {
-    await page.goto('/dashboard');
+    await page.goto('/dashboard')
     const results = await new AxeBuilder({ page })
       .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
-      .analyze();
-    expect(results.violations).toEqual([]);
-  });
+      .analyze()
+    expect(results.violations).toEqual([])
+  })
   ```
 
 - [ ] Add tests for other pages
@@ -830,44 +838,47 @@ _Document any accessibility issues found:_
 ### Fixes Applied
 
 | Issue | Location | Fix | Verified |
-|-------|----------|-----|----------|
-| | | | ⬜ |
-| | | | ⬜ |
+| ----- | -------- | --- | -------- |
+|       |          |     | ⬜       |
+|       |          |     | ⬜       |
 
 ### Time Tracking
 
 - **Estimated Time**: 18 hours (2 days)
-- **Actual Time**: ___ hours
-- **Day 1 (Audits & Contrast)**: ___ hours
-- **Day 2 (Manual Testing & Fixes)**: ___ hours
+- **Actual Time**: \_\_\_ hours
+- **Day 1 (Audits & Contrast)**: \_\_\_ hours
+- **Day 2 (Manual Testing & Fixes)**: \_\_\_ hours
 
 ### Success Metrics Achieved
 
-- [ ] Lighthouse accessibility: ___ /100 average (target: 100)
+- [ ] Lighthouse accessibility: \_\_\_ /100 average (target: 100)
 - [ ] axe Critical issues: 0 (target: 0)
 - [ ] axe Serious issues: 0 (target: 0)
 - [ ] WCAG 2.1 AA: 100% compliant (target: 100%)
-- [ ] Accessibility score: 7.0/10 → ___/10 (target: 9.5+)
+- [ ] Accessibility score: 7.0/10 → \_\_\_/10 (target: 9.5+)
 
 ### Test Results Summary
 
 **Lighthouse Scores**:
-- Dashboard: ___ /100
-- Assets: ___ /100
-- Tasks: ___ /100
-- Templates: ___ /100
-- Average: ___ /100
+
+- Dashboard: \_\_\_ /100
+- Assets: \_\_\_ /100
+- Tasks: \_\_\_ /100
+- Templates: \_\_\_ /100
+- Average: \_\_\_ /100
 
 **axe Results**:
-- Total pages tested: ___
-- Critical issues found: ___
-- Serious issues found: ___
+
+- Total pages tested: \_\_\_
+- Critical issues found: \_\_\_
+- Serious issues found: \_\_\_
 - All resolved: ✓ or ✗
 
 **Manual Testing**:
+
 - Screen reader: NVDA / VoiceOver
-- Test duration: ___ hours
-- Issues found: ___
+- Test duration: \_\_\_ hours
+- Issues found: \_\_\_
 - All resolved: ✓ or ✗
 
 ---

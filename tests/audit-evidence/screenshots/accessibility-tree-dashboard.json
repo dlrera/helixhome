@@ -1,15 +1,18 @@
 {
-  "role": "document",
-  "name": "HelixIntel",
+  "role": "WebArea",
+  "name": "Home Portal",
   "children": [
+    {
+      "role": "link",
+      "name": "Skip to main content"
+    },
     {
       "role": "button",
       "name": "Toggle menu"
     },
     {
       "role": "link",
-      "name": "H HelixIntel",
-      "value": "http://localhost:3000/dashboard"
+      "name": "H Home Portal"
     },
     {
       "role": "button",
@@ -23,162 +26,238 @@
           "role": "button",
           "name": ""
         }
-      ],
-      "value": "http://localhost:3000/notifications"
+      ]
     },
     {
       "role": "button",
-      "name": "AU",
+      "name": "User menu",
       "haspopup": "menu"
     },
     {
       "role": "button",
-      "name": "Dashboard"
+      "name": ""
     },
     {
       "role": "link",
-      "name": "Overview",
-      "value": "http://localhost:3000/dashboard"
+      "name": "Assets"
     },
     {
       "role": "link",
-      "name": "Cost Report",
-      "value": "http://localhost:3000/dashboard/costs"
+      "name": "Tasks"
     },
     {
       "role": "link",
-      "name": "Settings",
-      "value": "http://localhost:3000/dashboard/settings"
+      "name": "Templates"
     },
     {
       "role": "link",
-      "name": "Assets",
-      "value": "http://localhost:3000/assets"
+      "name": "Reports"
     },
     {
       "role": "link",
-      "name": "Tasks",
-      "value": "http://localhost:3000/tasks"
+      "name": "Settings"
     },
     {
       "role": "link",
-      "name": "Templates",
-      "value": "http://localhost:3000/templates"
-    },
-    {
-      "role": "link",
-      "name": "Reports",
-      "value": "http://localhost:3000/reports"
-    },
-    {
-      "role": "link",
-      "name": "Settings",
-      "value": "http://localhost:3000/settings"
-    },
-    {
-      "role": "link",
-      "name": "Help",
-      "value": "http://localhost:3000/help"
-    },
-    {
-      "role": "heading",
-      "name": "HelixIntel",
-      "level": 1
-    },
-    {
-      "role": "text leaf",
-      "name": "admin@example.com"
-    },
-    {
-      "role": "button",
-      "name": "Sign out"
+      "name": "Help"
     },
     {
       "role": "heading",
       "name": "Welcome back, Admin User!",
-      "level": 2
+      "level": 1
     },
     {
-      "role": "text leaf",
+      "role": "text",
       "name": "Here's an overview of your home maintenance status."
     },
     {
-      "role": "text leaf",
+      "role": "text",
       "name": "Total Assets"
     },
     {
-      "role": "text leaf",
+      "role": "text",
+      "name": "6"
+    },
+    {
+      "role": "link",
+      "name": "View all assets →"
+    },
+    {
+      "role": "text",
+      "name": "Pending Tasks"
+    },
+    {
+      "role": "text",
       "name": "3"
     },
     {
       "role": "link",
-      "name": "View all assets →",
-      "value": "http://localhost:3000/assets"
+      "name": "View all tasks →"
     },
     {
-      "role": "text leaf",
-      "name": "Pending Tasks"
-    },
-    {
-      "role": "text leaf",
-      "name": "2"
-    },
-    {
-      "role": "link",
-      "name": "View all tasks →",
-      "value": "http://localhost:3000/tasks"
-    },
-    {
-      "role": "text leaf",
+      "role": "text",
       "name": "Overdue"
     },
     {
-      "role": "text leaf",
-      "name": "1"
+      "role": "text",
+      "name": "5"
     },
     {
-      "role": "text leaf",
+      "role": "text",
       "name": "Need attention"
     },
     {
-      "role": "text leaf",
+      "role": "text",
       "name": "Completed This Month"
     },
     {
-      "role": "text leaf",
+      "role": "text",
       "name": "0"
     },
     {
-      "role": "text leaf",
+      "role": "text",
       "name": "No tasks completed yet"
     },
     {
-      "role": "text leaf",
+      "role": "text",
+      "name": "Quick Actions"
+    },
+    {
+      "role": "link",
+      "name": "Add Asset",
+      "children": [
+        {
+          "role": "button",
+          "name": "Add Asset"
+        }
+      ]
+    },
+    {
+      "role": "link",
+      "name": "Create Task",
+      "children": [
+        {
+          "role": "button",
+          "name": "Create Task"
+        }
+      ]
+    },
+    {
+      "role": "text",
       "name": "Maintenance Analytics"
     },
     {
-      "role": "text leaf",
+      "role": "text",
       "name": "Track completion trends and task distribution"
     },
     {
       "role": "combobox",
       "name": "Select time period",
-      "autocomplete": "none"
+      "haspopup": "listbox",
+      "value": "This Month"
     },
     {
-      "role": "text leaf",
+      "role": "tablist",
+      "name": "",
+      "orientation": "horizontal",
+      "children": [
+        {
+          "role": "tab",
+          "name": "Completion",
+          "selected": true
+        },
+        {
+          "role": "tab",
+          "name": "Category"
+        },
+        {
+          "role": "tab",
+          "name": "Priority"
+        }
+      ]
+    },
+    {
+      "role": "tabpanel",
+      "name": "Completion",
+      "children": [
+        {
+          "role": "image",
+          "name": "Completed Tasks legend icon"
+        },
+        {
+          "role": "text",
+          "name": "Completed Tasks"
+        },
+        {
+          "role": "application",
+          "name": "",
+          "children": [
+            {
+              "role": "text",
+              "name": "11/30"
+            },
+            {
+              "role": "text",
+              "name": "12/1"
+            },
+            {
+              "role": "text",
+              "name": "0"
+            },
+            {
+              "role": "text",
+              "name": "1"
+            },
+            {
+              "role": "text",
+              "name": "2"
+            },
+            {
+              "role": "text",
+              "name": "3"
+            },
+            {
+              "role": "text",
+              "name": "4"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "role": "text",
       "name": "Cost Summary"
     },
     {
-      "role": "text leaf",
+      "role": "text",
       "name": "Track maintenance spending and budget"
     },
     {
-      "role": "text leaf",
+      "role": "tablist",
+      "name": "",
+      "orientation": "horizontal",
+      "children": [
+        {
+          "role": "tab",
+          "name": "Overview",
+          "selected": true
+        },
+        {
+          "role": "tab",
+          "name": "Trends"
+        }
+      ]
+    },
+    {
+      "role": "tabpanel",
+      "name": "Overview"
+    },
+    {
+      "role": "text",
       "name": "Maintenance Calendar"
     },
     {
-      "role": "text leaf",
+      "role": "text",
       "name": "Monthly view of scheduled maintenance"
     },
     {
@@ -190,11 +269,11 @@
       "name": "Previous month"
     },
     {
-      "role": "text leaf",
-      "name": "November"
+      "role": "text",
+      "name": "December"
     },
     {
-      "role": "text leaf",
+      "role": "text",
       "name": "2025"
     },
     {
@@ -202,19 +281,527 @@
       "name": "Next month"
     },
     {
-      "role": "text leaf",
+      "role": "text",
+      "name": "Sun"
+    },
+    {
+      "role": "text",
+      "name": "Mon"
+    },
+    {
+      "role": "text",
+      "name": "Tue"
+    },
+    {
+      "role": "text",
+      "name": "Wed"
+    },
+    {
+      "role": "text",
+      "name": "Thu"
+    },
+    {
+      "role": "text",
+      "name": "Fri"
+    },
+    {
+      "role": "text",
+      "name": "Sat"
+    },
+    {
+      "role": "gridcell",
+      "name": "November 1, 2025"
+    },
+    {
+      "role": "gridcell",
+      "name": "December 2, 2025 (today)"
+    },
+    {
+      "role": "gridcell",
+      "name": "December 3, 2025"
+    },
+    {
+      "role": "gridcell",
+      "name": "December 4, 2025. 3 tasks"
+    },
+    {
+      "role": "gridcell",
+      "name": "December 5, 2025"
+    },
+    {
+      "role": "gridcell",
+      "name": "December 6, 2025"
+    },
+    {
+      "role": "gridcell",
+      "name": "December 7, 2025"
+    },
+    {
+      "role": "gridcell",
+      "name": "December 8, 2025. 1 task"
+    },
+    {
+      "role": "gridcell",
+      "name": "December 9, 2025"
+    },
+    {
+      "role": "gridcell",
+      "name": "December 10, 2025"
+    },
+    {
+      "role": "gridcell",
+      "name": "December 11, 2025"
+    },
+    {
+      "role": "gridcell",
+      "name": "December 12, 2025"
+    },
+    {
+      "role": "gridcell",
+      "name": "December 13, 2025"
+    },
+    {
+      "role": "gridcell",
+      "name": "December 14, 2025"
+    },
+    {
+      "role": "gridcell",
+      "name": "December 15, 2025"
+    },
+    {
+      "role": "gridcell",
+      "name": "December 16, 2025"
+    },
+    {
+      "role": "gridcell",
+      "name": "December 17, 2025"
+    },
+    {
+      "role": "gridcell",
+      "name": "December 18, 2025"
+    },
+    {
+      "role": "gridcell",
+      "name": "December 19, 2025. 1 task"
+    },
+    {
+      "role": "gridcell",
+      "name": "December 20, 2025"
+    },
+    {
+      "role": "gridcell",
+      "name": "December 21, 2025. 1 task"
+    },
+    {
+      "role": "gridcell",
+      "name": "December 22, 2025"
+    },
+    {
+      "role": "gridcell",
+      "name": "December 23, 2025"
+    },
+    {
+      "role": "gridcell",
+      "name": "December 24, 2025"
+    },
+    {
+      "role": "gridcell",
+      "name": "December 25, 2025. 1 task"
+    },
+    {
+      "role": "gridcell",
+      "name": "December 26, 2025"
+    },
+    {
+      "role": "gridcell",
+      "name": "December 27, 2025. 2 tasks"
+    },
+    {
+      "role": "gridcell",
+      "name": "December 28, 2025"
+    },
+    {
+      "role": "gridcell",
+      "name": "December 29, 2025"
+    },
+    {
+      "role": "gridcell",
+      "name": "December 30, 2025"
+    },
+    {
+      "role": "gridcell",
+      "name": "December 31, 2025. 1 task"
+    },
+    {
+      "role": "text",
+      "name": "Overdue"
+    },
+    {
+      "role": "text",
+      "name": "In Progress"
+    },
+    {
+      "role": "text",
+      "name": "Pending"
+    },
+    {
+      "role": "text",
       "name": "Recent Activity"
     },
     {
-      "role": "text leaf",
+      "role": "text",
       "name": "Your latest home maintenance activities"
     },
     {
-      "role": "text leaf",
+      "role": "text",
+      "name": "Task Created"
+    },
+    {
+      "role": "text",
+      "name": "2 days ago"
+    },
+    {
+      "role": "text",
+      "name": "Created task: Test Smoke Detectors"
+    },
+    {
+      "role": "text",
+      "name": "Task Created"
+    },
+    {
+      "role": "text",
+      "name": "3 days ago"
+    },
+    {
+      "role": "text",
+      "name": "Created task: Flush Water Heater"
+    },
+    {
+      "role": "text",
+      "name": "Task Completed"
+    },
+    {
+      "role": "text",
+      "name": "4 days ago"
+    },
+    {
+      "role": "text",
+      "name": "Completed task: Clean Refrigerator Coils"
+    },
+    {
+      "role": "text",
+      "name": "Clean Refrigerator Coils"
+    },
+    {
+      "role": "text",
+      "name": "Task Created"
+    },
+    {
+      "role": "text",
+      "name": "6 days ago"
+    },
+    {
+      "role": "text",
+      "name": "Created task: Test Smoke Detectors"
+    },
+    {
+      "role": "text",
+      "name": "Task Created"
+    },
+    {
+      "role": "text",
+      "name": "6 days ago"
+    },
+    {
+      "role": "text",
+      "name": "Created task: Test Smoke Detectors"
+    },
+    {
+      "role": "text",
+      "name": "Task Created"
+    },
+    {
+      "role": "text",
+      "name": "6 days ago"
+    },
+    {
+      "role": "text",
+      "name": "Created task: Change HVAC Filter"
+    },
+    {
+      "role": "text",
+      "name": "Asset Updated"
+    },
+    {
+      "role": "text",
+      "name": "6 days ago"
+    },
+    {
+      "role": "text",
+      "name": "Updated Test Asset Minimal"
+    },
+    {
+      "role": "text",
+      "name": "Test Asset Minimal"
+    },
+    {
+      "role": "text",
+      "name": "Asset Updated"
+    },
+    {
+      "role": "text",
+      "name": "6 days ago"
+    },
+    {
+      "role": "text",
+      "name": "Updated Test Full Asset - Playwright"
+    },
+    {
+      "role": "text",
+      "name": "Test Full Asset - Playwright"
+    },
+    {
+      "role": "text",
+      "name": "Asset Updated"
+    },
+    {
+      "role": "text",
+      "name": "6 days ago"
+    },
+    {
+      "role": "text",
+      "name": "Updated Test Full Asset - Playwright"
+    },
+    {
+      "role": "text",
+      "name": "Test Full Asset - Playwright"
+    },
+    {
+      "role": "text",
+      "name": "Task Created"
+    },
+    {
+      "role": "text",
+      "name": "7 days ago"
+    },
+    {
+      "role": "text",
+      "name": "Created task: Flush Water Heater"
+    },
+    {
+      "role": "text",
+      "name": "Task Created"
+    },
+    {
+      "role": "text",
+      "name": "7 days ago"
+    },
+    {
+      "role": "text",
+      "name": "Created task: Flush Water Heater"
+    },
+    {
+      "role": "text",
+      "name": "Asset Updated"
+    },
+    {
+      "role": "text",
+      "name": "7 days ago"
+    },
+    {
+      "role": "text",
+      "name": "Updated Test Full Asset - Playwright"
+    },
+    {
+      "role": "text",
+      "name": "Test Full Asset - Playwright"
+    },
+    {
+      "role": "text",
+      "name": "Asset Updated"
+    },
+    {
+      "role": "text",
+      "name": "7 days ago"
+    },
+    {
+      "role": "text",
+      "name": "Updated Test Full Asset - Playwright"
+    },
+    {
+      "role": "text",
+      "name": "Test Full Asset - Playwright"
+    },
+    {
+      "role": "text",
+      "name": "Task Completed"
+    },
+    {
+      "role": "text",
+      "name": "7 days ago"
+    },
+    {
+      "role": "text",
+      "name": "Completed task: T009 Cost Tracking Test Task"
+    },
+    {
+      "role": "text",
+      "name": "T009 Cost Tracking Test Task"
+    },
+    {
+      "role": "text",
+      "name": "Task Created"
+    },
+    {
+      "role": "text",
+      "name": "7 days ago"
+    },
+    {
+      "role": "text",
+      "name": "Created task: T009 Cost Tracking Test Task"
+    },
+    {
+      "role": "text",
+      "name": "T009 Cost Tracking Test Task"
+    },
+    {
+      "role": "text",
+      "name": "• Priority:"
+    },
+    {
+      "role": "text",
+      "name": " "
+    },
+    {
+      "role": "text",
+      "name": "MEDIUM"
+    },
+    {
+      "role": "text",
+      "name": "Schedule Created"
+    },
+    {
+      "role": "text",
+      "name": "7 days ago"
+    },
+    {
+      "role": "text",
+      "name": "Created MONTHLY schedule: Clean Range Hood Filter for Test Full Asset - Playwright"
+    },
+    {
+      "role": "text",
+      "name": "Clean Range Hood Filter for Test Full Asset - Playwright"
+    },
+    {
+      "role": "text",
+      "name": "Template Applied"
+    },
+    {
+      "role": "text",
+      "name": "7 days ago"
+    },
+    {
+      "role": "text",
+      "name": "Applied Clean Range Hood Filter to Test Full Asset - Playwright"
+    },
+    {
+      "role": "text",
+      "name": "Clean Range Hood Filter"
+    },
+    {
+      "role": "text",
+      "name": "Task Created"
+    },
+    {
+      "role": "text",
+      "name": "7 days ago"
+    },
+    {
+      "role": "text",
+      "name": "Created task: Task Without Asset - Playwright Test"
+    },
+    {
+      "role": "text",
+      "name": "Task Without Asset - Playwright Test"
+    },
+    {
+      "role": "text",
+      "name": "• Priority:"
+    },
+    {
+      "role": "text",
+      "name": " "
+    },
+    {
+      "role": "text",
+      "name": "MEDIUM"
+    },
+    {
+      "role": "text",
+      "name": "Asset Created"
+    },
+    {
+      "role": "text",
+      "name": "7 days ago"
+    },
+    {
+      "role": "text",
+      "name": "Added Test Full Asset - Playwright to home"
+    },
+    {
+      "role": "text",
+      "name": "Test Full Asset - Playwright"
+    },
+    {
+      "role": "text",
+      "name": "•"
+    },
+    {
+      "role": "text",
+      "name": " "
+    },
+    {
+      "role": "text",
+      "name": "APPLIANCE"
+    },
+    {
+      "role": "text",
+      "name": "Task Created"
+    },
+    {
+      "role": "text",
+      "name": "7 days ago"
+    },
+    {
+      "role": "text",
+      "name": "Created task: Test Asset Selector - Water Heater Task"
+    },
+    {
+      "role": "text",
+      "name": "Test Asset Selector - Water Heater Task"
+    },
+    {
+      "role": "text",
+      "name": "• Priority:"
+    },
+    {
+      "role": "text",
+      "name": " "
+    },
+    {
+      "role": "text",
+      "name": "MEDIUM"
+    },
+    {
+      "role": "button",
+      "name": "Load More"
+    },
+    {
+      "role": "text",
       "name": "Maintenance Insights"
     },
     {
-      "role": "text leaf",
+      "role": "text",
       "name": "Personalized recommendations and analytics"
     },
     {
@@ -223,7 +810,7 @@
       "level": 3
     },
     {
-      "role": "text leaf",
+      "role": "text",
       "name": "HVAC System has 8 completed maintenance tasks."
     },
     {
@@ -236,23 +823,12 @@
       "level": 3
     },
     {
-      "role": "text leaf",
+      "role": "text",
       "name": "You've completed tasks for 5 consecutive days! Keep up the great work."
     },
     {
       "role": "button",
       "name": "Recommendation. Click to take action"
-    },
-    {
-      "role": "link",
-      "name": "Add new asset",
-      "children": [
-        {
-          "role": "button",
-          "name": "Add new asset"
-        }
-      ],
-      "value": "http://localhost:3000/assets/new"
     },
     {
       "role": "region",

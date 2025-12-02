@@ -1,0 +1,174 @@
+[
+  {
+    "id": "garage-maintenance",
+    "name": "Garage Maintenance",
+    "description": "Keep your garage door and storage safe and organized.",
+    "category": "STRUCTURAL",
+    "tags": ["Garage", "Safety"],
+    "applicableClimateZones": [],
+    "minHomeAge": null,
+    "maxHomeAge": null,
+    "templates": [
+      {
+        "name": "Lubricate Garage Door",
+        "description": "Quiet noisy doors and extend component life.",
+        "category": "STRUCTURAL",
+        "defaultFrequency": "SEMIANNUAL",
+        "estimatedDurationMinutes": 20,
+        "difficulty": "EASY",
+        "tags": ["Maintenance"],
+        "season": null,
+        "instructions": [
+          "Clean old grease from tracks.",
+          "Spray lithium grease on rollers, hinges, and springs.",
+          "Do NOT lubricate the track itself (it attracts dirt).",
+          "Lubricate the chain or screw drive if applicable."
+        ],
+        "requiredTools": ["White Lithium Grease"],
+        "safetyPrecautions": []
+      },
+      {
+        "name": "Test Garage Door Safety Reverse",
+        "description": "Ensure the door reverses when it hits an object.",
+        "category": "STRUCTURAL",
+        "defaultFrequency": "MONTHLY",
+        "estimatedDurationMinutes": 5,
+        "difficulty": "EASY",
+        "tags": ["Safety"],
+        "season": null,
+        "instructions": [
+          "Place a 2x4 board flat on the ground in the door's path.",
+          "Close the door.",
+          "The door should reverse immediately upon touching the board.",
+          "If it doesn't, adjust the down-force setting or call a pro."
+        ],
+        "requiredTools": ["2x4 Wood Block"],
+        "safetyPrecautions": ["Keep hands and feet clear."]
+      },
+      {
+        "name": "Inspect Garage Door Springs",
+        "description": "Visual check for wear or gaps.",
+        "category": "STRUCTURAL",
+        "defaultFrequency": "ANNUAL",
+        "estimatedDurationMinutes": 5,
+        "difficulty": "EASY",
+        "tags": ["Inspection"],
+        "season": null,
+        "instructions": [
+          "Close the door.",
+          "Look at the torsion springs above the door.",
+          "Check for gaps in the coils or rust.",
+          "Listen for squeaking or banging."
+        ],
+        "requiredTools": [],
+        "safetyPrecautions": [
+          "NEVER touch or adjust torsion springs. They are under high tension."
+        ]
+      },
+      {
+        "name": "Organize Garage Storage",
+        "description": "Declutter and sweep.",
+        "category": "OTHER",
+        "defaultFrequency": "ANNUAL",
+        "estimatedDurationMinutes": 120,
+        "difficulty": "EASY",
+        "tags": ["Organization"],
+        "season": "Spring",
+        "instructions": [
+          "Remove items from floor.",
+          "Sweep or blow out dust and leaves.",
+          "Check stored chemicals for leaks or expiration.",
+          "Donate unused items."
+        ],
+        "requiredTools": ["Broom"],
+        "safetyPrecautions": []
+      }
+    ]
+  },
+  {
+    "id": "utility-room",
+    "name": "Utility Room",
+    "description": "Maintenance for essential home systems.",
+    "category": "PLUMBING",
+    "tags": ["Utility", "Systems"],
+    "applicableClimateZones": [],
+    "minHomeAge": null,
+    "maxHomeAge": null,
+    "templates": [
+      {
+        "name": "Descale Tankless Water Heater",
+        "description": "Remove mineral buildup to maintain efficiency.",
+        "category": "PLUMBING",
+        "defaultFrequency": "ANNUAL",
+        "estimatedDurationMinutes": 60,
+        "difficulty": "MODERATE",
+        "tags": ["Maintenance", "Water Heater"],
+        "season": null,
+        "instructions": [
+          "Isolate the unit (turn off water/gas/power).",
+          "Connect pump and hoses to service ports.",
+          "Circulate white vinegar through the unit for 45 minutes.",
+          "Flush with fresh water.",
+          "Clean the inlet filter screen."
+        ],
+        "requiredTools": ["Descaling Kit (Pump/Bucket)", "Vinegar"],
+        "safetyPrecautions": []
+      },
+      {
+        "name": "Check Water Softener Salt",
+        "description": "Ensure softener has salt to treat water.",
+        "category": "PLUMBING",
+        "defaultFrequency": "MONTHLY",
+        "estimatedDurationMinutes": 5,
+        "difficulty": "EASY",
+        "tags": ["Maintenance"],
+        "season": null,
+        "instructions": [
+          "Open the brine tank lid.",
+          "Check salt level (should be above water level).",
+          "Break up any salt bridges (hard crust) with a broom handle.",
+          "Add salt if low."
+        ],
+        "requiredTools": ["Salt Bags"],
+        "safetyPrecautions": []
+      },
+      {
+        "name": "Clean Humidifier Pad",
+        "description": "Prevent mold and ensure proper humidity.",
+        "category": "HVAC",
+        "defaultFrequency": "ANNUAL",
+        "estimatedDurationMinutes": 15,
+        "difficulty": "EASY",
+        "tags": ["Maintenance"],
+        "season": "Fall",
+        "instructions": [
+          "Turn off humidifier.",
+          "Remove cover and water panel (pad).",
+          "If calcified, replace the pad.",
+          "Clean the housing with vinegar water.",
+          "Reassemble."
+        ],
+        "requiredTools": ["New Water Panel"],
+        "safetyPrecautions": []
+      },
+      {
+        "name": "Vacuum HVAC Vents",
+        "description": "Improve airflow and air quality.",
+        "category": "HVAC",
+        "defaultFrequency": "ANNUAL",
+        "estimatedDurationMinutes": 30,
+        "difficulty": "EASY",
+        "tags": ["Cleaning"],
+        "season": null,
+        "instructions": [
+          "Remove vent covers if possible.",
+          "Vacuum inside the duct opening.",
+          "Wash vent covers in sink.",
+          "Replace filters if dirty."
+        ],
+        "requiredTools": ["Vacuum"],
+        "safetyPrecautions": []
+      }
+    ]
+  }
+]

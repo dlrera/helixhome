@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
 import {
   Dialog,
@@ -15,8 +15,9 @@ import { Badge } from '@/components/ui/badge'
 import { useToast } from '@/hooks/use-toast'
 import { formatFrequency, formatDuration } from '@/lib/utils/template-helpers'
 import { getCategoryIcon, getCategoryColor } from '@/lib/utils/asset-helpers'
+import { AssetCategory, Frequency } from '@prisma/client'
 import ApplyTemplateModal from '@/components/templates/apply-template-modal'
-import { Loader2 } from 'lucide-react'
+import { Loader2, Home } from 'lucide-react'
 
 interface Asset {
   id: string
@@ -25,30 +26,51 @@ interface Asset {
   modelNumber: string | null
 }
 
+// Special constant for whole-home tasks
+const WHOLE_HOME_OPTION = {
+  id: 'whole-home',
+  name: 'Whole Home / General',
+  category: 'HOME',
+  modelNumber: null,
+} as const
+
 interface ApplyTemplateToAssetProps {
   assets: Asset[]
 }
 
-export default function ApplyTemplateToAsset({ assets }: ApplyTemplateToAssetProps) {
+export default function ApplyTemplateToAsset({
+  assets,
+}: ApplyTemplateToAssetProps) {
   const searchParams = useSearchParams()
   const router = useRouter()
   const { toast } = useToast()
   const templateId = searchParams.get('applyTemplate')
 
   const [isOpen, setIsOpen] = useState(false)
-  const [template, setTemplate] = useState<any>(null)
+  const [template, setTemplate] = useState<{
+    id: string
+    name: string
+    description: string
+    defaultFrequency: Frequency
+    estimatedDurationMinutes: number
+    difficulty: string
+  } | null>(null)
   const [selectedAsset, setSelectedAsset] = useState<Asset | null>(null)
   const [showApplyModal, setShowApplyModal] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
 
-  useEffect(() => {
-    if (templateId) {
-      setIsOpen(true)
-      fetchTemplate()
-    }
-  }, [templateId])
+  const handleClose = useCallback(() => {
+    setIsOpen(false)
+    setTemplate(null)
+    setSelectedAsset(null)
+    // Remove query parameter
+    const newParams = new URLSearchParams(searchParams.toString())
+    newParams.delete('applyTemplate')
+    const newUrl = newParams.toString() ? `/assets?${newParams}` : '/assets'
+    router.push(newUrl)
+  }, [searchParams, router])
 
-  const fetchTemplate = async () => {
+  const fetchTemplate = useCallback(async () => {
     if (!templateId) return
 
     setIsLoading(true)
@@ -76,29 +98,19 @@ export default function ApplyTemplateToAsset({ assets }: ApplyTemplateToAssetPro
     } finally {
       setIsLoading(false)
     }
-  }
+  }, [templateId, toast, handleClose])
 
-  const handleClose = () => {
-    setIsOpen(false)
-    setTemplate(null)
-    setSelectedAsset(null)
-    // Remove query parameter
-    const newParams = new URLSearchParams(searchParams.toString())
-    newParams.delete('applyTemplate')
-    const newUrl = newParams.toString() ? `/assets?${newParams}` : '/assets'
-    router.push(newUrl)
-  }
+  useEffect(() => {
+    if (templateId) {
+      setIsOpen(true)
+      fetchTemplate()
+    }
+  }, [templateId, fetchTemplate])
 
   const handleSelectAsset = (asset: Asset) => {
     setSelectedAsset(asset)
     setIsOpen(false)
     setShowApplyModal(true)
-  }
-
-  const handleApplyComplete = () => {
-    setShowApplyModal(false)
-    handleClose()
-    router.refresh()
   }
 
   if (!templateId) return null
@@ -123,7 +135,9 @@ export default function ApplyTemplateToAsset({ assets }: ApplyTemplateToAssetPro
 
           {template && (
             <div className="mb-4 p-3 bg-gray-50 rounded-lg">
-              <p className="font-medium text-base text-gray-900">{template.name}</p>
+              <p className="font-medium text-base text-gray-900">
+                {template.name}
+              </p>
               <div className="flex gap-2 mt-2">
                 <Badge variant="secondary" className="text-xs">
                   {formatFrequency(template.defaultFrequency)}
@@ -149,15 +163,42 @@ export default function ApplyTemplateToAsset({ assets }: ApplyTemplateToAssetPro
             </div>
           ) : (
             <div className="mt-4 space-y-2 max-h-96 overflow-y-auto">
+              {/* Whole Home Option - Always shown at top */}
+              <Card
+                className="p-4 cursor-pointer hover:bg-blue-50 transition-colors border-2 border-dashed border-blue-200 bg-blue-50/30"
+                onClick={() => handleSelectAsset(WHOLE_HOME_OPTION as Asset)}
+              >
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <Home className="h-5 w-5 text-blue-600" />
+                    <div>
+                      <p className="font-medium text-blue-900">
+                        Whole Home / General
+                      </p>
+                      <p className="text-sm text-blue-600">
+                        For tasks not tied to a specific asset
+                      </p>
+                    </div>
+                  </div>
+                  <Badge
+                    variant="secondary"
+                    className="bg-blue-100 text-blue-800"
+                  >
+                    HOME
+                  </Badge>
+                </div>
+              </Card>
+
               {assets.length === 0 ? (
-                <div className="text-center py-8 text-gray-500">
-                  <p>No assets available</p>
-                  <p className="text-sm mt-2">Create an asset first to apply templates</p>
+                <div className="text-center py-4 text-gray-500">
+                  <p className="text-sm">No other assets available</p>
                 </div>
               ) : (
                 assets.map((asset) => {
-                  const Icon = getCategoryIcon(asset.category as any)
-                  const categoryColor = getCategoryColor(asset.category as any)
+                  const Icon = getCategoryIcon(asset.category as AssetCategory)
+                  const categoryColor = getCategoryColor(
+                    asset.category as AssetCategory
+                  )
 
                   return (
                     <Card
@@ -171,7 +212,9 @@ export default function ApplyTemplateToAsset({ assets }: ApplyTemplateToAssetPro
                           <div>
                             <p className="font-medium">{asset.name}</p>
                             {asset.modelNumber && (
-                              <p className="text-sm text-gray-500">Model: {asset.modelNumber}</p>
+                              <p className="text-sm text-gray-500">
+                                Model: {asset.modelNumber}
+                              </p>
                             )}
                           </div>
                         </div>
