@@ -57,3 +57,16 @@ Thumbs.db
 /public/uploads/
 
 .vercel
+
+# Temp/generated files
+cookies.txt
+local_cookies.txt
+lighthouse-report.json
+report.json
+report_nav.json
+test_output*.txt
+verify-content.ts
+nul
+
+# Product documentation drafts
+Product Description*.md
