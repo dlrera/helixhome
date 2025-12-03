@@ -32,6 +32,20 @@ const defaultPreferences: NotificationPreferences = {
   weeklyDigest: false,
 }
 
+// Helper to load from localStorage
+function loadFromStorage(): NotificationPreferences {
+  try {
+    const stored = localStorage.getItem(STORAGE_KEY)
+    if (stored) {
+      const parsed = JSON.parse(stored)
+      return { ...defaultPreferences, ...parsed }
+    }
+  } catch {
+    // Ignore parse errors
+  }
+  return defaultPreferences
+}
+
 export default function NotificationPreferencesForm() {
   const { toast } = useToast()
   const [isLoading, setIsLoading] = useState(false)
@@ -41,16 +55,9 @@ export default function NotificationPreferencesForm() {
 
   // Load preferences from localStorage on mount
   useEffect(() => {
+    const loaded = loadFromStorage()
+    setPreferences(loaded)
     setMounted(true)
-    try {
-      const stored = localStorage.getItem(STORAGE_KEY)
-      if (stored) {
-        const parsed = JSON.parse(stored)
-        setPreferences({ ...defaultPreferences, ...parsed })
-      }
-    } catch {
-      // Ignore parse errors
-    }
   }, [])
 
   const handleToggle = (key: keyof NotificationPreferences) => {

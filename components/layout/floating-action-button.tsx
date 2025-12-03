@@ -2,9 +2,22 @@
 
 import { Plus } from 'lucide-react'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 
+// Routes where the FAB should be hidden
+const HIDDEN_ROUTES = ['/settings', '/profile', '/auth']
+
 export default function FloatingActionButton() {
+  const pathname = usePathname()
+
+  // Hide FAB on certain routes
+  const shouldHide = HIDDEN_ROUTES.some((route) => pathname.startsWith(route))
+
+  if (shouldHide) {
+    return null
+  }
+
   return (
     <Link href="/assets/new">
       <Button

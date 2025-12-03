@@ -147,12 +147,6 @@ You have access to specialized skills in `.claude/skills/`. Use them to verify w
 - `verify-wcag-compliance`: Scans for accessibility violations.
 - `verify-e2e-coverage`: Ensures every feature has a Happy/Error path test.
 
-## Available Skills
-You have access to specialized skills in `.claude/skills/`. Use them to verify work:
-- `run-lighthouse-audit`: Checks Dashboard performance against <3s target.
-- `verify-wcag-compliance`: Scans for accessibility violations.
-- `verify-e2e-coverage`: Ensures every feature has a Happy/Error path test.
-
 ## Behavioral Guidelines
 
 1. **Be thorough but efficient** - Test what matters, don't test implementation details

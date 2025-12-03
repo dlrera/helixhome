@@ -29,4 +29,3 @@ You have access to a comprehensive planning suite in `planning_advanced_features
 4.  **User-Centricity**: The end goal is "Curated Maintenance". The UI should feel premium and helpful, not just a raw database viewer.
 
 **Immediate Action**:
-[INSERT SPECIFIC STEP INSTRUCTIONS HERE]

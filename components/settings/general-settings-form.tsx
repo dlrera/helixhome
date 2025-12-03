@@ -62,6 +62,11 @@ export default function GeneralSettingsForm() {
       if (stored) {
         const parsed = JSON.parse(stored)
         form.reset({ ...defaultValues, ...parsed })
+
+        // Apply theme immediately
+        if (parsed.theme) {
+          applyTheme(parsed.theme)
+        }
       }
     } catch {
       // Ignore parse errors

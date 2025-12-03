@@ -96,10 +96,9 @@ export const userMenuItems: UserMenuItem[] = [
     icon: User,
   },
   {
-    label: 'Account Settings',
-    href: '/settings/account',
+    label: 'Settings',
+    href: '/settings',
     icon: Settings,
-    disabled: true,
   },
   {
     label: 'Sign Out',

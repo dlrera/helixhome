@@ -11,6 +11,7 @@ applyTo: '**'
 - Don't leave unused imports anywhere
 - Don't mock data in the UI, always make the API return it
 - Don't mock data in the API, always seed the in-memory database to populate data
+- Don't use `useEffect` for side effects, use `useMutation` or `useQuery` instead
 
 # Branding
 

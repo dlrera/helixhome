@@ -2,12 +2,12 @@
 
 This document provides a step-by-step execution guide for implementing the Expanded Template Library. Each step is designed to be atomic and verifiable.
 
-## Phase 1: Database Schema & Models ✅ COMPLETE
+## Phase 1: Database Schema & Models
 
 ### Step 1.1: Define `TemplatePack` Model
 
-- [x] **Cross-Reference**: Open `prisma/schema.prisma` and review existing `AssetCategory` enum to ensure consistency.
-- [x] Add the `TemplatePack` model (lines 344-366):
+- [ ] **Cross-Reference**: Open `prisma/schema.prisma` and review existing `AssetCategory` enum to ensure consistency.
+- [ ] Add the `TemplatePack` model:
   - `id` (String, CUID, PK)
   - `name` (String)
   - `description` (String)
@@ -19,62 +19,55 @@ This document provides a step-by-step execution guide for implementing the Expan
   - `isSystemPack` (Boolean, default true)
   - `isActive` (Boolean, default true)
   - `createdAt`, `updatedAt`
-- [x] Add relation: `templates MaintenanceTemplate[]`
+- [ ] Add relation: `templates MaintenanceTemplate[]`
 
 ### Step 1.2: Update `Home` Model (Gap Fix)
 
-- [x] **Cross-Reference**: Open `prisma/schema.prisma`.
-- [x] Add `climateZone` (String, Optional) field - line 158.
-- [x] Add `yearBuilt` (Int, Optional) field - line 159.
-- [x] _Note_: These are required for the recommendation engine.
+- [ ] **Cross-Reference**: Open `prisma/schema.prisma`.
+- [ ] Add `climateZone` (String, Optional) field.
+- [ ] Add `yearBuilt` (Int, Optional) field.
+- [ ] _Note_: These are required for the recommendation engine.
 
 ### Step 1.3: Update `MaintenanceTemplate` Model
 
-- [x] **Cross-Reference**: Check `MaintenanceTemplate` in `prisma/schema.prisma`. Ensure we don't break existing fields used by `TemplateBrowser` (e.g., `defaultFrequency`, `estimatedDurationMinutes`).
-- [x] Add `packId` (String, Optional) field - line 210.
-- [x] Add relation: `pack TemplatePack? @relation(fields: [packId], references: [id])` - line 211.
-- [x] Add `tags` (String array) field - line 214.
-- [x] Add `season` (String, Optional) field - line 215.
-- [x] Add `originalTemplateId` (String, Optional) field for cloning - line 218.
-- [x] Add relation: `originalTemplate MaintenanceTemplate? @relation("TemplateClones", fields: [originalTemplateId], references: [id])` - line 219.
-- [x] Add relation: `clones MaintenanceTemplate[] @relation("TemplateClones")` - line 220.
-- [x] **Critical**: Add `userId` (String, Optional) to support user-customized templates - line 223.
-- [x] **Cross-Reference**: Check `User` model. Add `maintenanceTemplates MaintenanceTemplate[]` relation to `User` - line 105.
+- [ ] **Cross-Reference**: Check `MaintenanceTemplate` in `prisma/schema.prisma`. Ensure we don't break existing fields used by `TemplateBrowser` (e.g., `defaultFrequency`, `estimatedDurationMinutes`).
+- [ ] Add `packId` (String, Optional) field.
+- [ ] Add relation: `pack TemplatePack? @relation(fields: [packId], references: [id])`.
+- [ ] Add `tags` (String array) field.
+- [ ] Add `season` (String, Optional) field.
+- [ ] Add `originalTemplateId` (String, Optional) field for cloning.
+- [ ] Add relation: `originalTemplate MaintenanceTemplate? @relation("TemplateClones", fields: [originalTemplateId], references: [id])`.
+- [ ] Add relation: `clones MaintenanceTemplate[] @relation("TemplateClones")`.
+- [ ] **Critical**: Add `userId` (String, Optional) to support user-customized templates.
+- [ ] **Cross-Reference**: Check `User` model. Add `maintenanceTemplates MaintenanceTemplate[]` relation to `User`.
 
 ### Step 1.4: Migration
 
-- [x] Run `npx prisma format`.
-- [x] Run `npx prisma migrate dev --name add_template_packs_and_home_fields`.
-- [x] Verify schema is applied and application is functional.
+- [ ] Run `npx prisma format`.
+- [ ] Run `npx prisma migrate dev --name add_template_packs_and_home_fields`.
+- [ ] Verify `prisma/migrations` contains the new migration file.
 
 ---
 
-## Phase 2: Seed Data Implementation ✅ COMPLETE
+## Phase 2: Seed Data Implementation
 
 ### Step 2.1: Create Seed Data File
 
-- [x] Create file `prisma/seed-data/template-packs.ts`.
-- [x] Define `SYSTEM_PACKS` array with 6 packs:
-  1. Seasonal Essentials (4 templates)
-  2. Safety First (5 templates)
-  3. Appliance Care (5 templates)
-  4. Older Home Care (3 templates, 20+ years)
-  5. Cold Climate Essentials (3 templates)
-  6. Humid Climate Care (3 templates)
-- [x] **Cross-Reference**: Check `prisma/schema.prisma` `AssetCategory` enum to ensure categories match exactly.
+- [ ] Create file `prisma/seed-data/template-packs.ts`.
+- [ ] Define `SYSTEM_PACKS` array (Seasonal Essentials, Safety First, Appliance Care).
+- [ ] **Cross-Reference**: Check `prisma/schema.prisma` `AssetCategory` enum to ensure categories match exactly.
 
 ### Step 2.2: Update Seed Script
 
-- [x] Open `prisma/seed.ts`.
-- [x] Import `SYSTEM_PACKS` - line 10.
-- [x] Implement upsert logic for Packs and nested Templates - lines 75-149.
-- [x] Uses fixed IDs for idempotent seeding.
-- [x] **Cross-Reference**: Check for existing seed logic to avoid duplicate runs or conflicts.
+- [ ] Open `prisma/seed.ts`.
+- [ ] Import `SYSTEM_PACKS`.
+- [ ] Implement upsert logic for Packs and nested Templates.
+- [ ] **Cross-Reference**: Check for existing seed logic to avoid duplicate runs or conflicts.
 
 ### Step 2.3: Execute Seeding
 
-- [x] Run `npx prisma db seed`.
-- [x] **Verification**: Data confirmed in database via API responses.
+- [ ] Run `npx prisma db seed`.
+- [ ] **Verification**: Use `npx prisma studio` to confirm data integrity.
 
 ---
 
@@ -145,10 +138,8 @@ This document provides a step-by-step execution guide for implementing the Expan
 
 ### Step 4.5: Update Asset Selector
 
-- [x] **Cross-Reference**: Check if `ApplyTemplateModal` uses a hardcoded asset list or a selector component.
-- [x] Added "Whole Home / General" option in `apply-template-to-asset.tsx` for templates that don't require a specific asset.
-- [x] Updated API (`/api/templates/apply`) to handle whole-home tasks with `assetId: null`.
-- [ ] Optional: Consider upgrading to a searchable `Combobox` if users have many assets.
+- [ ] **Cross-Reference**: Check if `ApplyTemplateModal` uses a hardcoded asset list or a selector component.
+- [ ] If it uses a simple `Select`, consider upgrading to a searchable `Combobox` (using `components/ui/command.tsx`) if users have many assets.
 
 ---
 
@@ -199,9 +190,9 @@ This document provides a step-by-step execution guide for implementing the Expan
 
 ### Step 6.2: Manual Testing (User Required)
 
-- [ ] Login and navigate to `/templates`
-- [ ] Verify Recommendations widget shows at top
-- [ ] Switch between "Templates" and "Packs" view modes
-- [ ] Click on a pack to view details sheet
-- [ ] Apply a template from a pack and verify task creation
-- [ ] Check Task table for new entries after applying
+- [x] Login and navigate to `/templates`
+- [x] Verify Recommendations widget shows at top
+- [x] Switch between "Templates" and "Packs" view modes
+- [x] Click on a pack to view details sheet
+- [x] Apply a template from a pack and verify task creation
+- [x] Check Task table for new entries after applying
