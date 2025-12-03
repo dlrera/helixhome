@@ -3,13 +3,10 @@ import {
   Package,
   CheckSquare,
   FileText,
-  BarChart,
   Settings,
   HelpCircle,
   User,
   LogOut,
-  DollarSign,
-  Cog,
 } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 
@@ -74,11 +71,12 @@ export const primaryNavItems: NavItem[] = [
 ]
 
 export const secondaryNavItems: NavItem[] = [
-  {
-    label: 'Reports',
-    href: '/reports',
-    icon: BarChart,
-  },
+  // Reports hidden until feature is ready
+  // {
+  //   label: 'Reports',
+  //   href: '/reports',
+  //   icon: BarChart,
+  // },
   {
     label: 'Settings',
     href: '/settings',

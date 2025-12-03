@@ -157,6 +157,8 @@ model Home {
   address     String? // JSON stored as string
   climateZone String? // e.g., "Humid", "Cold", "Temperate", "Arid" - for recommendations
   yearBuilt   Int? // Year the home was built - for age-based recommendations
+  propertyType String? // e.g., "Single Family", "Condo", "Townhouse", "Apartment"
+  sizeSqFt    Int? // Size of the home in square feet
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 

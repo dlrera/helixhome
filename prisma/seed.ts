@@ -63,6 +63,8 @@ async function main() {
       }),
       climateZone: 'Cold', // For recommendation engine testing
       yearBuilt: 1995, // ~30 year old home for age-based recommendations
+      propertyType: 'Single Family', // Property type for settings demo
+      sizeSqFt: 2400, // Size in square feet
     },
   })
 
