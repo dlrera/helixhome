@@ -1,14 +1,15 @@
 'use client'
 
-import { useState } from 'react'
-import { usePathname } from 'next/navigation'
+import { useState, Suspense, lazy } from 'react'
 import TopBar from './top-bar'
 import Sidebar from './sidebar'
-import CommandPalette from './command-palette'
 import FloatingActionButton from './floating-action-button'
 import { useIsDesktop } from '@/lib/hooks/use-media-query'
 import { useSidebarState } from '@/lib/hooks/use-sidebar-state'
 import { useCommandPaletteShortcut } from '@/lib/hooks/use-keyboard-shortcuts'
+
+// Lazy load CommandPalette - only loads when user opens it (Cmd+K)
+const CommandPalette = lazy(() => import('./command-palette'))
 
 interface AppLayoutProps {
   children: React.ReactNode
@@ -21,7 +22,6 @@ interface AppLayoutProps {
 }
 
 export default function AppLayout({ children, user }: AppLayoutProps) {
-  const pathname = usePathname()
   const isDesktop = useIsDesktop()
   const { isCollapsed, toggleSidebar } = useSidebarState(true)
   const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState(false)
@@ -59,7 +59,6 @@ export default function AppLayout({ children, user }: AppLayoutProps) {
           isCollapsed={isDesktop ? isCollapsed : false}
           isMobileOpen={isMobileSidebarOpen}
           onMobileClose={handleMobileSidebarClose}
-          currentPath={pathname}
         />
 
         {/* Main Content */}
@@ -75,11 +74,15 @@ export default function AppLayout({ children, user }: AppLayoutProps) {
         </main>
       </div>
 
-      {/* Command Palette */}
-      <CommandPalette
-        open={isCommandPaletteOpen}
-        onOpenChange={setIsCommandPaletteOpen}
-      />
+      {/* Command Palette - Lazy loaded only when opened */}
+      {isCommandPaletteOpen && (
+        <Suspense fallback={null}>
+          <CommandPalette
+            open={isCommandPaletteOpen}
+            onOpenChange={setIsCommandPaletteOpen}
+          />
+        </Suspense>
+      )}
 
       {/* Floating Action Button (Mobile Only) */}
       {!isDesktop && <FloatingActionButton />}

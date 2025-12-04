@@ -32,6 +32,13 @@ Implement a comprehensive Settings Menu that allows users to configure applicati
 - Reuse existing UI components (Input, Select, Switch, Button).
 - Create `SettingsSidebar` and `SettingsLayout`.
 
+### 5. Application Integration (New Phase)
+
+- **Dashboard Header**: Update to display the dynamic "Home Name" from settings instead of hardcoded value.
+- **Theme**: Ensure dark/light mode preference persists and applies globally (using `next-themes`).
+- **Formatting Helpers**: Create utility functions for currency and date formatting that respect user preferences.
+- **Data Display**: Update Asset and Task views to use the formatting helpers.
+
 ## Verification Plan
 
 ### Automated Tests

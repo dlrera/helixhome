@@ -18,23 +18,18 @@ interface SidebarProps {
   isCollapsed: boolean
   isMobileOpen: boolean
   onMobileClose: () => void
-  currentPath: string
 }
 
 export default function Sidebar({
   isCollapsed,
   isMobileOpen,
   onMobileClose,
-  currentPath,
 }: SidebarProps) {
   const isDesktop = useIsDesktop()
   const pathname = usePathname()
   const [expandedItems, setExpandedItems] = useState<Record<string, boolean>>({
     '/dashboard': true, // Dashboard submenu expanded by default
   })
-
-  // Determine if sidebar should show labels
-  const showLabels = isDesktop ? !isCollapsed : true
 
   const toggleExpanded = (href: string) => {
     setExpandedItems((prev) => ({
@@ -59,14 +54,15 @@ export default function Sidebar({
           <div className="flex-1 space-y-1 px-2">
             {primaryNavItems.map((item) => {
               const Icon = item.icon
-              const isActive = pathname === item.href || pathname.startsWith(item.href + '/')
+              const isActive =
+                pathname === item.href || pathname.startsWith(item.href + '/')
               const isExpanded = expandedItems[item.href]
               const hasSubItems = item.subItems && item.subItems.length > 0
 
               // For items with subitems, check if any subitem is active
-              const hasActiveSubItem = hasSubItems && item.subItems?.some(
-                (sub) => pathname === sub.href
-              )
+              const hasActiveSubItem =
+                hasSubItems &&
+                item.subItems?.some((sub) => pathname === sub.href)
 
               const linkContent = hasSubItems ? (
                 <button
@@ -74,9 +70,11 @@ export default function Sidebar({
                   className={cn(
                     'flex items-center gap-3 px-3 py-2 rounded-md transition-colors w-full',
                     'hover:bg-gray-100',
-                    (isActive || hasActiveSubItem) && 'bg-[#216093] text-white hover:bg-[#1a4d75]',
+                    (isActive || hasActiveSubItem) &&
+                      'bg-[#216093] text-white hover:bg-[#1a4d75]',
                     !(isActive || hasActiveSubItem) && 'text-gray-700',
-                    item.disabled && 'opacity-50 cursor-not-allowed pointer-events-none'
+                    item.disabled &&
+                      'opacity-50 cursor-not-allowed pointer-events-none'
                   )}
                 >
                   <Icon className="h-5 w-5 flex-shrink-0" />
@@ -100,13 +98,15 @@ export default function Sidebar({
               ) : (
                 <Link
                   href={item.href}
+                  prefetch={true}
                   aria-label={item.label}
                   className={cn(
                     'flex items-center gap-3 px-3 py-2 rounded-md transition-colors',
                     'hover:bg-gray-100',
                     isActive && 'bg-[#216093] text-white hover:bg-[#1a4d75]',
                     !isActive && 'text-gray-700',
-                    item.disabled && 'opacity-50 cursor-not-allowed pointer-events-none'
+                    item.disabled &&
+                      'opacity-50 cursor-not-allowed pointer-events-none'
                   )}
                 >
                   <Icon className="h-5 w-5 flex-shrink-0" />
@@ -143,13 +143,16 @@ export default function Sidebar({
                           <Link
                             key={subItem.href}
                             href={subItem.href}
+                            prefetch={true}
                             aria-label={subItem.label}
                             className={cn(
                               'block px-3 py-1.5 text-sm rounded-md transition-colors',
                               'hover:bg-gray-100',
-                              isSubActive && 'text-[#216093] font-medium bg-gray-100',
+                              isSubActive &&
+                                'text-[#216093] font-medium bg-gray-100',
                               !isSubActive && 'text-gray-600',
-                              subItem.disabled && 'opacity-50 cursor-not-allowed pointer-events-none'
+                              subItem.disabled &&
+                                'opacity-50 cursor-not-allowed pointer-events-none'
                             )}
                           >
                             {subItem.label}
@@ -167,18 +170,21 @@ export default function Sidebar({
           <div className="border-t border-gray-200 pt-4 space-y-1 px-2">
             {secondaryNavItems.map((item) => {
               const Icon = item.icon
-              const isActive = pathname === item.href || pathname.startsWith(item.href + '/')
+              const isActive =
+                pathname === item.href || pathname.startsWith(item.href + '/')
 
               const linkContent = (
                 <Link
                   href={item.href}
+                  prefetch={true}
                   aria-label={item.label}
                   className={cn(
                     'flex items-center gap-3 px-3 py-2 rounded-md transition-colors',
                     'hover:bg-gray-100',
                     isActive && 'bg-[#216093] text-white hover:bg-[#1a4d75]',
                     !isActive && 'text-gray-700',
-                    item.disabled && 'opacity-50 cursor-not-allowed pointer-events-none'
+                    item.disabled &&
+                      'opacity-50 cursor-not-allowed pointer-events-none'
                   )}
                 >
                   <Icon className="h-5 w-5 flex-shrink-0" />
@@ -217,14 +223,15 @@ export default function Sidebar({
           <div className="flex-1 space-y-1 px-2">
             {primaryNavItems.map((item) => {
               const Icon = item.icon
-              const isActive = pathname === item.href || pathname.startsWith(item.href + '/')
+              const isActive =
+                pathname === item.href || pathname.startsWith(item.href + '/')
               const isExpanded = expandedItems[item.href]
               const hasSubItems = item.subItems && item.subItems.length > 0
 
               // For items with subitems, check if any subitem is active
-              const hasActiveSubItem = hasSubItems && item.subItems?.some(
-                (sub) => pathname === sub.href
-              )
+              const hasActiveSubItem =
+                hasSubItems &&
+                item.subItems?.some((sub) => pathname === sub.href)
 
               return (
                 <div key={item.href}>
@@ -234,9 +241,11 @@ export default function Sidebar({
                       className={cn(
                         'flex items-center gap-3 px-3 py-2 rounded-md transition-colors w-full',
                         'hover:bg-gray-100',
-                        (isActive || hasActiveSubItem) && 'bg-[#216093] text-white hover:bg-[#1a4d75]',
+                        (isActive || hasActiveSubItem) &&
+                          'bg-[#216093] text-white hover:bg-[#1a4d75]',
                         !(isActive || hasActiveSubItem) && 'text-gray-700',
-                        item.disabled && 'opacity-50 cursor-not-allowed pointer-events-none'
+                        item.disabled &&
+                          'opacity-50 cursor-not-allowed pointer-events-none'
                       )}
                     >
                       <Icon className="h-5 w-5 flex-shrink-0" />
@@ -256,14 +265,17 @@ export default function Sidebar({
                   ) : (
                     <Link
                       href={item.href}
+                      prefetch={true}
                       onClick={onMobileClose}
                       aria-label={item.label}
                       className={cn(
                         'flex items-center gap-3 px-3 py-2 rounded-md transition-colors',
                         'hover:bg-gray-100',
-                        isActive && 'bg-[#216093] text-white hover:bg-[#1a4d75]',
+                        isActive &&
+                          'bg-[#216093] text-white hover:bg-[#1a4d75]',
                         !isActive && 'text-gray-700',
-                        item.disabled && 'opacity-50 cursor-not-allowed pointer-events-none'
+                        item.disabled &&
+                          'opacity-50 cursor-not-allowed pointer-events-none'
                       )}
                     >
                       <Icon className="h-5 w-5 flex-shrink-0" />
@@ -285,14 +297,17 @@ export default function Sidebar({
                           <Link
                             key={subItem.href}
                             href={subItem.href}
+                            prefetch={true}
                             onClick={onMobileClose}
                             aria-label={subItem.label}
                             className={cn(
                               'block px-3 py-1.5 text-sm rounded-md transition-colors',
                               'hover:bg-gray-100',
-                              isSubActive && 'text-[#216093] font-medium bg-gray-100',
+                              isSubActive &&
+                                'text-[#216093] font-medium bg-gray-100',
                               !isSubActive && 'text-gray-600',
-                              subItem.disabled && 'opacity-50 cursor-not-allowed pointer-events-none'
+                              subItem.disabled &&
+                                'opacity-50 cursor-not-allowed pointer-events-none'
                             )}
                           >
                             {subItem.label}
@@ -310,12 +325,14 @@ export default function Sidebar({
           <div className="border-t border-gray-200 pt-4 space-y-1 px-2">
             {secondaryNavItems.map((item) => {
               const Icon = item.icon
-              const isActive = pathname === item.href || pathname.startsWith(item.href + '/')
+              const isActive =
+                pathname === item.href || pathname.startsWith(item.href + '/')
 
               return (
                 <Link
                   key={item.href}
                   href={item.href}
+                  prefetch={true}
                   onClick={onMobileClose}
                   aria-label={item.label}
                   className={cn(
@@ -323,7 +340,8 @@ export default function Sidebar({
                     'hover:bg-gray-100',
                     isActive && 'bg-[#216093] text-white hover:bg-[#1a4d75]',
                     !isActive && 'text-gray-700',
-                    item.disabled && 'opacity-50 cursor-not-allowed pointer-events-none'
+                    item.disabled &&
+                      'opacity-50 cursor-not-allowed pointer-events-none'
                   )}
                 >
                   <Icon className="h-5 w-5 flex-shrink-0" />

@@ -4,7 +4,7 @@ import React from 'react'
 import dynamic from 'next/dynamic'
 import { WidgetContainer } from './widget-container'
 import { useCostSummary } from '@/lib/hooks/use-dashboard'
-import { formatCurrency } from '@/lib/config/charts'
+import { useFormatters } from '@/lib/hooks/use-formatters'
 import { Progress } from '@/components/ui/progress'
 import { Badge } from '@/components/ui/badge'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
@@ -35,6 +35,7 @@ const MonthlyTrendChart = dynamic(
  */
 export const CostSummary = React.memo(function CostSummary() {
   const { data, isLoading, error } = useCostSummary()
+  const { formatCurrency } = useFormatters()
 
   return (
     <WidgetContainer
@@ -46,8 +47,12 @@ export const CostSummary = React.memo(function CostSummary() {
       {data && (
         <Tabs defaultValue="overview" className="w-full">
           <TabsList className="grid w-full grid-cols-2 mb-4">
-            <TabsTrigger value="overview" className="text-xs sm:text-sm">Overview</TabsTrigger>
-            <TabsTrigger value="trends" className="text-xs sm:text-sm">Trends</TabsTrigger>
+            <TabsTrigger value="overview" className="text-xs sm:text-sm">
+              Overview
+            </TabsTrigger>
+            <TabsTrigger value="trends" className="text-xs sm:text-sm">
+              Trends
+            </TabsTrigger>
           </TabsList>
 
           <TabsContent value="overview" className="mt-0 space-y-4">

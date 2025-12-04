@@ -100,6 +100,7 @@ lib/auth.ts             # NextAuth configuration
 lib/utils/cache.ts      # Server-side caching utility
 lib/validation/         # Zod schemas
 app/api/                # API routes
+```
 
 ## Available Skills
 You have access to specialized skills in `.claude/skills/`. Use them to enforce patterns:
@@ -108,7 +109,6 @@ You have access to specialized skills in `.claude/skills/`. Use them to enforce 
 - `scaffold-query-hook`: Creates React hooks for data fetching (No `useEffect`!).
 - `optimize-db-query`: Audits Prisma queries for performance.
 - `enforce-service-layer`: Ensures business logic stays in `lib/services/`.
-```
 
 ## Critical Rules
 

@@ -91,9 +91,14 @@ export default async function DashboardPage() {
     <div className="space-y-8">
       {/* Welcome Section */}
       <div className="space-y-2">
-        <h1 className="text-2xl sm:text-3xl font-black">
-          Welcome back, {session.user?.name || 'there'}!
-        </h1>
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+          <h1 className="text-2xl sm:text-3xl font-black">
+            Welcome back, {session.user?.name || 'there'}!
+          </h1>
+          <span className="text-sm font-medium text-[#216093] bg-[#216093]/10 px-3 py-1.5 rounded-full w-fit">
+            {home.name}
+          </span>
+        </div>
         <p className="text-sm sm:text-base text-muted-foreground">
           Here&apos;s an overview of your home maintenance status.
         </p>

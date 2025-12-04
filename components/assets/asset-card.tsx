@@ -5,7 +5,11 @@ import Image from 'next/image'
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { AssetCategory } from '@prisma/client'
-import { getCategoryIcon, getCategoryColor, formatCategory } from '@/lib/utils/asset-helpers'
+import {
+  getCategoryIcon,
+  getCategoryColor,
+  formatCategory,
+} from '@/lib/utils/asset-helpers'
 
 type AssetCardProps = {
   asset: {
@@ -23,9 +27,11 @@ type AssetCardProps = {
       recurringSchedules: number
     }
   }
+  /** Mark as priority for above-fold images (first 2-3 in grid) */
+  priority?: boolean
 }
 
-export default function AssetCard({ asset }: AssetCardProps) {
+export default function AssetCard({ asset, priority = false }: AssetCardProps) {
   const Icon = getCategoryIcon(asset.category)
   const categoryColor = getCategoryColor(asset.category)
 
@@ -39,6 +45,8 @@ export default function AssetCard({ asset }: AssetCardProps) {
                 src={asset.photoUrl}
                 alt={asset.name}
                 fill
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                priority={priority}
                 className="object-cover"
               />
             ) : (
@@ -51,7 +59,10 @@ export default function AssetCard({ asset }: AssetCardProps) {
         <CardContent className="space-y-2">
           <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2">
             <h3 className="font-semibold text-lg line-clamp-1">{asset.name}</h3>
-            <Badge variant="secondary" className={`${categoryColor} flex-shrink-0`}>
+            <Badge
+              variant="secondary"
+              className={`${categoryColor} flex-shrink-0`}
+            >
               {formatCategory(asset.category)}
             </Badge>
           </div>

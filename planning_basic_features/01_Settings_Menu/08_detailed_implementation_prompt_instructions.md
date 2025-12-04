@@ -50,12 +50,14 @@ Execute **Phase 3: Notifications & Polish** from `06_detailed_implementation_rol
 4.  **Manual Verification**: Click through all settings pages, update values, and verify persistence and UI feedback.
 ```
 
-## Session 5: Testing
+## Session 5: Application Integration
 
 ```markdown
 **Immediate Action**:
-Execute **Phase 4: Testing** from `06_detailed_implementation_rollout.md`.
+Execute **Phase 5: Application Integration** from `06_detailed_implementation_rollout.md`.
 
-1.  **E2E Tests**: Write Playwright tests in `tests/settings.spec.ts` to verify navigation to settings and successful update of home details.
-2.  **Unit Tests**: Add unit tests for the Zod validation schemas in `src/lib/validation/settings.ts`.
+1.  **Dashboard Integration**: Update `app/(protected)/dashboard/page.tsx` to fetch and display the dynamic "Home Name".
+2.  **Formatting Utilities**: Create `src/lib/formatters.ts` with `formatCurrency` and `formatDate` functions.
+3.  **Apply Formatting**: Update `app/(protected)/assets/page.tsx` and `app/(protected)/tasks/page.tsx` to use these formatters.
+4.  **Theme Verification**: Ensure the theme provider is correctly wrapping the application in `app/layout.tsx` or `app/(protected)/layout.tsx` and that toggling works without FOUC.
 ```

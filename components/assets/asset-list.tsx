@@ -9,7 +9,11 @@ import { Button } from '@/components/ui/button'
 import { Search, LayoutGrid, List } from 'lucide-react'
 import Link from 'next/link'
 import { Badge } from '@/components/ui/badge'
-import { getCategoryIcon, getCategoryColor, formatCategory } from '@/lib/utils/asset-helpers'
+import {
+  getCategoryIcon,
+  getCategoryColor,
+  formatCategory,
+} from '@/lib/utils/asset-helpers'
 import { useViewMode } from '@/lib/hooks/use-local-storage'
 
 type Asset = {
@@ -34,7 +38,9 @@ interface AssetListProps {
 
 export default function AssetList({ initialAssets }: AssetListProps) {
   const [assets] = useState(initialAssets)
-  const [selectedCategory, setSelectedCategory] = useState<AssetCategory | 'ALL'>('ALL')
+  const [selectedCategory, setSelectedCategory] = useState<
+    AssetCategory | 'ALL'
+  >('ALL')
   const [searchQuery, setSearchQuery] = useState('')
 
   // Use custom hook for persistent view mode preference
@@ -42,9 +48,11 @@ export default function AssetList({ initialAssets }: AssetListProps) {
 
   // Memoize filtered assets to avoid recalculation on every render
   const filteredAssets = useMemo(() => {
-    return assets.filter(asset => {
-      const matchesCategory = selectedCategory === 'ALL' || asset.category === selectedCategory
-      const matchesSearch = !searchQuery ||
+    return assets.filter((asset) => {
+      const matchesCategory =
+        selectedCategory === 'ALL' || asset.category === selectedCategory
+      const matchesSearch =
+        !searchQuery ||
         asset.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         asset.modelNumber?.toLowerCase().includes(searchQuery.toLowerCase())
 
@@ -98,17 +106,19 @@ export default function AssetList({ initialAssets }: AssetListProps) {
       {filteredAssets.length === 0 ? (
         <div className="text-center py-12">
           <p className="text-gray-500 text-lg">No assets found</p>
-          <p className="text-gray-400 mt-2">Try adjusting your filters or add a new asset</p>
+          <p className="text-gray-400 mt-2">
+            Try adjusting your filters or add a new asset
+          </p>
         </div>
       ) : viewMode === 'grid' ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredAssets.map(asset => (
-            <AssetCard key={asset.id} asset={asset} />
+          {filteredAssets.map((asset, index) => (
+            <AssetCard key={asset.id} asset={asset} priority={index < 3} />
           ))}
         </div>
       ) : (
         <div className="space-y-2">
-          {filteredAssets.map(asset => {
+          {filteredAssets.map((asset) => {
             const Icon = getCategoryIcon(asset.category)
             const categoryColor = getCategoryColor(asset.category)
             return (
@@ -120,15 +130,24 @@ export default function AssetList({ initialAssets }: AssetListProps) {
                         <Icon className="h-8 w-8 text-gray-400" />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <h3 className="font-semibold text-lg truncate">{asset.name}</h3>
+                        <h3 className="font-semibold text-lg truncate">
+                          {asset.name}
+                        </h3>
                         <div className="flex flex-wrap items-center gap-2 mt-1">
-                          <Badge variant="secondary" className={`${categoryColor} text-xs`}>
+                          <Badge
+                            variant="secondary"
+                            className={`${categoryColor} text-xs`}
+                          >
                             {formatCategory(asset.category)}
                           </Badge>
                           {asset.modelNumber && (
                             <>
-                              <span className="text-gray-400 hidden sm:inline">•</span>
-                              <span className="text-sm text-gray-600 truncate">Model: {asset.modelNumber}</span>
+                              <span className="text-gray-400 hidden sm:inline">
+                                •
+                              </span>
+                              <span className="text-sm text-gray-600 truncate">
+                                Model: {asset.modelNumber}
+                              </span>
                             </>
                           )}
                         </div>

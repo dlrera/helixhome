@@ -23,13 +23,34 @@ export function generateViewport(): Viewport {
   }
 }
 
+// Inline script to prevent FOUC by applying theme before page renders
+const themeScript = `
+(function() {
+  try {
+    var prefs = localStorage.getItem('helix-user-preferences');
+    if (prefs) {
+      var parsed = JSON.parse(prefs);
+      var theme = parsed.theme;
+      var isDark = theme === 'dark' ||
+        (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+      if (isDark) {
+        document.documentElement.classList.add('dark');
+      }
+    }
+  } catch (e) {}
+})();
+`
+
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className={inter.variable}>
+    <html lang="en" className={inter.variable} suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+      </head>
       <body>
         <a
           href="#main-content"

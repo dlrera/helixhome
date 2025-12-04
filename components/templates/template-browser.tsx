@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef, useMemo } from 'react'
 import { useQuery } from '@tanstack/react-query'
+import { useRouter } from 'next/navigation'
 import dynamic from 'next/dynamic'
 import {
   Card,
@@ -117,6 +118,7 @@ interface TemplateBrowserProps {
 export default function TemplateBrowser({
   appliedTemplateIds = [],
 }: TemplateBrowserProps) {
+  const router = useRouter()
   const [selectedCategory, setSelectedCategory] = useState<
     AssetCategory | 'ALL'
   >('ALL')
@@ -333,7 +335,7 @@ export default function TemplateBrowser({
           e.preventDefault()
           const template = paginatedTemplates[selectedIndex]
           if (template && !template.isApplied) {
-            window.location.href = `/assets?applyTemplate=${template.id}`
+            router.push(`/assets?applyTemplate=${template.id}`)
           }
         }
       }
@@ -351,7 +353,7 @@ export default function TemplateBrowser({
 
     document.addEventListener('keydown', handleKeyPress)
     return () => document.removeEventListener('keydown', handleKeyPress)
-  }, [paginatedTemplates, selectedIndex, totalPages, setViewMode])
+  }, [paginatedTemplates, selectedIndex, totalPages, setViewMode, router])
 
   // Pull to refresh on mobile
   useEffect(() => {
@@ -717,7 +719,9 @@ export default function TemplateBrowser({
                                   }`}
                                   onClick={() => {
                                     setLoadingTemplateId(template.id + '_apply')
-                                    window.location.href = `/assets?applyTemplate=${template.id}`
+                                    router.push(
+                                      `/assets?applyTemplate=${template.id}`
+                                    )
                                   }}
                                   disabled={
                                     loadingTemplateId ===
@@ -883,7 +887,9 @@ export default function TemplateBrowser({
                                   }`}
                                   onClick={() => {
                                     setLoadingTemplateId(template.id + '_apply')
-                                    window.location.href = `/assets?applyTemplate=${template.id}`
+                                    router.push(
+                                      `/assets?applyTemplate=${template.id}`
+                                    )
                                   }}
                                   disabled={
                                     loadingTemplateId ===

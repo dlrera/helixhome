@@ -49,6 +49,7 @@ import { QuickTaskForm } from '@/components/tasks/quick-task-form'
 import { formatDuration, formatFrequency } from '@/lib/utils/template-helpers'
 import ScheduleList from '@/components/schedules/schedule-list'
 import Link from 'next/link'
+import { useFormatters } from '@/lib/hooks/use-formatters'
 
 type SuggestedTemplate = {
   id: string
@@ -104,6 +105,7 @@ export default function AssetDetail({
   suggestedTemplates = [],
 }: AssetDetailProps) {
   const router = useRouter()
+  const { formatDate } = useFormatters()
   const [showPhotoDialog, setShowPhotoDialog] = useState(false)
   const [showDeleteDialog, setShowDeleteDialog] = useState(false)
   const [showCreateTask, setShowCreateTask] = useState(false)
@@ -279,24 +281,20 @@ export default function AssetDetail({
             {asset.purchaseDate && (
               <div>
                 <p className="text-sm text-gray-500">Purchase Date</p>
-                <p className="font-medium">
-                  {new Date(asset.purchaseDate).toLocaleDateString()}
-                </p>
+                <p className="font-medium">{formatDate(asset.purchaseDate)}</p>
               </div>
             )}
             {asset.warrantyExpiryDate && (
               <div>
                 <p className="text-sm text-gray-500">Warranty Expiry</p>
                 <p className="font-medium">
-                  {new Date(asset.warrantyExpiryDate).toLocaleDateString()}
+                  {formatDate(asset.warrantyExpiryDate)}
                 </p>
               </div>
             )}
             <div>
               <p className="text-sm text-gray-500">Added</p>
-              <p className="font-medium">
-                {new Date(asset.createdAt).toLocaleDateString()}
-              </p>
+              <p className="font-medium">{formatDate(asset.createdAt)}</p>
             </div>
           </CardContent>
         </Card>
@@ -399,7 +397,7 @@ export default function AssetDetail({
                         <div>
                           <p className="font-medium">{task.title}</p>
                           <p className="text-sm text-gray-500">
-                            Due: {new Date(task.dueDate).toLocaleDateString()}
+                            Due: {formatDate(task.dueDate)}
                           </p>
                         </div>
                         <Badge

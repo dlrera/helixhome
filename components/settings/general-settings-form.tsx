@@ -24,6 +24,7 @@ import {
 import { useToast } from '@/hooks/use-toast'
 import { Monitor, Moon, Sun, Loader2 } from 'lucide-react'
 import { THEMES, CURRENCIES, DATE_FORMATS } from '@/lib/validation/settings'
+import { notifyPreferencesChanged } from '@/lib/hooks/use-formatters'
 
 // Local schema for form
 const generalSettingsSchema = z.object({
@@ -81,6 +82,9 @@ export default function GeneralSettingsForm() {
 
       // Apply theme change
       applyTheme(data.theme)
+
+      // Notify other components that preferences have changed
+      notifyPreferencesChanged()
 
       toast({
         title: 'Settings saved',

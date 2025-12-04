@@ -39,7 +39,7 @@ import {
   getTaskPriorityColor,
   getTaskStatusColor,
 } from '@/lib/utils/task-helpers'
-import { format } from 'date-fns'
+import { useFormatters } from '@/lib/hooks/use-formatters'
 import {
   useStartTask,
   useDeleteTask,
@@ -49,6 +49,7 @@ import { TaskCompletionModal } from '@/components/tasks/task-completion-modal'
 import { EditTaskDialog } from '@/components/tasks/edit-task-dialog'
 import { useToast } from '@/hooks/use-toast'
 import Link from 'next/link'
+import Image from 'next/image'
 
 interface TaskWithRelations extends Task {
   asset?: Asset | null
@@ -68,6 +69,7 @@ export function TaskDetailClient({
 }: TaskDetailClientProps) {
   const router = useRouter()
   const { toast } = useToast()
+  const { formatCurrency, formatDate, formatDateTime } = useFormatters()
   const [showDeleteDialog, setShowDeleteDialog] = useState(false)
   const [showCompletionModal, setShowCompletionModal] = useState(false)
   const [showEditDialog, setShowEditDialog] = useState(false)
@@ -150,7 +152,7 @@ export function TaskDetailClient({
               Task Details
             </h1>
             <p className="text-sm text-gray-600 mt-1">
-              Created {format(new Date(task.createdAt), 'MMM d, yyyy')}
+              Created {formatDate(task.createdAt)}
             </p>
           </div>
         </div>
@@ -186,7 +188,7 @@ export function TaskDetailClient({
                 <div>
                   <p className="text-sm font-medium">Due Date</p>
                   <p className="text-sm text-gray-600">
-                    {format(new Date(task.dueDate), 'MMMM d, yyyy')} (
+                    {formatDate(task.dueDate)} (
                     {formatTaskDueDate(task.dueDate)})
                   </p>
                 </div>
@@ -237,7 +239,7 @@ export function TaskDetailClient({
                   <div>
                     <p className="text-sm font-medium">Estimated Cost</p>
                     <p className="text-sm text-gray-600">
-                      ${task.estimatedCost.toFixed(2)}
+                      {formatCurrency(task.estimatedCost)}
                     </p>
                   </div>
                 </div>
@@ -258,10 +260,7 @@ export function TaskDetailClient({
                 <div>
                   <p className="text-sm font-medium">Completed At</p>
                   <p className="text-sm text-gray-600">
-                    {format(
-                      new Date(task.completedAt),
-                      "MMMM d, yyyy 'at' h:mm a"
-                    )}
+                    {formatDateTime(task.completedAt)}
                   </p>
                 </div>
 
@@ -273,13 +272,13 @@ export function TaskDetailClient({
                       {task.estimatedCost != null && (
                         <div className="flex justify-between text-sm">
                           <span className="text-gray-600">Estimated</span>
-                          <span>${task.estimatedCost.toFixed(2)}</span>
+                          <span>{formatCurrency(task.estimatedCost)}</span>
                         </div>
                       )}
                       {task.actualCost != null && (
                         <div className="flex justify-between text-sm">
                           <span className="text-gray-600">Actual</span>
-                          <span>${task.actualCost.toFixed(2)}</span>
+                          <span>{formatCurrency(task.actualCost)}</span>
                         </div>
                       )}
                       {task.estimatedCost != null &&
@@ -293,9 +292,9 @@ export function TaskDetailClient({
                                   : 'text-green-600'
                               }
                             >
-                              {task.actualCost > task.estimatedCost ? '+' : ''}$
-                              {(task.actualCost - task.estimatedCost).toFixed(
-                                2
+                              {task.actualCost > task.estimatedCost ? '+' : ''}
+                              {formatCurrency(
+                                task.actualCost - task.estimatedCost
                               )}
                             </span>
                           </div>
@@ -322,12 +321,15 @@ export function TaskDetailClient({
                     <p className="text-sm font-medium mb-2">Photos</p>
                     <div className="grid grid-cols-2 gap-2">
                       {completionPhotos.map((photo: string, index: number) => (
-                        <img
-                          key={index}
-                          src={photo}
-                          alt={`Completion photo ${index + 1}`}
-                          className="rounded-lg border w-full h-48 object-cover"
-                        />
+                        <div key={index} className="relative h-48 w-full">
+                          <Image
+                            src={photo}
+                            alt={`Completion photo ${index + 1}`}
+                            fill
+                            sizes="(max-width: 768px) 50vw, 25vw"
+                            className="rounded-lg border object-cover"
+                          />
+                        </div>
                       ))}
                     </div>
                   </div>
@@ -430,15 +432,11 @@ export function TaskDetailClient({
               </div>
               <div>
                 <p className="font-medium text-gray-700">Created</p>
-                <p className="text-gray-600">
-                  {format(new Date(task.createdAt), 'MMM d, yyyy')}
-                </p>
+                <p className="text-gray-600">{formatDate(task.createdAt)}</p>
               </div>
               <div>
                 <p className="font-medium text-gray-700">Last Updated</p>
-                <p className="text-gray-600">
-                  {format(new Date(task.updatedAt), 'MMM d, yyyy')}
-                </p>
+                <p className="text-gray-600">{formatDate(task.updatedAt)}</p>
               </div>
             </CardContent>
           </Card>
